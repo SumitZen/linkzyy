@@ -1,0 +1,142 @@
+<html class="dark"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#2525f4",
+                        "background-light": "#f5f5f8",
+                        "background-dark": "#101022",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased overflow-x-hidden min-h-screen">
+<div class="relative flex h-full min-h-screen w-full flex-col bg-background-light dark:bg-background-dark overflow-x-hidden pb-12">
+<!-- Background Mesh Gradient -->
+<div class="fixed inset-0 z-0 opacity-40 dark:opacity-30 pointer-events-none">
+<div class="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] rounded-full bg-primary blur-[100px]"></div>
+<div class="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] rounded-full bg-fuchsia-600 blur-[100px]"></div>
+<div class="absolute top-[30%] right-[10%] w-[40%] h-[40%] rounded-full bg-cyan-400 blur-[100px]"></div>
+</div>
+<!-- Top Navigation -->
+<header class="relative z-10 flex items-center p-4 justify-between">
+<div class="text-slate-900 dark:text-white flex size-12 shrink-0 items-center justify-center">
+<span class="material-symbols-outlined text-2xl">arrow_back</span>
+</div>
+<h2 class="text-slate-900 dark:text-white text-lg font-bold leading-tight tracking-tight flex-1 text-center">Linkzy</h2>
+<div class="flex w-12 items-center justify-end">
+<button class="flex size-12 cursor-pointer items-center justify-center rounded-full bg-transparent text-slate-900 dark:text-white">
+<span class="material-symbols-outlined text-2xl">more_horiz</span>
+</button>
+</div>
+</header>
+<!-- Profile Section -->
+<main class="relative z-10 flex flex-col items-center px-6 @container">
+<div class="mt-4 mb-8 flex flex-col items-center">
+<div class="relative p-1 rounded-full bg-gradient-to-tr from-primary via-fuchsia-500 to-orange-400">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-32 w-32 border-4 border-background-dark shadow-2xl" data-alt="Modern stylish male portrait with colorful lighting" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDxYR7wZQEE0Yu4S3aaGOHhlkxqxogqX4d0wrEctE7bezHLIYTY6-73GqZWQcqkttQKXpCy_-hHEXr1YUe_Kvyi3SZ7RXr-qI852u-q-pu6QUkjHlrE8KF1L1Ll0AF5HbvT5_LCblxyvtB7_bf_yLgPXEMyHMdcco8zfNdu2NP8Xd3gYVZxFaZC2QbWYsPB-l9ESpd2bTptooqbYsXVRvHmW4qnlJLwiFGqBEmBQ2BQaRlKOyUHeEA7xIL7-BHWjieHZ2DGaobAVsFy");'>
+</div>
+</div>
+<div class="mt-6 flex flex-col items-center text-center">
+<h1 class="text-slate-900 dark:text-white text-3xl font-extrabold tracking-tight">Alex Rivera</h1>
+<p class="text-primary dark:text-primary/80 font-semibold mt-1">Digital Creator &amp; Designer 🚀</p>
+<div class="mt-2 py-1 px-4 rounded-full bg-slate-200/50 dark:bg-white/10 backdrop-blur-sm">
+<span class="text-slate-600 dark:text-slate-400 text-sm font-medium">linkzy.io/alex</span>
+</div>
+</div>
+</div>
+<!-- Links Grid -->
+<div class="w-full max-w-md flex flex-col gap-4">
+<!-- Link 1: Electric Blue to Purple -->
+<a class="group relative flex items-center justify-between p-1 rounded-full transition-transform active:scale-95 bg-gradient-to-r from-blue-600 to-indigo-600 shadow-lg shadow-blue-500/20" href="#">
+<div class="flex items-center gap-4 py-3 px-5">
+<div class="flex size-12 items-center justify-center rounded-full bg-white/20 text-white backdrop-blur-md">
+<span class="material-symbols-outlined text-2xl">public</span>
+</div>
+<span class="text-white text-lg font-bold tracking-wide">Latest Portfolio</span>
+</div>
+<div class="mr-6 text-white/50 group-hover:text-white transition-colors">
+<span class="material-symbols-outlined text-2xl">chevron_right</span>
+</div>
+</a>
+<!-- Link 2: Hot Pink to Orange -->
+<a class="group relative flex items-center justify-between p-1 rounded-full transition-transform active:scale-95 bg-gradient-to-r from-pink-500 to-orange-500 shadow-lg shadow-pink-500/20" href="#">
+<div class="flex items-center gap-4 py-3 px-5">
+<div class="flex size-12 items-center justify-center rounded-full bg-white/20 text-white backdrop-blur-md">
+<span class="material-symbols-outlined text-2xl">shopping_bag</span>
+</div>
+<span class="text-white text-lg font-bold tracking-wide">Shop My Presets</span>
+</div>
+<div class="mr-6 text-white/50 group-hover:text-white transition-colors">
+<span class="material-symbols-outlined text-2xl">chevron_right</span>
+</div>
+</a>
+<!-- Link 3: Cyan to Emerald -->
+<a class="group relative flex items-center justify-between p-1 rounded-full transition-transform active:scale-95 bg-gradient-to-r from-cyan-500 to-emerald-500 shadow-lg shadow-cyan-500/20" href="#">
+<div class="flex items-center gap-4 py-3 px-5">
+<div class="flex size-12 items-center justify-center rounded-full bg-white/20 text-white backdrop-blur-md">
+<span class="material-symbols-outlined text-2xl">videocam</span>
+</div>
+<span class="text-white text-lg font-bold tracking-wide">YouTube Channel</span>
+</div>
+<div class="mr-6 text-white/50 group-hover:text-white transition-colors">
+<span class="material-symbols-outlined text-2xl">chevron_right</span>
+</div>
+</a>
+<!-- Link 4: Violet to Rose -->
+<a class="group relative flex items-center justify-between p-1 rounded-full transition-transform active:scale-95 bg-gradient-to-r from-violet-600 to-rose-500 shadow-lg shadow-violet-500/20" href="#">
+<div class="flex items-center gap-4 py-3 px-5">
+<div class="flex size-12 items-center justify-center rounded-full bg-white/20 text-white backdrop-blur-md">
+<span class="material-symbols-outlined text-2xl">mail</span>
+</div>
+<span class="text-white text-lg font-bold tracking-wide">Contact Me</span>
+</div>
+<div class="mr-6 text-white/50 group-hover:text-white transition-colors">
+<span class="material-symbols-outlined text-2xl">chevron_right</span>
+</div>
+</a>
+</div>
+<!-- Social Icons -->
+<div class="mt-12 flex items-center justify-center gap-6">
+<a class="text-slate-600 dark:text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-3xl">brand_family</span>
+</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-3xl">camera_alt</span>
+</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-3xl">music_note</span>
+</a>
+</div>
+<!-- Branding -->
+<div class="mt-16 flex items-center gap-2 opacity-50 grayscale">
+<span class="material-symbols-outlined text-sm">link</span>
+<span class="text-xs font-bold uppercase tracking-widest">Built with Linkzy</span>
+</div>
+</main>
+</div>
+</body></html>

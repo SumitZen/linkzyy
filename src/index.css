@@ -1,0 +1,142 @@
+:root {
+  color-scheme: light;
+
+  /* Premium Grayscale Palette */
+  --bg-color: #F5F5F7;
+  /* Apple-esque light gray bg */
+  --surface-1: #FFFFFF;
+  --surface-2: #FAFAFC;
+
+  --black: #000000;
+  --white: #FFFFFF;
+
+  --text-dark: #1D1D1F;
+  /* Refined charcoal */
+  --text-muted: #86868B;
+  /* Elegant slate */
+  --text-light: #F5F5F7;
+
+  /* Accent (Strictly monochromatic, using deep metal tones) */
+  --accent-primary: #1D1D1F;
+  --accent-secondary: #86868B;
+
+  /* Typography Systems */
+  /* User requested advanced pairings, introducing Manrope for high-end editorial feel */
+  --font-sans: 'Manrope', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-serif: 'Playfair Display', ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+
+  /* Premium Soft Depth & Layering (Multi-tiered shadows) */
+  --border-subtle: 1px solid rgba(0, 0, 0, 0.06);
+
+  /* Z-Index Illusion Shadows - Linktree/Vercel style highly diffused */
+  --shadow-layer-1: 0px 1px 2px rgba(0, 0, 0, 0.04), 0px 2px 8px rgba(0, 0, 0, 0.04);
+  --shadow-layer-2: 0px 4px 8px rgba(0, 0, 0, 0.04), 0px 12px 24px rgba(0, 0, 0, 0.06);
+  --shadow-layer-3: 0px 8px 16px rgba(0, 0, 0, 0.04), 0px 24px 48px rgba(0, 0, 0, 0.08);
+
+  /* Premium smooth easing */
+  --transition-smooth: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Layout Spacing (Fluid scale) */
+  --space-1: 8px;
+  --space-2: 16px;
+  --space-3: 24px;
+  --space-4: 32px;
+  --space-5: 40px;
+  --space-6: 48px;
+  --space-8: 64px;
+  --space-10: 80px;
+  --space-12: 96px;
+  --space-16: 128px;
+
+  /* Rounded aesthetics for tech interfaces */
+  --border-radius-sm: 8px;
+  --border-radius-md: 16px;
+  --border-radius-lg: 24px;
+  --border-radius-xl: 32px;
+  --border-radius-pill: 9999px;
+}
+
+/* Premium Dark Mode - Deep Space Aesthetics / Titanium Harmony */
+[data-theme='dark'] {
+  color-scheme: dark;
+  /* Shift from flat black to a harmonious Titanium/Slate dark gray */
+  --bg-color: #0D1117;
+  /* GitHub Dark / Titanium Slate */
+  --surface-1: #161B22;
+  --surface-2: #21262D;
+
+  /* Text gets a crisp, silvery white glow instead of flat white */
+  --text-dark: #F0F6FC;
+  --text-muted: #8B949E;
+  --text-light: #0D1117;
+
+  --accent-primary: #58A6FF;
+  /* Subtle harmonic metallic blue */
+  --accent-secondary: #8B949E;
+
+  /* Polished metallic rim lighting for borders */
+  --border-subtle: 1px solid rgba(255, 255, 255, 0.08);
+
+  /* Instead of flat black shadows in dark mode, use pure rim lighting and extreme minimal drop shadow */
+  --shadow-layer-1: 0 4px 12px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.06) inset;
+  --shadow-layer-2: 0 8px 24px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.08) inset;
+  --shadow-layer-3: 0 24px 48px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+@media(prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+html {
+  /* Lenis handles smooth scrolling, so we don't strictly need scroll-behavior: smooth 
+     but keeping it for non-JS fallbacks isn't strictly necessary. Lenis docs say NO scroll-behavior */
+  scroll-behavior: auto;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: var(--bg-color);
+  color: var(--text-dark);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+/* Base link reset */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera natively on EVERYTHING */
+::-webkit-scrollbar,
+*::-webkit-scrollbar,
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+*,
+html,
+body {
+  -ms-overflow-style: none !important;
+  /* IE and Edge */
+  scrollbar-width: none !important;
+  /* Firefox */
+}

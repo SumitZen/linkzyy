@@ -1,0 +1,155 @@
+.profileContainer {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 64px 20px;
+    background-color: var(--bg-color);
+}
+
+.profileCard {
+    width: 100%;
+    max-width: 680px;
+    /* Responsive, dynamic width, NOT a hardcoded phone */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+}
+
+/* Header Section */
+.profileHeader {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 32px;
+}
+
+.avatar {
+    width: 140px;
+    height: 140px;
+    border-radius: 10px;
+    /* Small radius for brutalism */
+    border: 4px solid var(--black);
+    box-shadow: 6px 6px 0px var(--black);
+    object-fit: cover;
+}
+
+.username {
+    font-size: 2rem;
+    font-weight: 900;
+    color: var(--black);
+    margin: 0;
+}
+
+.bio {
+    font-size: 1.1rem;
+    color: var(--muted);
+    text-align: center;
+    max-width: 400px;
+    margin: 0;
+}
+
+/* Blocks Container */
+.blocksContainer {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.baseBlock {
+    width: 100%;
+    background: var(--white);
+    border: 4px solid var(--black);
+    border-radius: 8px;
+    /* Hard rule: No huge border radius, max 10px */
+    box-shadow: 6px 6px 0px var(--black);
+    padding: 24px;
+    transition: transform 0.15s ease-out, box-shadow 0.15s ease-out;
+    /* Snappy transition, no spring */
+    color: var(--black);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.baseBlock:hover {
+    transform: translate(4px, 4px);
+    box-shadow: 2px 2px 0px var(--black);
+}
+
+/* Specific Block Modifiers */
+.blockLink {
+    font-weight: 800;
+    font-size: 1.1rem;
+    cursor: pointer;
+}
+
+.blockSpotify {
+    padding: 0;
+    /* IFrames handle their own padding */
+    overflow: hidden;
+}
+
+.blockMap {
+    padding: 0;
+    overflow: hidden;
+    height: 250px;
+}
+
+.blockImageGallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 16px;
+    padding: 24px;
+}
+
+.galleryItem {
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 8px;
+    border: 4px solid var(--black);
+    box-shadow: 4px 4px 0px var(--black);
+    object-fit: cover;
+    transition: transform 0.15s ease-out, box-shadow 0.15s ease-out;
+}
+
+.galleryItem:hover {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0px var(--black);
+}
+
+.blockProduct {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    cursor: pointer;
+}
+
+.productImage {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 4px solid var(--black);
+}
+
+.productTitle {
+    font-weight: 800;
+    font-size: 1.25rem;
+}
+
+.productPrice {
+    font-weight: 900;
+    color: var(--accent-pink);
+    font-size: 1.5rem;
+}
+
+.blockVideo {
+    padding: 0;
+    overflow: hidden;
+    aspect-ratio: 16/9;
+}
