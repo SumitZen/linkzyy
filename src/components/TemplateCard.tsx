@@ -10,6 +10,9 @@ export interface ThemeConfig {
     textColor: string;
     btnBg: string;
     btnText: string;
+    btnBorder?: string;
+    btnShadow?: string;
+    backdropBlur?: string;
     borderFormat: 'none' | 'thin' | 'thick';
     shadowFormat: 'none' | 'soft' | 'hard';
     fontFamily: string;
@@ -56,6 +59,8 @@ function LinksContent({ theme, btnBg, btnText, getBorder, getShadow, borderRadiu
                         boxShadow: getShadow(),
                         borderRadius,
                         fontFamily: theme.fontFamily,
+                        backdropFilter: theme.backdropBlur,
+                        WebkitBackdropFilter: theme.backdropBlur,
                     }}
                 >
                     {label}
@@ -67,9 +72,13 @@ function LinksContent({ theme, btnBg, btnText, getBorder, getShadow, borderRadiu
 
 function MusicContent({ theme, btnBg, btnText }: PhoneContentProps) {
     const textColor = theme.textColor;
+    const isGradient = btnBg.includes('gradient') || btnBg.includes('url');
+    const safeBorder = theme.btnBorder || (isGradient ? 'none' : `2px solid ${btnBg}`);
+    const safeDotBg = isGradient ? textColor : btnBg;
+
     return (
         <div className={styles.musicContent}>
-            <div className={styles.albumArt} style={{ border: `2px solid ${btnBg}` }}>
+            <div className={styles.albumArt} style={{ border: safeBorder, boxShadow: theme.btnShadow }}>
                 <div className={styles.albumInner} style={{ background: btnBg }}>🎵</div>
             </div>
             <div className={styles.songTitle} style={{ color: textColor, fontFamily: theme.fontFamily }}>
@@ -77,7 +86,7 @@ function MusicContent({ theme, btnBg, btnText }: PhoneContentProps) {
             </div>
             <div className={styles.songArtist} style={{ color: textColor, opacity: 0.6 }}>The Wanderers</div>
             <div className={styles.playerControls}>
-                <div className={styles.progressBar}><div className={styles.progressFill} style={{ background: btnBg }} /></div>
+                <div className={styles.progressBar}><div className={styles.progressFill} style={{ background: isGradient ? textColor : btnBg }} /></div>
                 <div className={styles.controlRow} style={{ color: textColor }}>
                     <span>⏮</span><span className={styles.playBtn} style={{ background: btnBg, color: btnText }}>▶</span><span>⏭</span>
                 </div>
@@ -85,7 +94,7 @@ function MusicContent({ theme, btnBg, btnText }: PhoneContentProps) {
             <div className={styles.trackList}>
                 {['', ''].map((_, i) => (
                     <div key={i} className={styles.trackRow} style={{ borderColor: `${textColor}20`, color: textColor }}>
-                        <div className={styles.trackDot} style={{ background: btnBg }} />
+                        <div className={styles.trackDot} style={{ background: safeDotBg }} />
                         <div className={styles.trackMeta}>
                             <div className={styles.trackName} style={{ background: `${textColor}30` }} />
                             <div className={styles.trackLen} style={{ background: `${textColor}20` }} />
@@ -114,7 +123,17 @@ function PhotosContent({ theme, btnBg, btnText }: PhoneContentProps) {
             </div>
             <div
                 className={styles.mockLink}
-                style={{ background: btnBg, color: btnText, borderRadius: '10px', marginTop: 8, fontFamily: theme.fontFamily }}
+                style={{
+                    background: btnBg,
+                    color: btnText,
+                    borderRadius: '10px',
+                    marginTop: 8,
+                    fontFamily: theme.fontFamily,
+                    border: theme.btnBorder || 'none',
+                    boxShadow: theme.btnShadow || 'none',
+                    backdropFilter: theme.backdropBlur,
+                    WebkitBackdropFilter: theme.backdropBlur,
+                }}
             >
                 📷 View All Photos
             </div>
@@ -123,27 +142,36 @@ function PhotosContent({ theme, btnBg, btnText }: PhoneContentProps) {
 }
 
 function ProductContent({ theme, textColor, btnBg, btnText, getBorder, getShadow, borderRadius }: PhoneContentProps) {
+    const isGradient = btnBg.includes('gradient') || btnBg.includes('url');
+    const safeBg = isGradient ? 'rgba(255,255,255,0.15)' : `${btnBg}30`;
+    const cardStyle = {
+        border: theme.btnBorder || getBorder(),
+        boxShadow: theme.btnShadow || getShadow(),
+        backdropFilter: theme.backdropBlur,
+        WebkitBackdropFilter: theme.backdropBlur,
+    };
     return (
         <div className={styles.productContent}>
-            <div className={styles.productCard} style={{ border: getBorder(), boxShadow: getShadow() }}>
-                <div className={styles.productImage} style={{ background: `${btnBg}30` }}>
+            <div className={styles.productCard} style={cardStyle}>
+                <div className={styles.productImage} style={{ background: safeBg }}>
                     <span style={{ fontSize: '32px' }}>🛍️</span>
                 </div>
                 <div className={styles.productInfo}>
                     <div className={styles.productName} style={{ color: textColor, fontFamily: theme.fontFamily }}>Limited Edition Cap</div>
-                    <div className={styles.productPrice} style={{ color: btnBg }}>$49.00</div>
+                    <div className={styles.productPrice} style={{ color: isGradient ? textColor : btnBg }}>$49.00</div>
                 </div>
             </div>
-            <div className={styles.productCard} style={{ border: getBorder(), boxShadow: getShadow() }}>
-                <div className={styles.productImage} style={{ background: `${btnBg}30` }}>
+            <div className={styles.productCard} style={cardStyle}>
+                <div className={styles.productImage} style={{ background: safeBg }}>
                     <span style={{ fontSize: '32px' }}>👟</span>
                 </div>
                 <div className={styles.productInfo}>
                     <div className={styles.productName} style={{ color: textColor, fontFamily: theme.fontFamily }}>Collab Sneaker</div>
-                    <div className={styles.productPrice} style={{ color: btnBg }}>$129.00</div>
+                    <div className={styles.productPrice} style={{ color: isGradient ? textColor : btnBg }}>$129.00</div>
                 </div>
             </div>
             <div
+
                 className={styles.mockLink}
                 style={{ background: btnBg, color: btnText, borderRadius, fontFamily: theme.fontFamily }}
             >
