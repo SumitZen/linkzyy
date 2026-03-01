@@ -60,7 +60,7 @@ export default function Dashboard() {
     const [settingsName, setSettingsName] = useState(user?.name ?? '');
 
     const theme = templatesList.find(t => t.id === selTheme) ?? templatesList[0];
-    const previewBg = bgImage ? `url(${bgImage}) center/cover no-repeat` : bgColor || theme.bg;
+    const previewBg = bgImage ? `url(${bgImage}) center/cover no-repeat` : bgColor || theme.screenBg;
 
     const flash = () => { setSavedMsg('Saved!'); setTimeout(() => setSavedMsg(''), 1800); };
 
@@ -319,7 +319,22 @@ export default function Dashboard() {
                                     <div style={{ fontSize: '0.6rem', color: theme.textColor, opacity: 0.7, textAlign: 'center', marginBottom: 14, padding: '0 8px' }}>{bio || user?.bio}</div>
                                     <div style={{ display: 'flex', flexDirection: 'column', gap: 8, width: '100%' }}>
                                         {links.filter(l => l.enabled).slice(0, 4).map(link => (
-                                            <div key={link.id} style={{ background: theme.btnBg, color: theme.btnText, borderRadius: 10, padding: '8px 12px', fontSize: '0.68rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 7 }}>
+                                            <div key={link.id} style={{
+                                                background: theme.btnBg,
+                                                color: theme.btnText,
+                                                borderRadius: theme.borderFormat === 'thick' ? 4 : 20,
+                                                padding: '8px 12px',
+                                                fontSize: '0.68rem',
+                                                fontWeight: 600,
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                gap: 7,
+                                                border: theme.btnBorder !== 'none' ? theme.btnBorder : undefined,
+                                                boxShadow: theme.btnShadow !== 'none' ? theme.btnShadow : undefined,
+                                                backdropFilter: theme.backdropBlur !== 'none' ? theme.backdropBlur : undefined,
+                                                WebkitBackdropFilter: theme.backdropBlur !== 'none' ? theme.backdropBlur : undefined,
+                                                fontFamily: theme.fontFamily
+                                            }}>
                                                 <PlatformIcon id={link.icon} size={14} /><span>{link.label}</span>
                                             </div>
                                         ))}
