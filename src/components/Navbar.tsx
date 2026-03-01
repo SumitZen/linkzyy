@@ -5,6 +5,7 @@ import '../pages/LandingPage.css';
 
 export default function Navbar() {
     const [isDarkMode, setIsDarkMode] = useState(false);
+    const [menuOpen, setMenuOpen] = useState(false);
     const { user, logout } = useAuth();
     const navigate = useNavigate();
 
@@ -15,6 +16,14 @@ export default function Navbar() {
             document.documentElement.setAttribute('data-theme', 'dark');
         }
     }, []);
+
+    // Close menu on outside click
+    useEffect(() => {
+        if (!menuOpen) return;
+        const close = () => setMenuOpen(false);
+        document.addEventListener('click', close);
+        return () => document.removeEventListener('click', close);
+    }, [menuOpen]);
 
     const toggleTheme = () => {
         const newMode = !isDarkMode;
@@ -31,17 +40,22 @@ export default function Navbar() {
     const handleLogout = () => {
         logout();
         navigate('/');
+        setMenuOpen(false);
     };
 
     return (
         <nav className="nav-brutal">
             <Link to="/" className="nav-logo" style={{ textDecoration: 'none' }}>Linkzy</Link>
-            <ul className="nav-links">
+
+            {/* Desktop links */}
+            <ul className="nav-links nav-links--desktop">
                 <li><Link to="/templates">Templates</Link></li>
                 <li><Link to="/pricing">Pricing</Link></li>
                 <li><Link to="/blog">Blog</Link></li>
             </ul>
-            <div className="nav-end">
+
+            {/* Desktop right actions */}
+            <div className="nav-end nav-end--desktop">
                 <button className="btn-theme-toggle" onClick={toggleTheme} aria-label="Toggle Dark Mode">
                     {isDarkMode ? '☀️' : '🌙'}
                 </button>
@@ -69,6 +83,41 @@ export default function Navbar() {
                     </>
                 )}
             </div>
+
+            {/* Mobile: theme toggle + hamburger */}
+            <div className="nav-mobile-right">
+                <button className="btn-theme-toggle" onClick={toggleTheme} aria-label="Toggle Dark Mode">
+                    {isDarkMode ? '☀️' : '🌙'}
+                </button>
+                <button
+                    className={`nav-hamburger${menuOpen ? ' open' : ''}`}
+                    onClick={e => { e.stopPropagation(); setMenuOpen(o => !o); }}
+                    aria-label="Open menu"
+                >
+                    <span /><span /><span />
+                </button>
+            </div>
+
+            {/* Mobile dropdown */}
+            {menuOpen && (
+                <div className="nav-mobile-menu" onClick={e => e.stopPropagation()}>
+                    <Link to="/templates" onClick={() => setMenuOpen(false)}>Templates</Link>
+                    <Link to="/pricing" onClick={() => setMenuOpen(false)}>Pricing</Link>
+                    <Link to="/blog" onClick={() => setMenuOpen(false)}>Blog</Link>
+                    <hr style={{ border: 'none', borderTop: '1px solid #eee', margin: '4px 0' }} />
+                    {user ? (
+                        <>
+                            <Link to="/dashboard" onClick={() => setMenuOpen(false)}>Dashboard</Link>
+                            <button onClick={handleLogout} style={{ textAlign: 'left', background: 'none', border: 'none', color: '#dc2626', fontFamily: 'inherit', fontSize: '0.95rem', cursor: 'pointer', padding: '10px 0', width: '100%' }}>Log out</button>
+                        </>
+                    ) : (
+                        <>
+                            <Link to="/login" onClick={() => setMenuOpen(false)}>Log in</Link>
+                            <Link to="/signup" onClick={() => setMenuOpen(false)} style={{ fontWeight: 700 }}>Sign up free →</Link>
+                        </>
+                    )}
+                </div>
+            )}
         </nav>
     );
 }

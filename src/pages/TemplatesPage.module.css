@@ -38,3 +38,23 @@
     width: 100%;
     max-width: 1400px;
 }
+
+/* ═══ MOBILE BREAKPOINTS ═══ */
+@media (max-width: 768px) {
+    .pageRoot {
+        padding: 100px 24px 60px 24px;
+    }
+
+    .title {
+        font-size: clamp(2.5rem, 8vw, 4rem);
+        margin-bottom: 16px;
+    }
+
+    .subtitle {
+        font-size: 1rem;
+    }
+
+    .grid {
+        gap: 32px;
+    }
+}

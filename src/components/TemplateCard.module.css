@@ -363,3 +363,50 @@
     transition: opacity 0.2s ease, transform 0.2s ease;
     font-family: var(--font-sans);
 }
+
+/* ═══ MOBILE BREAKPOINTS ═══ */
+@media (max-width: 768px) {
+    .phoneMockup {
+        width: 200px;
+        height: 420px;
+        border-radius: 36px;
+    }
+
+    .screen {
+        border-radius: 28px;
+        padding: 0 10px 12px;
+    }
+
+    .bannerStrip {
+        height: 60px;
+    }
+
+    .avatarRing {
+        width: 50px;
+        height: 50px;
+        margin-top: -25px;
+    }
+
+    .avatarFallback {
+        font-size: 1.2rem;
+    }
+
+    .profileName {
+        font-size: 0.9rem;
+        margin-top: 6px;
+    }
+
+    .profileBio {
+        font-size: 0.65rem;
+    }
+
+    .mockupLinks {
+        gap: 6px;
+    }
+
+    .mockupLink {
+        height: 36px;
+        font-size: 0.7rem;
+        border-radius: 10px;
+    }
+}
