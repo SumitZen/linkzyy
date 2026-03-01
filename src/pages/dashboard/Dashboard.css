@@ -161,12 +161,23 @@
 /* ═══ BENTO GRID ═══ */
 .bento-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: auto;
-    gap: 16px;
+    grid-template-columns: 1fr 380px;
+    align-items: flex-start;
+    gap: 32px;
     padding: 24px 32px;
     max-width: 1400px;
     margin: 0 auto;
+}
+
+.bento-left-col {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.bento-right-col {
+    position: sticky;
+    top: 24px;
 }
 
 /* Card base */
@@ -230,9 +241,10 @@
     line-height: 1;
 }
 
-/* LINKS CARD — spans 2 cols */
+/* LINKS CARD */
 .bento-links-card {
-    grid-column: span 2;
+    display: flex;
+    flex-direction: column;
 }
 
 .bento-card-header {
@@ -439,11 +451,11 @@
     border-radius: 46px;
     background: #000;
     padding: 10px;
-    box-shadow: 
+    box-shadow:
         0 0 0 2px #3f3f46,
         0 0 0 6px #18181b,
         0 0 0 8px #27272a,
-        0 24px 48px -12px rgba(0,0,0,0.8);
+        0 24px 48px -12px rgba(0, 0, 0, 0.8);
     position: relative;
     overflow: hidden;
     display: flex;
@@ -458,6 +470,7 @@
     position: relative;
     scrollbar-width: none;
 }
+
 .bento-phone-content::-webkit-scrollbar {
     display: none;
 }
