@@ -242,9 +242,6 @@ export default function TemplateCard({ theme, avatarUrl, username = 'Creator Nam
                         alignItems: theme.layoutType === 'centered' ? 'center' : 'flex-start',
                     }}
                 >
-                    {/* Banner / header gradient strip */}
-                    <div className={styles.bannerStrip} style={{ background: theme.btnBg }} />
-
                     {/* Avatar */}
                     <div
                         className={styles.avatarRing}

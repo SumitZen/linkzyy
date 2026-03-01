@@ -13,9 +13,9 @@
 .phoneMockup {
     width: 240px;
     height: 500px;
-    border-radius: 44px;
+    border-radius: 36px;
     background: #111118;
-    padding: 10px;
+    padding: 6px;
     box-shadow:
         0 2px 6px rgba(0, 0, 0, 0.14),
         0 16px 48px rgba(0, 0, 0, 0.28),
@@ -35,9 +35,9 @@
 
 .phoneNotch {
     width: 80px;
-    height: 20px;
+    height: 18px;
     background: #111118;
-    border-radius: 0 0 14px 14px;
+    border-radius: 0 0 12px 12px;
     margin: 0 auto 6px;
     position: relative;
     z-index: 2;
@@ -45,37 +45,37 @@
 
 .screen {
     width: 100%;
-    height: calc(100% - 26px);
-    border-radius: 34px;
+    height: calc(100% - 24px);
+    border-radius: 30px;
     overflow: hidden;
     position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 0 14px 16px;
+    padding: 0 16px 16px;
     gap: 0;
 }
 
 /* Banner gradient strip at top of screen */
 .bannerStrip {
-    width: calc(100% + 28px);
-    height: 68px;
+    width: calc(100% + 32px);
+    height: 80px;
     flex-shrink: 0;
-    margin: 0 -14px;
-    opacity: 0.9;
+    margin: 0 -16px;
 }
 
-/* Avatar ring floats over banner */
+/* Avatar ring */
 .avatarRing {
-    width: 60px;
-    height: 60px;
+    width: 76px;
+    height: 76px;
     border-radius: 50%;
     border: 3px solid;
     padding: 2px;
-    margin-top: -30px;
+    margin-top: 24px;
     background: rgba(255, 255, 255, 0.1);
     flex-shrink: 0;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+    z-index: 10;
 }
 
 .avatar {
@@ -369,12 +369,12 @@
     .phoneMockup {
         width: 240px;
         height: 500px;
-        border-radius: 44px;
+        border-radius: 36px;
     }
 
     .screen {
-        border-radius: 34px;
-        padding: 0 14px 16px;
+        border-radius: 30px;
+        padding: 0 16px 16px;
     }
 
     .bannerStrip {
@@ -384,7 +384,7 @@
     .avatarRing {
         width: 68px;
         height: 68px;
-        margin-top: -34px;
+        margin-top: 20px;
     }
 
     .title {
