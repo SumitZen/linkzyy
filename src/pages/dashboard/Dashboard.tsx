@@ -1,9 +1,14 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import type { ChangeEvent } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import Cropper from 'react-easy-crop';
+import type { Point, Area } from 'react-easy-crop';
 import { useAuth } from '../../context/AuthContext';
 import type { LinkItem, Block, MusicBlock, PhotoBlock, ProductBlock } from '../../context/AuthContext';
 import { PLATFORM_ICONS, PLATFORM_COLORS } from '../../lib/platformIcons';
 import { templatesList } from '../../lib/themes';
+import { supabase } from '../../lib/supabase';
+import getCroppedImg from '../../lib/cropImage';
 import './Dashboard.css';
 
 type Tab = 'links' | 'appearance' | 'analytics' | 'settings';
@@ -55,6 +60,13 @@ export default function Dashboard() {
     const [bgColor, setBgColor] = useState(user?.bgColor ?? '');
     const [bgImage, setBgImage] = useState(user?.bgImage ?? '');
     const [selTheme, setSelTheme] = useState(user?.theme ?? 'editorial-light');
+
+    // ─── Image Crop & Upload state ───
+    const [cropImageSrc, setCropImageSrc] = useState<string | null>(null);
+    const [crop, setCrop] = useState<Point>({ x: 0, y: 0 });
+    const [zoom, setZoom] = useState(1);
+    const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
+    const [isUploading, setIsUploading] = useState(false);
 
     // ─── Settings state ───
     const [settingsName, setSettingsName] = useState(user?.name ?? '');
@@ -110,6 +122,55 @@ export default function Dashboard() {
     };
 
     const saveAppearance = () => { updateUser({ name, bio, avatarUrl, bannerUrl, bgColor, bgImage, theme: selTheme }); flash(); };
+
+    // ─── Cropping & Upload Logic ───
+    const onFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files.length > 0) {
+            const file = e.target.files[0];
+            const reader = new FileReader();
+            reader.onload = () => {
+                setCropImageSrc(reader.result as string);
+                setTab('appearance');
+            };
+            reader.readAsDataURL(file);
+        }
+        // Reset file input so same file can be chosen again
+        e.target.value = '';
+    };
+
+    const onCropComplete = useCallback((_croppedArea: Area, croppedAreaPixels: Area) => {
+        setCroppedAreaPixels(croppedAreaPixels);
+    }, []);
+
+    const uploadCroppedImage = async () => {
+        if (!cropImageSrc || !croppedAreaPixels || !user) return;
+        setIsUploading(true);
+        try {
+            const croppedFile = await getCroppedImg(cropImageSrc, croppedAreaPixels);
+            if (!croppedFile) throw new Error('Failed to generate crop');
+
+            const filePath = `${user.id}/${Date.now()}_bg.jpg`;
+
+            // Upload to Supabase 'backgrounds' bucket
+            const { error: uploadError } = await supabase.storage
+                .from('backgrounds')
+                .upload(filePath, croppedFile, { upsert: true });
+
+            if (uploadError) throw uploadError;
+
+            // Get public URL
+            const { data } = supabase.storage.from('backgrounds').getPublicUrl(filePath);
+
+            setBgImage(data.publicUrl);
+            setCropImageSrc(null); // Close modal
+            flash();
+        } catch (err: any) {
+            console.error('Upload failed:', err);
+            alert(`Upload failed: ${err.message || err.toString()}`);
+        } finally {
+            setIsUploading(false);
+        }
+    };
 
     const TABS: { id: Tab; label: string }[] = [
         { id: 'links', label: 'Links' }, { id: 'appearance', label: 'Appearance' },
@@ -169,6 +230,37 @@ export default function Dashboard() {
                         <div className="bento-stat-sub">Tracking coming soon</div>
                     </div>
 
+                    {/* ── SAVED TOAST ── */}
+                    {savedMsg && <div className="bento-toast">{savedMsg}</div>}
+
+                    {/* ── CROP MODAL ── */}
+                    {cropImageSrc && (
+                        <div className="bento-modal-overlay" style={{ zIndex: 9999 }}>
+                            <div className="bento-modal" style={{ width: '90%', maxWidth: 600, height: '80vh', display: 'flex', flexDirection: 'column' }}>
+                                <div className="bento-modal-header">
+                                    <h2>Crop Background</h2>
+                                    <button className="bento-modal-close" onClick={() => setCropImageSrc(null)}>✕</button>
+                                </div>
+                                <div style={{ position: 'relative', flex: 1, background: '#000', borderRadius: 8, overflow: 'hidden', margin: '16px 0' }}>
+                                    <Cropper
+                                        image={cropImageSrc}
+                                        crop={crop}
+                                        zoom={zoom}
+                                        aspect={9 / 16} // Standard phone screen aspect ratio
+                                        onCropChange={setCrop}
+                                        onZoomChange={setZoom}
+                                        onCropComplete={onCropComplete}
+                                    />
+                                </div>
+                                <div className="bento-modal-footer">
+                                    <button className="bento-ghost" onClick={() => setCropImageSrc(null)} disabled={isUploading}>Cancel</button>
+                                    <button className="bento-btn" onClick={uploadCroppedImage} disabled={isUploading}>
+                                        {isUploading ? 'Uploading...' : 'Crop & Save'}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
                     {/* ── LINKS CARD ── */}
                     <div className="bento-card bento-links-card">
                         <div className="bento-card-header">
@@ -416,10 +508,14 @@ export default function Dashboard() {
 
                         {/* Background image */}
                         <div className="bento-field-row">
-                            <label className="bento-field-label">Background Photo URL <span className="bento-hint">(fills entire profile background)</span></label>
+                            <label className="bento-field-label">Background Photo <span className="bento-hint">(fills entire profile background)</span></label>
                             {bgImage && <div style={{ width: '100%', height: 88, borderRadius: 10, backgroundImage: `url(${bgImage})`, backgroundSize: 'cover', backgroundPosition: 'center', marginBottom: 10, border: '1.5px solid #e9ecef' }} />}
-                            <div style={{ display: 'flex', gap: 8 }}>
-                                <input className="bento-input" style={{ flex: 1 }} placeholder="Paste photo URL to use as background…" value={bgImage} onChange={e => setBgImage(e.target.value)} />
+                            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                                <label className="bento-btn" style={{ cursor: 'pointer', textAlign: 'center', flex: 1, minWidth: 120 }}>
+                                    Upload Local Image
+                                    <input type="file" accept="image/*" style={{ display: 'none' }} onChange={onFileChange} />
+                                </label>
+                                <input className="bento-input" style={{ flex: 2, minWidth: 200 }} placeholder="Or paste photo URL…" value={bgImage} onChange={e => setBgImage(e.target.value)} />
                                 {bgImage && <button className="bento-ghost" onClick={() => setBgImage('')}>Clear</button>}
                             </div>
                         </div>
