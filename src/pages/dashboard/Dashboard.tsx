@@ -397,41 +397,45 @@ export default function Dashboard() {
                         <div className="bento-phone-wrap">
                             <div className="bento-phone">
                                 <div className="bento-phone-notch" />
-                                <div className="bento-phone-screen" style={{ background: previewBg }}>
+                                <div className="bento-phone-content" style={{ background: previewBg }}>
                                     {bannerUrl && (
                                         <div style={{ width: 'calc(100% + 28px)', marginLeft: -14, height: 64, backgroundImage: `url(${bannerUrl})`, backgroundSize: 'cover', backgroundPosition: 'center', marginTop: -18, marginBottom: 12, flexShrink: 0 }} />
                                     )}
-                                    <div className="bento-phone-avatar">
+                                    <div className="bento-phone-avatar" style={{
+                                        width: 64, height: 64, borderRadius: '50%', margin: '0 auto 12px', background: '#333',
+                                        display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', border: '2px solid rgba(255,255,255,0.1)'
+                                    }}>
                                         {avatarUrl
-                                            ? <img src={avatarUrl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
-                                            : <span style={{ fontSize: '1.3rem', fontWeight: 700, color: 'rgba(255,255,255,0.9)' }}>{(name || user?.name || 'U').charAt(0)}</span>
+                                            ? <img src={avatarUrl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                            : <span style={{ fontSize: '1.5rem', fontWeight: 700, color: 'rgba(255,255,255,0.9)' }}>{(name || user?.name || 'U').charAt(0)}</span>
                                         }
                                     </div>
-                                    <div style={{ fontSize: '0.8rem', fontWeight: 700, color: theme.textColor, textAlign: 'center', marginBottom: 2 }}>{name || user?.name}</div>
-                                    <div style={{ fontSize: '0.6rem', color: theme.textColor, opacity: 0.7, textAlign: 'center', marginBottom: 14, padding: '0 8px' }}>{bio || user?.bio}</div>
-                                    <div style={{ display: 'flex', flexDirection: 'column', gap: 8, width: '100%' }}>
+                                    <div style={{ fontSize: '1rem', fontWeight: 700, color: theme.textColor, textAlign: 'center', marginBottom: 4 }}>{name || user?.name}</div>
+                                    <div style={{ fontSize: '0.8rem', color: theme.textColor, opacity: 0.8, textAlign: 'center', marginBottom: 20, padding: '0 16px' }}>{bio || user?.bio}</div>
+
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: 12, width: '100%', padding: '0 16px', boxSizing: 'border-box' }}>
                                         {links.filter(l => l.enabled).slice(0, 4).map(link => (
                                             <div key={link.id} style={{
                                                 background: theme.btnBg,
                                                 color: theme.btnText,
-                                                borderRadius: theme.borderFormat === 'thick' ? 4 : 20,
-                                                padding: '8px 12px',
-                                                fontSize: '0.68rem',
+                                                borderRadius: theme.borderFormat === 'thick' ? 8 : 24,
+                                                padding: '12px 16px',
+                                                fontSize: '0.85rem',
                                                 fontWeight: 600,
                                                 display: 'flex',
                                                 alignItems: 'center',
-                                                gap: 7,
+                                                gap: 10,
                                                 border: theme.btnBorder !== 'none' ? theme.btnBorder : undefined,
                                                 boxShadow: theme.btnShadow !== 'none' ? theme.btnShadow : undefined,
                                                 backdropFilter: theme.backdropBlur !== 'none' ? theme.backdropBlur : undefined,
                                                 WebkitBackdropFilter: theme.backdropBlur !== 'none' ? theme.backdropBlur : undefined,
                                                 fontFamily: theme.fontFamily
                                             }}>
-                                                <PlatformIcon id={link.icon} size={14} /><span>{link.label}</span>
+                                                <PlatformIcon id={link.icon} size={18} /><span>{link.label}</span>
                                             </div>
                                         ))}
                                     </div>
-                                    <div style={{ marginTop: 'auto', paddingTop: 10, fontSize: '0.55rem', color: 'rgba(255,255,255,0.3)', textAlign: 'center' }}>Powered by Linkzy</div>
+                                    <div style={{ padding: '24px 0', fontSize: '0.7rem', color: 'rgba(255,255,255,0.4)', textAlign: 'center' }}>Powered by Linkzy</div>
                                 </div>
                             </div>
                         </div>

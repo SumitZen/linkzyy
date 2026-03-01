@@ -57,11 +57,7 @@ function getStoredUsers(): Record<string, { password: string; user: User }> {
 }
 
 function getDefaultLinks(): LinkItem[] {
-    return [
-        { id: '1', type: 'link', label: 'My Portfolio', url: 'https://example.com', icon: 'globe', enabled: true },
-        { id: '2', type: 'link', label: 'Newsletter', url: 'https://example.com/newsletter', icon: 'email', enabled: true },
-        { id: '3', type: 'link', label: 'Instagram', url: 'https://instagram.com', icon: 'instagram', enabled: true },
-    ];
+    return [];
 }
 
 function buildUserFromSupabase(sbUser: { id: string; email?: string | null; user_metadata?: Record<string, string> }, extra?: Partial<User>): User {

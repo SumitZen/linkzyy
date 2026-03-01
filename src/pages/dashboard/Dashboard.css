@@ -434,19 +434,45 @@
 }
 
 .bento-phone {
-    width: 210px;
-    border-radius: 36px;
-    background: #111118;
-    padding: 8px;
-    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.6);
+    width: 280px;
+    height: 580px;
+    border-radius: 46px;
+    background: #000;
+    padding: 10px;
+    box-shadow: 
+        0 0 0 2px #3f3f46,
+        0 0 0 6px #18181b,
+        0 0 0 8px #27272a,
+        0 24px 48px -12px rgba(0,0,0,0.8);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
 }
 
+.bento-phone-content {
+    flex: 1;
+    border-radius: 36px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    position: relative;
+    scrollbar-width: none;
+}
+.bento-phone-content::-webkit-scrollbar {
+    display: none;
+}
+
+/* The true Dynamic Island Notch */
 .bento-phone-notch {
-    width: 72px;
-    height: 18px;
-    background: #0d0d14;
-    border-radius: 0 0 12px 12px;
-    margin: 0 auto 6px;
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 28px;
+    background: #000;
+    border-radius: 20px;
+    z-index: 99;
 }
 
 .bento-phone-screen {
