@@ -158,32 +158,25 @@
 
 @media (max-width: 768px) {
     .masonryWrapper {
-        gap: 16px;
+        gap: 24px;
+        flex-direction: column;
+        align-items: center;
     }
 
     .mockupCard {
-        width: 180px;
-        height: 380px;
-    }
-
-    .innerAvatar {
-        width: 56px;
-        height: 56px;
-    }
-
-    .innerName {
-        font-size: 0.9rem;
+        width: 250px;
+        height: 500px;
     }
 }
 
 @media (max-width: 480px) {
     .masonryWrapper {
-        gap: 12px;
+        gap: 24px;
     }
 
     .mockupCard {
-        width: 155px;
-        height: 340px;
+        width: 250px;
+        height: 500px;
     }
 }
 

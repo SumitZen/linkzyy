@@ -13,7 +13,7 @@ const templatesList: ThemeConfig[] = [
     },
     {
         id: '2-acid', name: 'Acid Rain', category: 'Creative',
-        bg: 'var(--accent-yellow)', screenBg: '#0A0A0A', textColor: 'var(--accent-green)', btnBg: 'transparent', btnText: 'var(--accent-green)',
+        bg: '#DFFF00', screenBg: '#0A0A0A', textColor: '#00FF00', btnBg: 'transparent', btnText: '#00FF00',
         borderFormat: 'thin', shadowFormat: 'hard', fontFamily: 'monospace', layoutType: 'left'
     },
     {
@@ -28,7 +28,7 @@ const templatesList: ThemeConfig[] = [
     },
     {
         id: '5-neon', name: 'Neon City', category: 'Tech / Gaming',
-        bg: 'var(--black)', screenBg: 'var(--black)', textColor: 'var(--accent-pink)', btnBg: 'var(--accent-blue)', btnText: 'var(--black)',
+        bg: 'var(--black)', screenBg: 'var(--black)', textColor: '#FF00FF', btnBg: '#00FFFF', btnText: 'var(--black)',
         borderFormat: 'thick', shadowFormat: 'hard', fontFamily: 'monospace', layoutType: 'centered'
     },
     {
@@ -48,7 +48,7 @@ const templatesList: ThemeConfig[] = [
     },
     {
         id: '9-y2k', name: 'Y2K Glitch', category: 'Fashion',
-        bg: 'var(--accent-blue)', screenBg: 'var(--white)', textColor: 'var(--black)', btnBg: 'var(--accent-pink)', btnText: 'var(--white)',
+        bg: '#0000FF', screenBg: 'var(--white)', textColor: 'var(--black)', btnBg: '#FF00FF', btnText: 'var(--white)',
         borderFormat: 'thick', shadowFormat: 'hard', fontFamily: 'monospace', layoutType: 'centered'
     },
     {
