@@ -1,29 +1,8 @@
 import { useNavigate } from 'react-router-dom';
 import styles from './TemplateCard.module.css';
 
-export interface ThemeConfig {
-    id: string;
-    name: string;
-    category: string;
-    bg: string;
-    screenBg: string;
-    textColor: string;
-    btnBg: string;
-    btnText: string;
-    btnBorder?: string;
-    btnShadow?: string;
-    backdropBlur?: string;
-    borderFormat: 'none' | 'thin' | 'thick';
-    shadowFormat: 'none' | 'soft' | 'hard';
-    fontFamily: string;
-    layoutType: 'centered' | 'left' | 'grid';
-    // Which content block style to render inside the phone
-    blockStyle?: 'links' | 'music' | 'photos' | 'product';
-    avatarSeed?: string;
-}
+import type { ThemeConfig } from '../lib/themes';
 
-// Social icon SVGs as simple circles with emoji labels
-const SOCIAL_ICONS = ['📸', '🎵', '🐦', '▶️'];
 
 // Category → default content block type
 function getBlockStyle(category: string): 'links' | 'music' | 'photos' | 'product' {
@@ -281,14 +260,7 @@ export default function TemplateCard({ theme, avatarUrl, username = 'Creator Nam
                     {blockStyle === 'photos' && <PhotosContent {...contentProps} />}
                     {blockStyle === 'product' && <ProductContent {...contentProps} />}
 
-                    {/* Social icons */}
-                    <div className={styles.socials} style={{ alignSelf: 'center' }}>
-                        {SOCIAL_ICONS.map((icon, i) => (
-                            <div key={i} className={styles.socialIcon} style={{ color: theme.textColor, opacity: 0.7 }}>
-                                {icon}
-                            </div>
-                        ))}
-                    </div>
+
                 </div>
             </div>
 

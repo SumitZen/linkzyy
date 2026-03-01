@@ -49,7 +49,8 @@ export default function SignupPage() {
         setIsLoading(true);
         try {
             await signup(name, email, password);
-            navigate('/dashboard', { replace: true });
+            const search = searchParams.toString();
+            navigate(`/dashboard${search ? `?${search}` : ''}`, { replace: true });
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Signup failed.');
         } finally {

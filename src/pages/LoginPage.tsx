@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { FormEvent } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Link, useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import './AuthPage.css';
 
@@ -20,6 +20,7 @@ export default function LoginPage() {
     const { login, loginWithGoogle } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
+    const [searchParams] = useSearchParams();
     const from = (location.state as { from?: { pathname: string } })?.from?.pathname || '/dashboard';
 
     const [email, setEmail] = useState('');
@@ -33,7 +34,8 @@ export default function LoginPage() {
         setError(''); setIsLoading(true);
         try {
             await login(email, password);
-            navigate(from, { replace: true });
+            const search = searchParams.toString();
+            navigate(`${from}${search ? `?${search}` : ''}`, { replace: true });
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Login failed.');
         } finally {

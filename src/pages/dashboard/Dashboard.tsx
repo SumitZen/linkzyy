@@ -1,20 +1,12 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import type { LinkItem, Block, MusicBlock, PhotoBlock, ProductBlock } from '../../context/AuthContext';
 import { PLATFORM_ICONS, PLATFORM_COLORS } from '../../lib/platformIcons';
+import { templatesList } from '../../lib/themes';
 import './Dashboard.css';
 
 type Tab = 'links' | 'appearance' | 'analytics' | 'settings';
-
-const THEMES = [
-    { id: 'editorial-light', label: 'Editorial', bg: 'linear-gradient(160deg,#e8eaf6,#c5cae9)', textColor: '#1a237e', btnBg: '#3949ab', btnColor: '#fff' },
-    { id: 'neon-nights', label: 'Neon Nights', bg: 'linear-gradient(160deg,#2d0060,#0a001a)', textColor: '#e9d5ff', btnBg: 'linear-gradient(90deg,#7c3aed,#db2777)', btnColor: '#fff' },
-    { id: 'pastel-dream', label: 'Pastel', bg: 'linear-gradient(150deg,#fce4ec,#f8bbd9)', textColor: '#880e4f', btnBg: 'linear-gradient(90deg,#e91e8c,#ff6090)', btnColor: '#fff' },
-    { id: 'dark-minimal', label: 'Dark', bg: 'linear-gradient(160deg,#0a0a0a,#1a1a1a)', textColor: '#f0f0f0', btnBg: '#f0f0f0', btnColor: '#0a0a0a' },
-    { id: 'sunset-warm', label: 'Sunset', bg: 'linear-gradient(160deg,#ff7043,#ffd54f)', textColor: '#bf360c', btnBg: '#e64a19', btnColor: '#fff' },
-    { id: 'ocean-blue', label: 'Ocean', bg: 'linear-gradient(160deg,#0d47a1,#0288d1)', textColor: '#e3f2fd', btnBg: '#2196f3', btnColor: '#fff' },
-];
 
 // Icon helper — renders real SVG from a platform id (falls back to a generic link icon)
 function PlatformIcon({ id, size = 18 }: { id: string; size?: number }) {
@@ -33,6 +25,7 @@ function PlatformIcon({ id, size = 18 }: { id: string; size?: number }) {
 export default function Dashboard() {
     const { user, logout, updateUser } = useAuth();
     const navigate = useNavigate();
+    const [searchParams, setSearchParams] = useSearchParams();
     const [tab, setTab] = useState<Tab>('links');
     const [savedMsg, setSavedMsg] = useState('');
 
@@ -66,10 +59,22 @@ export default function Dashboard() {
     // ─── Settings state ───
     const [settingsName, setSettingsName] = useState(user?.name ?? '');
 
-    const theme = THEMES.find(t => t.id === selTheme) ?? THEMES[0];
+    const theme = templatesList.find(t => t.id === selTheme) ?? templatesList[0];
     const previewBg = bgImage ? `url(${bgImage}) center/cover no-repeat` : bgColor || theme.bg;
 
     const flash = () => { setSavedMsg('Saved!'); setTimeout(() => setSavedMsg(''), 1800); };
+
+    // ─── Auto-Apply Theme from URL ───
+    useEffect(() => {
+        const themeToApply = searchParams.get('template');
+        if (themeToApply && templatesList.some(t => t.id === themeToApply)) {
+            setSelTheme(themeToApply);
+            updateUser({ theme: themeToApply });
+            setTab('appearance'); // Jump right into Appearance so they see what happened
+            // Auto strip the query param so refresh doesn't re-trigger
+            setSearchParams({}, { replace: true });
+        }
+    }, [searchParams, setSearchParams, updateUser]);
 
     // CRUD helpers
     const saveLinks = (u: LinkItem[]) => { setLinks(u); updateUser({ links: u }); };
@@ -314,7 +319,7 @@ export default function Dashboard() {
                                     <div style={{ fontSize: '0.6rem', color: theme.textColor, opacity: 0.7, textAlign: 'center', marginBottom: 14, padding: '0 8px' }}>{bio || user?.bio}</div>
                                     <div style={{ display: 'flex', flexDirection: 'column', gap: 8, width: '100%' }}>
                                         {links.filter(l => l.enabled).slice(0, 4).map(link => (
-                                            <div key={link.id} style={{ background: theme.btnBg, color: theme.btnColor, borderRadius: 10, padding: '8px 12px', fontSize: '0.68rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 7 }}>
+                                            <div key={link.id} style={{ background: theme.btnBg, color: theme.btnText, borderRadius: 10, padding: '8px 12px', fontSize: '0.68rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 7 }}>
                                                 <PlatformIcon id={link.icon} size={14} /><span>{link.label}</span>
                                             </div>
                                         ))}
@@ -416,15 +421,15 @@ export default function Dashboard() {
 
                         {/* Theme grid */}
                         <div className="bento-field-row">
-                            <label className="bento-field-label">Theme Preset <span className="bento-hint">(base background gradient)</span></label>
+                            <label className="bento-field-label">Theme Preset <span className="bento-hint">(base background gradient & UI style)</span></label>
                             <div className="bento-theme-grid">
-                                {THEMES.map(t => (
+                                {templatesList.map(t => (
                                     <button key={t.id} className={`bento-theme-btn${selTheme === t.id ? ' sel' : ''}`} onClick={() => setSelTheme(t.id)}>
                                         <div className="bento-tp" style={{ background: t.bg }}>
                                             <div className="bento-tp-circ" />
                                             <div className="bento-tp-bar" style={{ background: t.btnBg }} />
                                         </div>
-                                        <div className="bento-theme-name">{t.label}</div>
+                                        <div className="bento-theme-name">{t.name}</div>
                                         {selTheme === t.id && <div className="bento-tick">✓</div>}
                                     </button>
                                 ))}
