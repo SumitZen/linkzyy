@@ -756,6 +756,24 @@ h6 {
         align-items: flex-start;
     }
 
+    /* Spatial Mockups Mobile Fix */
+    .spatial-mockup-wrapper {
+        height: auto;
+        margin-top: 40px;
+        perspective: none;
+    }
+
+    .main-device {
+        width: 100%;
+        max-width: 300px;
+        height: 600px;
+        transform: none !important;
+    }
+
+    .floating-card {
+        display: none !important;
+    }
+
     /* Sections */
     .features-grid,
     .stats-grid {
