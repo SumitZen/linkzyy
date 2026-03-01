@@ -141,52 +141,85 @@
     opacity: 0.85;
 }
 
-.bento-logout {
-    padding: 6px 12px;
+.bento-ghost {
+    padding: 12px 16px;
     background: transparent;
-    border: 1px solid #e5e7eb;
-    border-radius: 7px;
-    color: #6b7280;
-    font-size: 0.75rem;
-    font-family: inherit;
-    cursor: pointer;
-    transition: all 0.12s;
-}
-
-.bento-logout:hover {
-    border-color: #f87171;
+    border: 3px solid transparent;
     color: #dc2626;
+    font-weight: 800;
+    font-size: 0.85rem;
+    cursor: pointer;
+    border-radius: 6px;
+    text-transform: uppercase;
 }
 
-/* ═══ BENTO GRID ═══ */
+.bento-ghost:hover {
+    border-color: #dc2626;
+    background: #fee2e2;
+}
+
+/* ═══ NEO-BRUTALIST GRID ═══ */
 .bento-grid {
-    display: grid;
-    grid-template-columns: 1fr 380px;
+    display: flex;
+    flex-wrap: wrap;
     align-items: flex-start;
-    gap: 32px;
-    padding: 24px 32px;
+    justify-content: center;
+    padding: 100px 24px 40px;
+    /* Space for the fixed Navbar */
     max-width: 1400px;
     margin: 0 auto;
+    gap: 24px;
+}
+
+@media (min-width: 1024px) {
+    .bento-grid {
+        padding: 100px 48px 48px;
+    }
 }
 
 .bento-left-col {
     display: flex;
     flex-direction: column;
     gap: 24px;
+    width: 100%;
+}
+
+@media (min-width: 1024px) {
+    .bento-left-col {
+        width: calc(60% - 12px);
+    }
 }
 
 .bento-right-col {
-    position: sticky;
-    top: 24px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 24px;
 }
 
-/* Card base */
+@media (min-width: 1024px) {
+    .bento-right-col {
+        width: calc(40% - 12px);
+        position: sticky;
+        top: 100px;
+        height: calc(100vh - 140px);
+    }
+}
+
+/* ═══ NEO-BRUTALIST CARDS ═══ */
 .bento-card {
     background: #fff;
-    border-radius: 16px;
-    padding: 22px;
-    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.05);
-    border: 1px solid #f0f0f0;
+    border-radius: 6px;
+    padding: 24px;
+    border: 3px solid #000;
+    box-shadow: 4px 4px 0px 0px #000;
+    transition: all 0.15s;
+}
+
+.bento-card:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0px 0px #000;
 }
 
 /* STAT CARDS */
@@ -745,15 +778,80 @@
     background: #fff;
 }
 
-.bento-ghost {
-    padding: 8px 14px;
-    border: 1.5px solid #e5e7eb;
-    border-radius: 8px;
+.bento-logout {
+    padding: 6px 12px;
     background: transparent;
+    border: 1px solid #e5e7eb;
+    border-radius: 7px;
     color: #6b7280;
+    font-size: 0.75rem;
     font-family: inherit;
-    font-size: 0.8rem;
     cursor: pointer;
+    transition: all 0.12s;
+}
+
+.bento-logout:hover {
+    border-color: #f87171;
+    color: #dc2626;
+}
+
+/* ═══ SIMPLE FORM CONTROLS (Neo-Brutalism) ═══ */
+.bento-simple-form {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.bento-field-row {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.bento-field-label {
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: #000;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.bento-input {
+    padding: 14px 16px;
+    border: 3px solid #000;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    font-family: inherit;
+    background: #fff;
+    box-shadow: 2px 2px 0px 0px #000;
+    transition: all 0.15s;
+}
+
+.bento-input:focus {
+    outline: none;
+    box-shadow: 4px 4px 0px 0px #0ddff2;
+    border-color: #000;
+}
+
+.bento-btn {
+    padding: 12px 20px;
+    background: #0ddff2;
+    /* Stitch Cyan */
+    color: #000;
+    border: 3px solid #000;
+    border-radius: 6px;
+    font-weight: 800;
+    font-size: 0.9rem;
+    cursor: pointer;
+    box-shadow: 2px 2px 0px 0px #000;
+    text-transform: uppercase;
+    transition: all 0.1s;
+}
+
+.bento-btn:hover:not(:disabled) {
+    transform: translate(2px, 2px);
+    box-shadow: 0px 0px 0px 0px #000;
 }
 
 /* Theme grid */

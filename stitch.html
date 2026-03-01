@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0ddff2",
+                        "neo-yellow": "#FFFF00",
+                        "neo-cyan": "#00FFFF",
+                        "background-light": "#f5f8f8",
+                        "background-dark": "#102122",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans"]
+                    },
+                    borderWidth: {
+                        '3': '3px',
+                    },
+                    boxShadow: {
+                        'neo': '4px 4px 0px 0px #000000',
+                        'neo-sm': '2px 2px 0px 0px #000000',
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .neo-border { border: 3px solid #000000; }
+        .neo-shadow { box-shadow: 4px 4px 0px 0px #000000; }
+        .neo-shadow-sm { box-shadow: 2px 2px 0px 0px #000000; }
+        .neo-input:focus { outline: none; border-color: #000000; ring: 0; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 antialiased">
+<!-- Header Navigation -->
+<header class="sticky top-0 z-50 bg-white border-b-3 border-black px-6 py-4 flex justify-between items-center">
+<div class="flex items-center gap-3">
+<div class="bg-neo-cyan neo-border p-1">
+<span class="material-symbols-outlined font-bold text-black">bolt</span>
+</div>
+<h1 class="text-2xl font-extrabold tracking-tighter uppercase italic">NeoLink</h1>
+</div>
+<div class="flex items-center gap-4">
+<button class="bg-neo-yellow neo-border neo-shadow px-4 py-2 font-black uppercase text-sm hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all">
+                Publish
+            </button>
+<div class="neo-border rounded-full p-1 bg-white">
+<span class="material-symbols-outlined text-black">account_circle</span>
+</div>
+</div>
+</header>
+<main class="flex min-h-screen">
+<!-- Left Column: Settings Area -->
+<section class="w-full lg:w-3/5 p-6 lg:p-12 overflow-y-auto border-r-3 border-black bg-white">
+<div class="max-w-2xl mx-auto space-y-12">
+<!-- Profile Section -->
+<div class="space-y-6">
+<h2 class="text-3xl font-black uppercase tracking-tight">Edit Profile</h2>
+<div class="flex items-center gap-8 p-6 neo-border bg-background-light">
+<div class="relative">
+<div class="w-32 h-32 rounded-full neo-border bg-neo-cyan overflow-hidden" data-alt="User profile avatar close up photo" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD1dvYMvLPx7xpPvkxmZbno_oEbRnMbfscm57AB0jq4vTwbaTwqlWY4go22dk09PtzPzSUT3sjWwEBRTqwk1mugxKJBexubkrXY39wuFpA9wze4bJU9vU6QwxI2Dm7qXKKzsgg1UmhztOdxpIgFTjaMqa3bMKo16UPa92fUh6ennuDpp24Ue9nHXv5JQJDargEl5IfdQJVQH1WUJ6a0ZipgL1POBfU7HmL79szjzhhQ07HhQUEgFRlEC2W6Amh2B15vdnX_EwQhAsic'); background-size: cover;">
+</div>
+<button class="absolute bottom-0 right-0 bg-neo-yellow neo-border p-2 neo-shadow-sm rounded-full">
+<span class="material-symbols-outlined text-black text-sm font-bold">edit</span>
+</button>
+</div>
+<div class="space-y-2">
+<p class="font-black text-lg uppercase">Profile Image</p>
+<p class="text-slate-600 text-sm font-medium">JPG, PNG or GIF. Max 5MB.</p>
+<button class="bg-white neo-border px-4 py-1 font-bold text-sm neo-shadow-sm">Replace</button>
+</div>
+</div>
+<div class="space-y-4">
+<div class="flex flex-col gap-2">
+<label class="font-black uppercase text-sm tracking-widest">Display Name</label>
+<input class="w-full neo-border p-4 neo-shadow-sm neo-input font-bold text-lg" placeholder="Your Name" type="text" value="Neo User"/>
+</div>
+<div class="flex flex-col gap-2">
+<label class="font-black uppercase text-sm tracking-widest">Bio</label>
+<textarea class="w-full neo-border p-4 neo-shadow-sm neo-input font-medium" placeholder="Tell the world who you are..." rows="4">Creative technologist building the future of link-in-bio experiences. Based in Cyber Tokyo.</textarea>
+</div>
+</div>
+</div>
+<!-- Links Section -->
+<div class="space-y-6 pt-6">
+<div class="flex justify-between items-center">
+<h2 class="text-3xl font-black uppercase tracking-tight">Your Links</h2>
+<button class="bg-neo-cyan neo-border neo-shadow px-6 py-2 font-black uppercase flex items-center gap-2 hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all">
+<span class="material-symbols-outlined font-black">add</span>
+                            Add New
+                        </button>
+</div>
+<div class="space-y-6">
+<!-- Link Card 1 -->
+<div class="neo-border p-6 bg-white neo-shadow relative group">
+<div class="absolute -top-3 -left-3 bg-black text-neo-yellow px-2 py-1 font-black text-xs uppercase">Link 01</div>
+<div class="flex flex-col gap-4">
+<div class="flex gap-4">
+<div class="flex-1 space-y-2">
+<label class="text-[10px] font-black uppercase text-slate-400">Title</label>
+<input class="w-full border-b-2 border-black focus:ring-0 focus:border-neo-cyan p-0 font-bold bg-transparent" type="text" value="My Portfolio"/>
+</div>
+<div class="flex-1 space-y-2">
+<label class="text-[10px] font-black uppercase text-slate-400">URL</label>
+<input class="w-full border-b-2 border-black focus:ring-0 focus:border-neo-cyan p-0 font-bold bg-transparent" type="text" value="https://portfolio.neo"/>
+</div>
+</div>
+<div class="flex justify-between items-center pt-2">
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-slate-400 cursor-pointer hover:text-black">bar_chart</span>
+<span class="material-symbols-outlined text-slate-400 cursor-pointer hover:text-black">image</span>
+</div>
+<span class="material-symbols-outlined text-red-500 cursor-pointer font-bold">delete</span>
+</div>
+</div>
+</div>
+<!-- Link Card 2 -->
+<div class="neo-border p-6 bg-white neo-shadow relative group">
+<div class="absolute -top-3 -left-3 bg-black text-neo-yellow px-2 py-1 font-black text-xs uppercase">Link 02</div>
+<div class="flex flex-col gap-4">
+<div class="flex gap-4">
+<div class="flex-1 space-y-2">
+<label class="text-[10px] font-black uppercase text-slate-400">Title</label>
+<input class="w-full border-b-2 border-black focus:ring-0 focus:border-neo-cyan p-0 font-bold bg-transparent" type="text" value="Latest YouTube Video"/>
+</div>
+<div class="flex-1 space-y-2">
+<label class="text-[10px] font-black uppercase text-slate-400">URL</label>
+<input class="w-full border-b-2 border-black focus:ring-0 focus:border-neo-cyan p-0 font-bold bg-transparent" type="text" value="https://youtube.com/watch?v=..."/>
+</div>
+</div>
+<div class="flex justify-between items-center pt-2">
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-slate-400 cursor-pointer hover:text-black">bar_chart</span>
+<span class="material-symbols-outlined text-slate-400 cursor-pointer hover:text-black">image</span>
+</div>
+<span class="material-symbols-outlined text-red-500 cursor-pointer font-bold">delete</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="h-24"></div>
+</div>
+</section>
+<!-- Right Column: Live Phone Preview -->
+<aside class="hidden lg:flex w-2/5 bg-background-light items-center justify-center sticky top-20 h-[calc(100vh-80px)] overflow-hidden">
+<div class="relative w-[320px] h-[640px] neo-border bg-white neo-shadow overflow-hidden flex flex-col items-center p-8">
+<!-- Phone Top Bar -->
+<div class="w-24 h-6 bg-black rounded-b-xl absolute top-0"></div>
+<!-- Preview Content -->
+<div class="w-full mt-10 flex flex-col items-center space-y-6">
+<div class="w-24 h-24 rounded-full neo-border bg-neo-cyan overflow-hidden" data-alt="User preview avatar circular photo" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCYh-cBHCZ1s36-OL2-snXhRykh2CFzY9b3iwED62QFltnFQBmzPGXm3KoU79VyGe11ufFAJ6eVuJj6o10muI6IPIf1pdm6wG75UhwFQohD1joaFj6MOk7gPSeZHqVzVFXaCt_-oHLUREEyl_F0wGpXeLL4TpnJIPyKL3eQmXoIOCEXpaP2VRwldGnoUVl8uH8l_KwxugUtVdQtgr6r3EYaHVb78ui8W5y0qj54-qwbmu9dHPIwdTtp_HtXeVt-9LtmTzY4buGN66oT'); background-size: cover;">
+</div>
+<div class="text-center">
+<h3 class="font-black text-xl uppercase italic">Neo User</h3>
+<p class="text-[10px] font-bold text-slate-500 max-w-[200px] mt-2 leading-tight">Creative technologist building the future of link-in-bio experiences.</p>
+</div>
+<div class="w-full space-y-3">
+<div class="w-full neo-border py-3 px-4 bg-neo-yellow neo-shadow-sm text-center font-black uppercase text-xs tracking-wider">
+                            My Portfolio
+                        </div>
+<div class="w-full neo-border py-3 px-4 bg-white neo-shadow-sm text-center font-black uppercase text-xs tracking-wider">
+                            Latest YouTube Video
+                        </div>
+<div class="w-full neo-border py-3 px-4 bg-white neo-shadow-sm text-center font-black uppercase text-xs tracking-wider">
+                            Twitter / X
+                        </div>
+<div class="w-full neo-border py-3 px-4 bg-white neo-shadow-sm text-center font-black uppercase text-xs tracking-wider">
+                            Shop Merch
+                        </div>
+</div>
+</div>
+<!-- Preview Footer -->
+<div class="absolute bottom-6 flex items-center gap-2">
+<div class="bg-neo-cyan neo-border p-1">
+<span class="material-symbols-outlined text-[14px] font-bold text-black">bolt</span>
+</div>
+<span class="text-[10px] font-black uppercase tracking-tighter italic">NeoLink</span>
+</div>
+</div>
+<!-- Preview Label -->
+<div class="absolute top-6 right-6 flex items-center gap-2 bg-black text-white px-3 py-1 neo-border border-white">
+<span class="material-symbols-outlined text-sm text-neo-cyan">visibility</span>
+<span class="text-xs font-black uppercase">Live Preview</span>
+</div>
+</aside>
+</main>
+<!-- Bottom Mobile Nav -->
+<nav class="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t-3 border-black flex justify-around items-center p-3 z-50">
+<a class="flex flex-col items-center gap-1 text-black" href="#">
+<span class="material-symbols-outlined font-black">edit_note</span>
+<span class="text-[10px] font-black uppercase">Edit</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">palette</span>
+<span class="text-[10px] font-black uppercase">Style</span>
+</a>
+<div class="w-12 h-12 bg-neo-yellow neo-border rounded-full flex items-center justify-center -mt-8 neo-shadow-sm">
+<span class="material-symbols-outlined font-black text-black">add</span>
+</div>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="text-[10px] font-black uppercase">Stats</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-[10px] font-black uppercase">Settings</span>
+</a>
+</nav>
+</body></html>
