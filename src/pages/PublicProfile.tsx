@@ -63,7 +63,13 @@ export default function PublicProfile() {
     const previewBg = profile.bgImage ? `url(${profile.bgImage}) center/cover no-repeat fixed` : profile.bgColor || theme.screenBg;
 
     let links: LinkItem[] = [];
-    try { links = typeof profile.links === 'string' ? JSON.parse(profile.links) : (profile.links || []); } catch { /* ignore */ }
+    try {
+        if (profile.links) {
+            links = typeof profile.links === 'string' ? JSON.parse(profile.links) : profile.links;
+        }
+    } catch (err) {
+        console.error('Link parsing error:', err);
+    }
 
     return (
         <div style={{
