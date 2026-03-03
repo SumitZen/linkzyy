@@ -90,12 +90,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     useEffect(() => {
         if (SUPABASE_READY) {
             // Supabase: listen to auth state
-            supabase.auth.getSession().then(({ data }) => {
-                if (data.session?.user) {
+            supabase.auth.getSession().then(({ data, error }) => {
+                if (error) {
+                    console.error('Supabase session error:', error);
+                }
+                if (data?.session?.user) {
                     const saved = localStorage.getItem(`linkzy_profile_${data.session.user.id}`);
                     const extra = saved ? JSON.parse(saved) : {};
                     setUser(buildUserFromSupabase(data.session.user, extra));
                 }
+                setIsLoading(false);
+            }).catch((err) => {
+                console.error('Supabase connection failed:', err);
                 setIsLoading(false);
             });
 
@@ -122,8 +128,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // ── Email/password login ──
     const login = async (email: string, password: string) => {
         if (SUPABASE_READY) {
-            const { error } = await supabase.auth.signInWithPassword({ email, password });
-            if (error) throw new Error(error.message);
+            try {
+                const { error, data } = await supabase.auth.signInWithPassword({ email, password });
+                if (error) throw new Error(error.message);
+                if (!data?.user) throw new Error('Network error: Unable to connect to authentication server.');
+            } catch (err: any) {
+                if (err?.name === 'AbortError' || err?.message?.includes('fetch')) {
+                    throw new Error('Network timeout: Please check your connection or try again later.');
+                }
+                throw err;
+            }
         } else {
             const users = getStoredUsers();
             const entry = users[email.toLowerCase()];
@@ -138,22 +152,37 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         if (!SUPABASE_READY) {
             throw new Error('Supabase is not configured. Add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY to .env.local');
         }
-        const { error } = await supabase.auth.signInWithOAuth({
-            provider: 'google',
-            options: { redirectTo: `${window.location.origin}/auth/callback` },
-        });
-        if (error) throw new Error(error.message);
+        try {
+            const { error } = await supabase.auth.signInWithOAuth({
+                provider: 'google',
+                options: { redirectTo: `${window.location.origin}/auth/callback` },
+            });
+            if (error) throw new Error(error.message);
+        } catch (err: any) {
+            if (err?.name === 'AbortError' || err?.message?.includes('fetch')) {
+                throw new Error('Network timeout: Please check your connection or try again later.');
+            }
+            throw err;
+        }
     };
 
     // ── Signup ──
     const signup = async (name: string, email: string, password: string) => {
         if (SUPABASE_READY) {
-            const { error } = await supabase.auth.signUp({
-                email,
-                password,
-                options: { data: { full_name: name } },
-            });
-            if (error) throw new Error(error.message);
+            try {
+                const { error, data } = await supabase.auth.signUp({
+                    email,
+                    password,
+                    options: { data: { full_name: name } },
+                });
+                if (error) throw new Error(error.message);
+                if (!data?.user) throw new Error('Network error: Unable to connect to authentication server.');
+            } catch (err: any) {
+                if (err?.name === 'AbortError' || err?.message?.includes('fetch')) {
+                    throw new Error('Network timeout: Please check your connection or try again later.');
+                }
+                throw err;
+            }
         } else {
             const users = getStoredUsers();
             const key = email.toLowerCase();
