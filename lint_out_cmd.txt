@@ -1,0 +1,52 @@
+
+C:\Users\ASUS\Downloads\link-in-bio\linkzy-app\src\components\Navbar.tsx
+  15:13  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\Users\ASUS\Downloads\link-in-bio\linkzy-app\src\components\Navbar.tsx:15:13
+  13 |         const theme = localStorage.getItem('theme');
+  14 |         if (theme === 'dark') {
+> 15 |             setIsDarkMode(true);
+     |             ^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  16 |             document.documentElement.setAttribute('data-theme', 'dark');
+  17 |         }
+  18 |     }, []);  react-hooks/set-state-in-effect
+
+C:\Users\ASUS\Downloads\link-in-bio\linkzy-app\src\context\AuthContext.tsx
+  116:23  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\Users\ASUS\Downloads\link-in-bio\linkzy-app\src\context\AuthContext.tsx:116:23
+  114 |             const session = localStorage.getItem(SESSION_KEY);
+  115 |             if (session) {
+> 116 |                 try { setUser(JSON.parse(session)); } catch { localStorage.removeItem(SESSION_KEY); }
+      |                       ^^^^^^^ Avoid calling setState() directly within an effect
+  117 |             }
+  118 |             setIsLoading(false);
+  119 |         }  react-hooks/set-state-in-effect
+  127:27  error  Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                @typescript-eslint/no-explicit-any
+  153:23  error  Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                @typescript-eslint/no-explicit-any
+  167:27  error  Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                @typescript-eslint/no-explicit-any
+  223:17  error  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          react-refresh/only-export-components
+
+C:\Users\ASUS\Downloads\link-in-bio\linkzy-app\src\lib\firebase.ts
+  14:46  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\ASUS\Downloads\link-in-bio\linkzy-app\src\pages\PublicProfile.tsx
+  196:59  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\ASUS\Downloads\link-in-bio\linkzy-app\src\pages\dashboard\Dashboard.tsx
+  176:23  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+✖ 9 problems (9 errors, 0 warnings)
+

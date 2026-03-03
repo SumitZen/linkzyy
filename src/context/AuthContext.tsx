@@ -1,6 +1,8 @@
+/* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useState, useEffect } from 'react';
 import type { ReactNode } from 'react';
-import { supabase, SUPABASE_READY } from '../lib/supabase';
+import { account, APPWRITE_READY } from '../lib/appwrite';
+import { ID, OAuthProvider } from 'appwrite';
 
 // ── Block / User types ──────────────────────────────────────────────────────
 export interface LinkBlock {
@@ -39,7 +41,7 @@ interface AuthContextValue {
     user: User | null;
     isLoading: boolean;
     login: (email: string, password: string) => Promise<void>;
-    loginWithGoogle: () => Promise<void>;
+    loginWithGoogle: () => void;
     signup: (name: string, email: string, password: string) => Promise<void>;
     logout: () => void;
     updateUser: (updates: Partial<User>) => void;
@@ -47,7 +49,7 @@ interface AuthContextValue {
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
-// ── localStorage helpers (used as fallback when Supabase not configured) ─────
+// ── localStorage helpers ─────
 const STORAGE_KEY = 'linkzy_users';
 const SESSION_KEY = 'linkzy_session';
 
@@ -60,17 +62,17 @@ function getDefaultLinks(): LinkItem[] {
     return [];
 }
 
-function buildUserFromSupabase(sbUser: { id: string; email?: string | null; user_metadata?: Record<string, string> }, extra?: Partial<User>): User {
-    const email = sbUser.email ?? '';
-    const meta = sbUser.user_metadata ?? {};
+// Convert an Appwrite User into our standard User shape
+function buildUserFromAppwrite(awUser: import('appwrite').Models.User<import('appwrite').Models.Preferences>, extra?: Partial<User>): User {
+    const email = awUser.email ?? '';
     return {
-        id: sbUser.id,
-        name: meta['full_name'] ?? meta['name'] ?? email.split('@')[0],
+        id: awUser.$id,
+        name: awUser.name || email.split('@')[0],
         email,
         plan: 'free',
         username: email.split('@')[0].replace(/[^a-z0-9]/gi, '').toLowerCase(),
         bio: 'Hey there! I use Linkzy.',
-        avatarUrl: meta['avatar_url'] ?? meta['picture'] ?? '',
+        avatarUrl: '',
         bannerUrl: '',
         bgColor: '',
         bgImage: '',
@@ -83,60 +85,48 @@ function buildUserFromSupabase(sbUser: { id: string; email?: string | null; user
 
 // ── Provider ─────────────────────────────────────────────────────────────────
 export function AuthProvider({ children }: { children: ReactNode }) {
-    const [user, setUser] = useState<User | null>(null);
+    const [user, setUser] = useState<User | null>(() => {
+        // Optimistic restore
+        const session = localStorage.getItem(SESSION_KEY);
+        if (session) {
+            try { return JSON.parse(session); } catch { localStorage.removeItem(SESSION_KEY); }
+        }
+        return null;
+    });
     const [isLoading, setIsLoading] = useState(true);
 
-    // ── Init: restore session ──
     useEffect(() => {
-        if (SUPABASE_READY) {
-            // Supabase: listen to auth state
-            supabase.auth.getSession().then(({ data, error }) => {
-                if (error) {
-                    console.error('Supabase session error:', error);
-                }
-                if (data?.session?.user) {
-                    const saved = localStorage.getItem(`linkzy_profile_${data.session.user.id}`);
-                    const extra = saved ? JSON.parse(saved) : {};
-                    setUser(buildUserFromSupabase(data.session.user, extra));
-                }
+        if (APPWRITE_READY) {
+            account.get().then((awUser) => {
+                const saved = localStorage.getItem(`linkzy_profile_${awUser.$id}`);
+                const extra = saved ? JSON.parse(saved) : {};
+                setUser(buildUserFromAppwrite(awUser, extra));
                 setIsLoading(false);
-            }).catch((err) => {
-                console.error('Supabase connection failed:', err);
+            }).catch(() => {
+                setUser(null);
+                localStorage.removeItem(SESSION_KEY);
                 setIsLoading(false);
             });
-
-            const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
-                if (session?.user) {
-                    const saved = localStorage.getItem(`linkzy_profile_${session.user.id}`);
-                    const extra = saved ? JSON.parse(saved) : {};
-                    setUser(buildUserFromSupabase(session.user, extra));
-                } else {
-                    setUser(null);
-                }
-            });
-            return () => listener.subscription.unsubscribe();
         } else {
-            // Fallback: localStorage session
-            const session = localStorage.getItem(SESSION_KEY);
-            if (session) {
-                try { setUser(JSON.parse(session)); } catch { localStorage.removeItem(SESSION_KEY); }
-            }
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setIsLoading(false);
         }
     }, []);
 
     // ── Email/password login ──
     const login = async (email: string, password: string) => {
-        if (SUPABASE_READY) {
+        if (APPWRITE_READY) {
             try {
-                const { error, data } = await supabase.auth.signInWithPassword({ email, password });
-                if (error) throw new Error(error.message);
-                if (!data?.user) throw new Error('Network error: Unable to connect to authentication server.');
-            } catch (err: any) {
-                if (err?.name === 'AbortError' || err?.message?.includes('fetch')) {
-                    throw new Error('Network timeout: Please check your connection or try again later.');
-                }
-                throw err;
+                await account.createEmailPasswordSession(email, password);
+                const awUser = await account.get();
+                const saved = localStorage.getItem(`linkzy_profile_${awUser.$id}`);
+                const extra = saved ? JSON.parse(saved) : {};
+                const u = buildUserFromAppwrite(awUser, extra);
+                setUser(u);
+                localStorage.setItem(SESSION_KEY, JSON.stringify(u));
+            } catch (err: unknown) {
+                const error = err as { code?: string; message?: string };
+                throw new Error(error.message || 'Login failed.');
             }
         } else {
             const users = getStoredUsers();
@@ -148,40 +138,32 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
 
     // ── Google OAuth login ──
-    const loginWithGoogle = async () => {
-        if (!SUPABASE_READY) {
-            throw new Error('Supabase is not configured. Add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY to .env.local');
+    const loginWithGoogle = () => {
+        if (!APPWRITE_READY) {
+            throw new Error('Appwrite is not configured. Add VITE_APPWRITE_* variables to .env.local');
         }
-        try {
-            const { error } = await supabase.auth.signInWithOAuth({
-                provider: 'google',
-                options: { redirectTo: `${window.location.origin}/auth/callback` },
-            });
-            if (error) throw new Error(error.message);
-        } catch (err: any) {
-            if (err?.name === 'AbortError' || err?.message?.includes('fetch')) {
-                throw new Error('Network timeout: Please check your connection or try again later.');
-            }
-            throw err;
-        }
+        // Initiates OAuth and navigates away
+        account.createOAuth2Session(
+            OAuthProvider.Google,
+            window.location.origin + '/auth/callback',
+            window.location.origin + '/login'
+        );
     };
 
     // ── Signup ──
     const signup = async (name: string, email: string, password: string) => {
-        if (SUPABASE_READY) {
+        if (APPWRITE_READY) {
             try {
-                const { error, data } = await supabase.auth.signUp({
-                    email,
-                    password,
-                    options: { data: { full_name: name } },
-                });
-                if (error) throw new Error(error.message);
-                if (!data?.user) throw new Error('Network error: Unable to connect to authentication server.');
-            } catch (err: any) {
-                if (err?.name === 'AbortError' || err?.message?.includes('fetch')) {
-                    throw new Error('Network timeout: Please check your connection or try again later.');
-                }
-                throw err;
+                await account.create(ID.unique(), email, password, name);
+                await account.createEmailPasswordSession(email, password);
+                const awUser = await account.get();
+                const u = buildUserFromAppwrite(awUser);
+                setUser(u);
+                localStorage.setItem(SESSION_KEY, JSON.stringify(u));
+                localStorage.setItem(`linkzy_profile_${u.id}`, JSON.stringify(u));
+            } catch (err: unknown) {
+                const error = err as { code?: string; message?: string };
+                throw new Error(error.message || 'Signup failed.');
             }
         } else {
             const users = getStoredUsers();
@@ -203,39 +185,35 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     // ── Logout ──
     const logout = () => {
-        if (SUPABASE_READY) {
-            supabase.auth.signOut();
+        if (APPWRITE_READY) {
+            account.deleteSession('current').finally(() => {
+                setUser(null);
+                localStorage.removeItem(SESSION_KEY);
+            });
         } else {
             setUser(null);
             localStorage.removeItem(SESSION_KEY);
         }
     };
 
-    // ── updateUser: persist profile data alongside Supabase auth ──
+    // ── updateUser: persist local ──
     const updateUser = (updates: Partial<User>) => {
-        if (!user) return;
-        const updated = { ...user, ...updates };
-        setUser(updated);
-        if (SUPABASE_READY) {
-            // Store profile in localStorage keyed by Supabase user ID
-            const profileKey = `linkzy_profile_${user.id}`;
-            const current = JSON.parse(localStorage.getItem(profileKey) || '{}');
-            localStorage.setItem(profileKey, JSON.stringify({ ...current, ...updates }));
-        } else {
-            localStorage.setItem(SESSION_KEY, JSON.stringify(updated));
-            const users = getStoredUsers();
-            if (users[user.email]) {
-                users[user.email].user = updated;
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(users));
+        setUser((prev) => {
+            if (!prev) return null;
+            const updated = { ...prev, ...updates };
+            if (APPWRITE_READY && prev.id) {
+                localStorage.setItem(`linkzy_profile_${prev.id}`, JSON.stringify(updated));
+                localStorage.setItem(SESSION_KEY, JSON.stringify(updated));
+            } else {
+                localStorage.setItem(SESSION_KEY, JSON.stringify(updated));
             }
-        }
+            return updated;
+        });
     };
 
-    return (
-        <AuthContext.Provider value={{ user, isLoading, login, loginWithGoogle, signup, logout, updateUser }}>
-            {children}
-        </AuthContext.Provider>
-    );
+    const value = { user, isLoading, login, loginWithGoogle, signup, logout, updateUser };
+
+    return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
 export function useAuth(): AuthContextValue {

@@ -4,18 +4,21 @@ import { useAuth } from '../context/AuthContext';
 import '../pages/LandingPage.css';
 
 export default function Navbar() {
-    const [isDarkMode, setIsDarkMode] = useState(false);
+    const [isDarkMode, setIsDarkMode] = useState(() => {
+        const theme = localStorage.getItem('theme');
+        return theme === 'dark';
+    });
     const [menuOpen, setMenuOpen] = useState(false);
     const { user, logout } = useAuth();
     const navigate = useNavigate();
 
     useEffect(() => {
-        const theme = localStorage.getItem('theme');
-        if (theme === 'dark') {
-            setIsDarkMode(true);
+        if (isDarkMode) {
             document.documentElement.setAttribute('data-theme', 'dark');
+        } else {
+            document.documentElement.removeAttribute('data-theme');
         }
-    }, []);
+    }, [isDarkMode]);
 
     // Close menu on outside click
     useEffect(() => {

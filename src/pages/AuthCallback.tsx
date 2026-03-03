@@ -1,31 +1,26 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { supabase } from '../lib/supabase';
+import { account, APPWRITE_READY } from '../lib/appwrite';
 
-/**
- * Handles the OAuth redirect from Supabase / Google.
- * Supabase exchanges the URL hash tokens automatically.
- * We just wait for the session to settle, then redirect to dashboard.
- */
 export default function AuthCallback() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        supabase.auth.getSession().then(({ data }) => {
-            if (data.session) {
+        if (!APPWRITE_READY) {
+            navigate('/login');
+            return;
+        }
+
+        // Appwrite sets the session cookie before redirecting back here.
+        // We just need to check if we can get the account, then redirect.
+        account.get()
+            .then(() => {
                 navigate('/dashboard', { replace: true });
-            } else {
-                // Poll briefly for session (OAuth redirect can be async)
-                const unsub = supabase.auth.onAuthStateChange((_e, session) => {
-                    if (session) {
-                        unsub.data.subscription.unsubscribe();
-                        navigate('/dashboard', { replace: true });
-                    }
-                });
-                // Timeout fallback – send back to login if no session within 5s
-                setTimeout(() => navigate('/login', { replace: true }), 5000);
-            }
-        });
+            })
+            .catch((error) => {
+                console.error("Appwrite OAuth Redirect Error:", error);
+                navigate('/login', { replace: true });
+            });
     }, [navigate]);
 
     return (

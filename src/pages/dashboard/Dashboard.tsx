@@ -7,7 +7,11 @@ import { useAuth } from '../../context/AuthContext';
 import type { LinkItem, Block, MusicBlock, PhotoBlock, ProductBlock } from '../../context/AuthContext';
 import { PLATFORM_ICONS, PLATFORM_COLORS } from '../../lib/platformIcons';
 import { templatesList } from '../../lib/themes';
-import { supabase } from '../../lib/supabase';
+import { storage, APPWRITE_READY, APPWRITE_CONFIG } from '../../lib/appwrite';
+import { ID } from 'appwrite';
+
+// ... other imports remain unchanged (keep them outside this replace block by targeting just the function)
+
 import getCroppedImg from '../../lib/cropImage';
 import Navbar from '../../components/Navbar';
 import './Dashboard.css';
@@ -144,33 +148,33 @@ export default function Dashboard() {
     }, []);
 
     const uploadCroppedImage = async () => {
-        if (!cropImageSrc || !croppedAreaPixels || !user) return;
+        if (!cropImageSrc || !croppedAreaPixels || !user || !APPWRITE_READY) {
+            if (!APPWRITE_READY) alert('Appwrite is not configured yet. Add VITE_APPWRITE_ keys.');
+            return;
+        }
         setIsUploading(true);
         try {
             const croppedFile = await getCroppedImg(cropImageSrc, croppedAreaPixels);
             if (!croppedFile) throw new Error('Failed to generate crop');
 
-            const filePath = `${user.id}/${Date.now()}_${cropType}.jpg`;
+            const fileId = ID.unique();
 
-            // Upload to Supabase 'backgrounds' bucket
-            const { error: uploadError } = await supabase.storage
-                .from('backgrounds')
-                .upload(filePath, croppedFile, { upsert: true });
-
-            if (uploadError) throw uploadError;
+            // Upload to Appwrite Storage
+            await storage.createFile(APPWRITE_CONFIG.storageBucketId, fileId, croppedFile);
 
             // Get public URL
-            const { data } = supabase.storage.from('backgrounds').getPublicUrl(filePath);
+            const publicUrl = storage.getFileView(APPWRITE_CONFIG.storageBucketId, fileId);
 
-            if (cropType === 'avatar') setAvatarUrl(data.publicUrl);
-            else if (cropType === 'banner') setBannerUrl(data.publicUrl);
-            else setBgImage(data.publicUrl);
+            if (cropType === 'avatar') setAvatarUrl(publicUrl);
+            else if (cropType === 'banner') setBannerUrl(publicUrl);
+            else setBgImage(publicUrl);
 
             setCropImageSrc(null); // Close modal
             flash();
-        } catch (err: any) {
-            console.error('Upload failed:', err);
-            alert(`Upload failed: ${err.message || err.toString()}`);
+        } catch (err: unknown) {
+            const error = err as Error;
+            console.error('Upload failed:', error);
+            alert(`Upload failed: ${error.message || error.toString()}`);
         } finally {
             setIsUploading(false);
         }

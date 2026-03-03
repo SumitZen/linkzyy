@@ -193,7 +193,7 @@ const BlockRenderer = ({ block }: { block: ProfileBlock }) => {
         case 'video':
             return <VideoBlock data={block} />;
         default:
-            console.warn(`Unknown block type: ${(block as any).type}`);
+            console.warn(`Unknown block type: ${(block as unknown as { type: string }).type}`);
             return null;
     }
 };
