@@ -208,9 +208,6 @@ export default function TemplateCard({ theme, avatarUrl, username = 'Creator Nam
         <div className={styles.cardWrapper} onClick={handleClick} role="button" tabIndex={0} onKeyDown={e => e.key === 'Enter' && handleClick()}>
             {/* Phone frame */}
             <div className={styles.phoneMockup}>
-                {/* Camera notch */}
-                <div className={styles.phoneNotch} />
-
                 {/* Screen */}
                 <div
                     className={styles.screen}

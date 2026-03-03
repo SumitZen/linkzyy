@@ -509,7 +509,6 @@ export default function Dashboard() {
                     <div className="bento-preview-label">LIVE PREVIEW</div>
                     <div className="bento-phone-wrap">
                         <div className="bento-phone">
-                            <div className="bento-phone-notch" />
                             <div className="bento-phone-content" style={{ background: previewBg }}>
                                 {bannerUrl && (
                                     <div style={{ width: 'calc(100% + 28px)', marginLeft: -14, height: 64, backgroundImage: `url(${bannerUrl})`, backgroundSize: 'cover', backgroundPosition: 'center', marginTop: -18, marginBottom: 12, flexShrink: 0 }} />
