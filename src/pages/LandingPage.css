@@ -39,11 +39,9 @@ h6 {
     justify-content: space-between;
     padding: 0 32px;
     height: 64px;
-    background: rgba(var(--surface-1-rgb), 0.85);
-    /* Requires RGB decomposition theoretically, assuming white fallback with backdrop for now */
-    background: var(--surface-1);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    background: color-mix(in srgb, var(--surface-1) 30%, transparent);
+    backdrop-filter: blur(32px) saturate(150%);
+    -webkit-backdrop-filter: blur(32px) saturate(150%);
     border: var(--border-subtle);
     border-radius: var(--border-radius-pill);
     box-shadow: var(--shadow-layer-1);
@@ -120,15 +118,17 @@ h6 {
 }
 
 .btn-signup {
-    background: var(--text-dark);
+    background: color-mix(in srgb, var(--text-dark) 85%, transparent);
     color: var(--bg-color);
-    border: none;
+    border: 1px solid color-mix(in srgb, var(--bg-color) 20%, transparent);
     padding: 12px 28px;
     border-radius: var(--border-radius-pill);
     font-family: var(--font-sans);
     font-weight: 600;
     font-size: 0.95rem;
     cursor: pointer;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     transition: var(--transition-smooth);
     box-shadow: var(--shadow-layer-1);
 }
@@ -361,7 +361,9 @@ h6 {
 .chip {
     padding: 8px 16px;
     border-radius: var(--border-radius-pill);
-    background: var(--surface-1);
+    background: color-mix(in srgb, var(--surface-1) 40%, transparent);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
     border: var(--border-subtle);
     font-size: 0.85rem;
     font-weight: 500;
@@ -377,7 +379,9 @@ h6 {
 }
 
 .plat-card {
-    background: var(--surface-1);
+    background: color-mix(in srgb, var(--surface-1) 20%, transparent);
+    backdrop-filter: blur(24px) saturate(120%);
+    -webkit-backdrop-filter: blur(24px) saturate(120%);
     border: var(--border-subtle);
     border-radius: var(--border-radius-lg);
     padding: 24px;
