@@ -15,9 +15,8 @@ export const SUPABASE_READY = isReal(supabaseUrl) && isReal(supabaseKey);
 // If in production on Vercel, route through the local proxy to bypass ISP blocks (like Jio)
 const finalUrl = SUPABASE_READY
     ? (import.meta.env.PROD ? '/api/supabase' : supabaseUrl!)
-    : '';
+    : 'https://placeholder.supabase.co'; // Prevent Invalid URL crash
 
-export const supabase: SupabaseClient = SUPABASE_READY
-    ? createClient(finalUrl, supabaseKey!)
-    : // Typed placeholder — never actually called when SUPABASE_READY is false
-    (null as unknown as SupabaseClient);
+const finalKey = SUPABASE_READY ? supabaseKey! : 'placeholder-key';
+
+export const supabase: SupabaseClient = createClient(finalUrl, finalKey);
