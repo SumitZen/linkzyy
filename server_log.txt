@@ -12,3 +12,4 @@ Port 5173 is in use, trying another one...
 [2m6:51:58 pm[22m [36m[1m[vite][22m[39m [32m.env.local changed, restarting server...[39m
 [2m6:51:58 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m Re-optimizing dependencies because lockfile has changed
 [2m6:51:58 pm[22m [36m[1m[vite][22m[39m server restarted.
+[2m9:39:16 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mindex.html[22m

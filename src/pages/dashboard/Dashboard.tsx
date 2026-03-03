@@ -215,6 +215,22 @@ export default function Dashboard() {
                     </div>
                 </aside>
 
+                {/* ── MOBILE BOTTOM NAV ── */}
+                <nav className="bento-tablet-nav">
+                    <button className={`bento-tablet-btn${activeTab === 'links' ? ' active' : ''}`} onClick={() => setActiveTab('links')}>
+                        <span className="bento-tablet-icon">🔗</span>
+                        Links
+                    </button>
+                    <button className={`bento-tablet-btn${activeTab === 'appearance' ? ' active' : ''}`} onClick={() => setActiveTab('appearance')}>
+                        <span className="bento-tablet-icon">✨</span>
+                        Appearance
+                    </button>
+                    <button className={`bento-tablet-btn${activeTab === 'settings' ? ' active' : ''}`} onClick={() => setActiveTab('settings')}>
+                        <span className="bento-tablet-icon">⚙️</span>
+                        Settings
+                    </button>
+                </nav>
+
                 <main className="bento-main-view">
                     {/* ── BENTO GRID ── */}
                     <div className="bento-grid">

@@ -262,18 +262,62 @@
         display: none;
     }
 
+    .bento-tablet-nav {
+        display: flex;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 64px;
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-top: 1px solid #e9ecef;
+        z-index: 1000;
+        justify-content: space-around;
+        align-items: center;
+        padding: 0 16px;
+    }
+
     .bento-grid {
         flex-direction: column;
-        padding: 24px 16px;
+        padding: 24px 16px 100px;
+        /* Space for bottom nav */
     }
 
     .bento-right-col {
         width: 100%;
         position: static;
         order: -1;
-        /* Show preview on top for mobile */
+    }
+
+    .bento-stat-grid {
+        grid-template-columns: 1fr 1fr !important;
     }
 }
+
+.bento-tablet-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    border: none;
+    background: transparent;
+    color: #6b7280;
+    font-family: inherit;
+    font-size: 0.7rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.bento-tablet-btn.active {
+    color: #7c3aed;
+}
+
+.bento-tablet-icon {
+    font-size: 1.25rem;
+}
+
 
 /* ═══ LIQUID GLASS CARDS ═══ */
 .bento-card {
