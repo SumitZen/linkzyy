@@ -13,6 +13,13 @@
     color: #111;
 }
 
+.bento-root .nav-brutal {
+    position: sticky !important;
+    top: 24px;
+    margin-bottom: 24px;
+    z-index: 999;
+}
+
 /* ═══ TOP NAV ═══ */
 .bento-nav {
     display: flex;
@@ -164,8 +171,7 @@
     flex-wrap: wrap;
     align-items: flex-start;
     justify-content: center;
-    padding: 100px 24px 40px;
-    /* Space for the fixed Navbar */
+    padding: 32px 24px 40px;
     max-width: 1400px;
     margin: 0 auto;
     gap: 24px;
@@ -173,7 +179,7 @@
 
 @media (min-width: 1024px) {
     .bento-grid {
-        padding: 100px 48px 48px;
+        padding: 40px 48px 48px;
     }
 }
 
@@ -202,8 +208,8 @@
     .bento-right-col {
         width: calc(40% - 12px);
         position: sticky;
-        top: 100px;
-        height: calc(100vh - 140px);
+        top: 24px;
+        height: calc(100vh - 48px);
     }
 }
 
@@ -489,13 +495,16 @@
     width: 280px;
     height: 580px;
     border-radius: 46px;
-    background: #000;
+    background: rgba(0, 0, 0, 0.85);
+    /* Premium dark glass */
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
     padding: 10px;
     box-shadow:
-        0 0 0 2px #3f3f46,
-        0 0 0 6px #18181b,
-        0 0 0 8px #27272a,
-        0 24px 48px -12px rgba(0, 0, 0, 0.8);
+        0 0 0 1px rgba(255, 255, 255, 0.15),
+        0 0 0 4px #000,
+        0 0 0 5px rgba(255, 255, 255, 0.08),
+        0 32px 64px -12px rgba(0, 0, 0, 0.5);
     position: relative;
     overflow: hidden;
     display: flex;
@@ -678,7 +687,7 @@
 .bento-inner-page {
     max-width: 900px;
     margin: 0 auto;
-    padding: 32px 32px;
+    padding: 24px 0;
 }
 
 .bento-page-title {

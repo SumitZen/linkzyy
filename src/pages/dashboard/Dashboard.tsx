@@ -505,8 +505,14 @@ export default function Dashboard() {
                 </div> {/* End Left Col */}
 
                 {/* ── LIVE PREVIEW (Floating Phone) ── */}
-                <div className="bento-right-col">
-                    <div className="bento-preview-label">LIVE PREVIEW</div>
+                <div className="bento-right-col" style={{ display: 'flex', flexDirection: 'column', gap: '24px', alignItems: 'center' }}>
+                    <div className="bento-share-box" style={{ width: '100%', maxWidth: '280px', background: 'var(--surface-1)', border: 'var(--border-subtle)', borderRadius: '16px', padding: '12px 16px', boxShadow: 'var(--shadow-layer-1)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span className="bento-share-url" style={{ color: 'var(--text-dark)', fontWeight: 600, fontSize: '0.85rem' }}>linkzy.co/{user?.username}</span>
+                        <button className="bento-copy" style={{ background: 'color-mix(in srgb, var(--text-dark) 85%, transparent)', color: 'var(--bg-color)', backdropFilter: 'blur(12px)', padding: '6px 12px', borderRadius: '8px' }} onClick={() => navigator.clipboard?.writeText?.(`https://linkzy.co/${user?.username}`)}>Copy</button>
+                    </div>
+
+                    <div className="bento-preview-label" style={{ alignSelf: 'center', marginTop: '-8px' }}>LIVE PREVIEW</div>
+
                     <div className="bento-phone-wrap">
                         <div className="bento-phone">
                             <div className="bento-phone-content" style={{ background: previewBg }}>
@@ -551,11 +557,6 @@ export default function Dashboard() {
                             </div>
                         </div>
                     </div>
-                </div>
-
-                <div className="bento-share-box" style={{ position: 'fixed', bottom: 24, left: 24, zIndex: 100, background: '#fff' }}>
-                    <span className="bento-share-url">linkzy.co/{user?.username}</span>
-                    <button className="bento-copy" onClick={() => navigator.clipboard?.writeText?.(`https://linkzy.co/${user?.username}`)}>Copy</button>
                 </div>
             </div>
         </div>

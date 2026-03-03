@@ -71,7 +71,7 @@ function buildUserFromAppwrite(awUser: import('appwrite').Models.User<import('ap
         email,
         plan: 'free',
         username: email.split('@')[0].replace(/[^a-z0-9]/gi, '').toLowerCase(),
-        bio: 'Hey there! I use Linkzy.',
+        bio: '',
         avatarUrl: '',
         bannerUrl: '',
         bgColor: '',
