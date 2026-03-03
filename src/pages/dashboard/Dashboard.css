@@ -802,66 +802,7 @@
     color: #dc2626;
 }
 
-/* ═══ SIMPLE FORM CONTROLS (Neo-Brutalism) ═══ */
-.bento-simple-form {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-}
 
-.bento-field-row {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.bento-field-label {
-    font-size: 0.85rem;
-    font-weight: 800;
-    color: #000;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-}
-
-.bento-input {
-    padding: 14px 16px;
-    border: 3px solid #000;
-    border-radius: 6px;
-    font-size: 0.95rem;
-    font-weight: 600;
-    font-family: inherit;
-    background: #fff;
-    box-shadow: 2px 2px 0px 0px #000;
-    transition: all 0.15s;
-}
-
-.bento-input:focus {
-    outline: none;
-    box-shadow: 4px 4px 0px 0px #0ddff2;
-    border-color: #000;
-}
-
-.bento-btn {
-    padding: 12px 20px;
-    background: #0ddff2;
-    /* Stitch Cyan */
-    color: #000;
-    border: 3px solid #000;
-    border-radius: 6px;
-    font-weight: 800;
-    font-size: 0.9rem;
-    cursor: pointer;
-    box-shadow: 2px 2px 0px 0px #000;
-    text-transform: uppercase;
-    transition: all 0.1s;
-}
-
-.bento-btn:hover:not(:disabled) {
-    transform: translate(2px, 2px);
-    box-shadow: 0px 0px 0px 0px #000;
-}
-
-/* Theme grid */
 .bento-theme-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);

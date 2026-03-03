@@ -209,7 +209,7 @@ export default function Dashboard() {
                             </div>
                             <div className="bento-modal-footer">
                                 <button className="bento-ghost" onClick={() => setCropImageSrc(null)} disabled={isUploading}>Cancel</button>
-                                <button className="bento-btn" onClick={uploadCroppedImage} disabled={isUploading}>
+                                <button className="bento-save" onClick={uploadCroppedImage} disabled={isUploading}>
                                     {isUploading ? 'Uploading...' : 'Crop & Save'}
                                 </button>
                             </div>
@@ -219,10 +219,10 @@ export default function Dashboard() {
 
                 <div className="bento-left-col">
                     {/* ── PIVOT TABS ── */}
-                    <div className="bento-pivot-nav">
-                        <button className={`bento-pivot-btn${activeTab === 'links' ? ' active' : ''}`} onClick={() => setActiveTab('links')}>Links</button>
-                        <button className={`bento-pivot-btn${activeTab === 'appearance' ? ' active' : ''}`} onClick={() => setActiveTab('appearance')}>Appearance</button>
-                        <button className={`bento-pivot-btn${activeTab === 'settings' ? ' active' : ''}`} onClick={() => setActiveTab('settings')}>Settings</button>
+                    <div className="bento-nav-pills" style={{ justifyContent: 'flex-start', marginBottom: '24px' }}>
+                        <button className={`bento-nav-pill${activeTab === 'links' ? ' active' : ''}`} onClick={() => setActiveTab('links')}>Links</button>
+                        <button className={`bento-nav-pill${activeTab === 'appearance' ? ' active' : ''}`} onClick={() => setActiveTab('appearance')}>Appearance</button>
+                        <button className={`bento-nav-pill${activeTab === 'settings' ? ' active' : ''}`} onClick={() => setActiveTab('settings')}>Settings</button>
                     </div>
 
                     {/* ── STAT CARDS ── */}
