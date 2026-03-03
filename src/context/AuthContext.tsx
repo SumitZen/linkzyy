@@ -89,7 +89,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         // Optimistic restore
         const session = localStorage.getItem(SESSION_KEY);
         if (session) {
-            try { return JSON.parse(session); } catch { localStorage.removeItem(SESSION_KEY); }
+            try {
+                const parsed = JSON.parse(session);
+                if (parsed.bio === 'Hey there! I use Linkzy.') parsed.bio = '';
+                return parsed;
+            } catch { localStorage.removeItem(SESSION_KEY); }
         }
         return null;
     });
@@ -121,9 +125,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                 const awUser = await account.get();
                 const saved = localStorage.getItem(`linkzy_profile_${awUser.$id}`);
                 const extra = saved ? JSON.parse(saved) : {};
-                const u = buildUserFromAppwrite(awUser, extra);
-                setUser(u);
-                localStorage.setItem(SESSION_KEY, JSON.stringify(u));
+                const finalUser = buildUserFromAppwrite(awUser, extra);
+                if (finalUser.bio === 'Hey there! I use Linkzy.') finalUser.bio = '';
+                setUser(finalUser);
+                localStorage.setItem(SESSION_KEY, JSON.stringify(finalUser));
             } catch (err: unknown) {
                 const error = err as { code?: string; message?: string };
                 throw new Error(error.message || 'Login failed.');

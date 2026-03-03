@@ -511,7 +511,7 @@ export default function Dashboard() {
                         <button className="bento-copy" style={{ background: 'color-mix(in srgb, var(--text-dark) 85%, transparent)', color: 'var(--bg-color)', backdropFilter: 'blur(12px)', padding: '6px 12px', borderRadius: '8px' }} onClick={() => navigator.clipboard?.writeText?.(`https://linkzy.co/${user?.username}`)}>Copy</button>
                     </div>
 
-                    <div className="bento-preview-label" style={{ alignSelf: 'center', marginTop: '-8px' }}>LIVE PREVIEW</div>
+                    <div className="bento-preview-label" style={{ alignSelf: 'center', margin: '4px 0 8px', letterSpacing: '0.15em', opacity: 0.6 }}>LIVE PREVIEW</div>
 
                     <div className="bento-phone-wrap">
                         <div className="bento-phone">

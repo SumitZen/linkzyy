@@ -14,9 +14,12 @@
 }
 
 .bento-root .nav-brutal {
-    position: sticky !important;
-    top: 24px;
-    margin-bottom: 24px;
+    position: static !important;
+    left: auto !important;
+    transform: none !important;
+    width: 100% !important;
+    max-width: 1200px !important;
+    margin: 32px auto !important;
     z-index: 999;
 }
 
