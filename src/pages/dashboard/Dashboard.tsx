@@ -184,380 +184,409 @@ export default function Dashboard() {
         <div className="bento-root">
             <Navbar />
 
-            {/* ── BENTO GRID ── */}
-            <div className="bento-grid">
+            <div className="bento-app-container">
+                {/* ── PRO SIDEBAR ── */}
+                <aside className="bento-sidebar">
+                    <button
+                        className={`bento-sidebar-btn${activeTab === 'links' ? ' active' : ''}`}
+                        onClick={() => setActiveTab('links')}
+                    >
+                        <span className="bento-sidebar-icon">🔗</span>
+                        Links
+                    </button>
+                    <button
+                        className={`bento-sidebar-btn${activeTab === 'appearance' ? ' active' : ''}`}
+                        onClick={() => setActiveTab('appearance')}
+                    >
+                        <span className="bento-sidebar-icon">✨</span>
+                        Appearance
+                    </button>
+                    <button
+                        className={`bento-sidebar-btn${activeTab === 'settings' ? ' active' : ''}`}
+                        onClick={() => setActiveTab('settings')}
+                    >
+                        <span className="bento-sidebar-icon">⚙️</span>
+                        Settings
+                    </button>
 
-                {/* ── CROP MODAL (Global) ── */}
-                {cropImageSrc && (
-                    <div className="bento-modal-overlay" style={{ zIndex: 9999 }}>
-                        <div className="bento-modal" style={{ width: '90%', maxWidth: 600, height: '80vh', display: 'flex', flexDirection: 'column' }}>
-                            <div className="bento-modal-header">
-                                <h2>Crop {cropType === 'avatar' ? 'Profile Photo' : cropType === 'banner' ? 'Banner' : 'Background'}</h2>
-                                <button className="bento-modal-close" onClick={() => setCropImageSrc(null)}>✕</button>
-                            </div>
-                            <div style={{ position: 'relative', flex: 1, background: '#000', borderRadius: 8, overflow: 'hidden', margin: '16px 0' }}>
-                                <Cropper
-                                    image={cropImageSrc}
-                                    crop={crop}
-                                    zoom={zoom}
-                                    aspect={cropType === 'avatar' ? 1 : cropType === 'banner' ? 3 / 1 : 9 / 16}
-                                    cropShape={cropType === 'avatar' ? 'round' : 'rect'}
-                                    onCropChange={setCrop}
-                                    onZoomChange={setZoom}
-                                    onCropComplete={onCropComplete}
-                                />
-                            </div>
-                            <div className="bento-modal-footer">
-                                <button className="bento-ghost" onClick={() => setCropImageSrc(null)} disabled={isUploading}>Cancel</button>
-                                <button className="bento-save" onClick={uploadCroppedImage} disabled={isUploading}>
-                                    {isUploading ? 'Uploading...' : 'Crop & Save'}
-                                </button>
-                            </div>
-                        </div>
+                    <div style={{ marginTop: 'auto', padding: '12px 16px', borderTop: '1px solid #f3f4f6' }}>
+                        <div style={{ fontSize: '0.75rem', color: '#9ca3af', fontWeight: 500 }}>LOGGED IN AS</div>
+                        <div style={{ fontSize: '0.85rem', fontWeight: 600, color: '#374151', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{user?.email}</div>
                     </div>
-                )}
+                </aside>
 
-                <div className="bento-left-col">
-                    {/* ── PIVOT TABS ── */}
-                    <div className="bento-nav-pills" style={{ justifyContent: 'flex-start', marginBottom: '24px' }}>
-                        <button className={`bento-nav-pill${activeTab === 'links' ? ' active' : ''}`} onClick={() => setActiveTab('links')}>Links</button>
-                        <button className={`bento-nav-pill${activeTab === 'appearance' ? ' active' : ''}`} onClick={() => setActiveTab('appearance')}>Appearance</button>
-                        <button className={`bento-nav-pill${activeTab === 'settings' ? ' active' : ''}`} onClick={() => setActiveTab('settings')}>Settings</button>
-                    </div>
+                <main className="bento-main-view">
+                    {/* ── BENTO GRID ── */}
+                    <div className="bento-grid">
 
-                    {/* ── STAT CARDS ── */}
-                    <div className="bento-stat-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16 }}>
-                        <div className="bento-card bento-stat bento-stat-purple">
-                            <div className="bento-stat-icon">🔗</div>
-                            <div className="bento-stat-label">Active Links</div>
-                            <div className="bento-stat-value" style={{ color: '#7c3aed' }}>
-                                {links.filter(l => l.enabled).length + blocks.filter(b => b.enabled).length}
-                            </div>
-                            <div className="bento-stat-sub">of {links.length + blocks.length} total</div>
-                        </div>
-                        <div className="bento-card bento-stat bento-stat-green">
-                            <div className="bento-stat-icon">👁</div>
-                            <div className="bento-stat-label">Profile Views</div>
-                            <div className="bento-stat-value" style={{ color: '#10b981' }}>—</div>
-                            <div className="bento-stat-sub">Tracking coming soon</div>
-                        </div>
-                    </div>
-
-                    {savedMsg && <div className="bento-toast">{savedMsg}</div>}
-
-                    {/* ── LINKS CARD ── */}
-                    {activeTab === 'links' && (
-                        <div className="bento-card bento-links-card">
-                            <div className="bento-card-header">
-                                <h2 className="bento-card-title">Your Links</h2>
-                            </div>
-
-                            {/* Simple add row */}
-                            <div className="bento-simple-add">
-                                {/* Icon picker — real brand SVGs */}
-                                <div className="bento-icon-picker">
-                                    <div className="bento-icon-display">
-                                        <PlatformIcon id={newIcon} size={20} />
+                        {/* ── CROP MODAL (Global) ── */}
+                        {cropImageSrc && (
+                            <div className="bento-modal-overlay" style={{ zIndex: 9999 }}>
+                                <div className="bento-modal" style={{ width: '90%', maxWidth: 600, height: '80vh', display: 'flex', flexDirection: 'column' }}>
+                                    <div className="bento-modal-header">
+                                        <h2>Crop {cropType === 'avatar' ? 'Profile Photo' : cropType === 'banner' ? 'Banner' : 'Background'}</h2>
+                                        <button className="bento-modal-close" onClick={() => setCropImageSrc(null)}>✕</button>
                                     </div>
-                                    <div className="bento-icon-grid">
-                                        {PLATFORM_ICONS.map(p => (
-                                            <button
-                                                key={p.id}
-                                                title={p.label}
-                                                className={`bento-icon-opt${newIcon === p.id ? ' sel' : ''}`}
-                                                onClick={() => setNewIcon(p.id)}
-                                            >
-                                                <PlatformIcon id={p.id} size={16} />
-                                            </button>
-                                        ))}
+                                    <div style={{ position: 'relative', flex: 1, background: '#000', borderRadius: 8, overflow: 'hidden', margin: '16px 0' }}>
+                                        <Cropper
+                                            image={cropImageSrc}
+                                            crop={crop}
+                                            zoom={zoom}
+                                            aspect={cropType === 'avatar' ? 1 : cropType === 'banner' ? 3 / 1 : 9 / 16}
+                                            cropShape={cropType === 'avatar' ? 'round' : 'rect'}
+                                            onCropChange={setCrop}
+                                            onZoomChange={setZoom}
+                                            onCropComplete={onCropComplete}
+                                        />
+                                    </div>
+                                    <div className="bento-modal-footer">
+                                        <button className="bento-ghost" onClick={() => setCropImageSrc(null)} disabled={isUploading}>Cancel</button>
+                                        <button className="bento-save" onClick={uploadCroppedImage} disabled={isUploading}>
+                                            {isUploading ? 'Uploading...' : 'Crop & Save'}
+                                        </button>
                                     </div>
                                 </div>
-                                <input
-                                    className="bento-input bento-flex1"
-                                    placeholder="Title  (e.g. My Website)"
-                                    value={newLabel}
-                                    onChange={e => setNewLabel(e.target.value)}
-                                    onKeyDown={e => e.key === 'Enter' && addLink()}
-                                />
-                                <input
-                                    className="bento-input bento-flex2"
-                                    placeholder="URL  (e.g. example.com)"
-                                    value={newUrl}
-                                    onChange={e => setNewUrl(e.target.value)}
-                                    onKeyDown={e => e.key === 'Enter' && addLink()}
-                                />
-                                <button className="bento-add-link-btn" onClick={addLink}>+ Add</button>
+                            </div>
+                        )}
+
+                        <div className="bento-left-col">
+
+
+                            {/* ── STAT CARDS ── */}
+                            <div className="bento-stat-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16 }}>
+                                <div className="bento-card bento-stat bento-stat-purple">
+                                    <div className="bento-stat-icon">🔗</div>
+                                    <div className="bento-stat-label">Active Links</div>
+                                    <div className="bento-stat-value" style={{ color: '#7c3aed' }}>
+                                        {links.filter(l => l.enabled).length + blocks.filter(b => b.enabled).length}
+                                    </div>
+                                    <div className="bento-stat-sub">of {links.length + blocks.length} total</div>
+                                </div>
+                                <div className="bento-card bento-stat bento-stat-green">
+                                    <div className="bento-stat-icon">👁</div>
+                                    <div className="bento-stat-label">Profile Views</div>
+                                    <div className="bento-stat-value" style={{ color: '#10b981' }}>—</div>
+                                    <div className="bento-stat-sub">Tracking coming soon</div>
+                                </div>
                             </div>
 
-                            {/* Advanced block toggle */}
-                            <button className="bento-adv-toggle" onClick={() => setShowAdvanced(v => !v)}>
-                                {showAdvanced ? '▲ Hide advanced blocks' : '+ Add Music / Photos / Product'}
-                            </button>
+                            {savedMsg && <div className="bento-toast">{savedMsg}</div>}
 
-                            {showAdvanced && (
-                                <div className="bento-adv-panel">
-                                    <div className="bento-adv-tabs">
-                                        {(['music', 'photo', 'product'] as const).map(t => (
-                                            <button key={t} className={`bento-adv-tab${advType === t ? ' active' : ''}`} onClick={() => setAdvType(t)}>
-                                                {t === 'music' ? '🎵 Music' : t === 'photo' ? '📷 Photos' : '🛍️ Product'}
-                                            </button>
-                                        ))}
+                            {/* ── LINKS CARD ── */}
+                            {activeTab === 'links' && (
+                                <div className="bento-card bento-links-card">
+                                    <div className="bento-card-header">
+                                        <h2 className="bento-card-title">Your Links</h2>
                                     </div>
 
-                                    {advType === 'music' && (
-                                        <div className="bento-adv-fields">
-                                            <input className="bento-input" placeholder="Song title *" value={mt} onChange={e => setMt(e.target.value)} />
-                                            <input className="bento-input" placeholder="Artist name" value={ma} onChange={e => setMa(e.target.value)} />
-                                            <input className="bento-input" placeholder="Spotify / SoundCloud embed URL *" value={me} onChange={e => setMe(e.target.value)} />
-                                            <input className="bento-input" placeholder="Cover image URL (optional)" value={mc} onChange={e => setMc(e.target.value)} />
-                                            <button className="bento-save" onClick={addBlock}>Add Music Block</button>
-                                        </div>
-                                    )}
-                                    {advType === 'photo' && (
-                                        <div className="bento-adv-fields">
-                                            <input className="bento-input" placeholder="Caption (optional)" value={pCap} onChange={e => setPCap(e.target.value)} />
-                                            <textarea className="bento-input" placeholder="Paste image URLs, separated by commas *" value={pImg} onChange={e => setPImg(e.target.value)} rows={2} style={{ resize: 'none' }} />
-                                            <button className="bento-save" onClick={addBlock}>Add Photo Block</button>
-                                        </div>
-                                    )}
-                                    {advType === 'product' && (
-                                        <div className="bento-adv-fields">
-                                            <input className="bento-input" placeholder="Product name *" value={prName} onChange={e => setPrName(e.target.value)} />
-                                            <input className="bento-input" placeholder="Price (e.g. $49)" value={prPrice} onChange={e => setPrPrice(e.target.value)} />
-                                            <input className="bento-input" placeholder="Buy URL *" value={prBuy} onChange={e => setPrBuy(e.target.value)} />
-                                            <input className="bento-input" placeholder="Product image URL (optional)" value={prImg} onChange={e => setPrImg(e.target.value)} />
-                                            <button className="bento-save" onClick={addBlock}>Add Product</button>
-                                        </div>
-                                    )}
-                                </div>
-                            )}
-
-                            {/* List */}
-                            <div className="bento-link-list">
-                                {links.length === 0 && blocks.length === 0 && (
-                                    <div className="bento-empty">✦ Add your first link above to get started</div>
-                                )}
-                                {links.map(link => (
-                                    <div key={link.id} className={`bento-link-row${!link.enabled ? ' off' : ''}`}>
-                                        <div className="bento-link-icon-sq">
-                                            <PlatformIcon id={link.icon} size={18} />
-                                        </div>
-                                        <div className="bento-link-info">
-                                            <div className="bento-link-name">{link.label}</div>
-                                            <div className="bento-link-url">{link.url}</div>
-                                        </div>
-                                        <label className="bento-toggle">
-                                            <input type="checkbox" checked={link.enabled} onChange={() => toggleLink(link.id)} />
-                                            <span className="bento-toggle-track" />
-                                        </label>
-                                        <button className="bento-del" title="Remove" onClick={() => removeLink(link.id)}>✕</button>
-                                    </div>
-                                ))}
-                                {blocks.map(block => (
-                                    <div key={block.id} className={`bento-link-row${!block.enabled ? ' off' : ''}`}>
-                                        <div className="bento-link-icon-sq">
-                                            <PlatformIcon id={block.type === 'music' ? 'music' : block.type === 'photo' ? 'globe' : 'store'} size={18} />
-                                        </div>
-                                        <div className="bento-link-info">
-                                            <div className="bento-link-name">
-                                                {block.type === 'music' ? (block as MusicBlock).title
-                                                    : block.type === 'photo' ? ((block as PhotoBlock).caption || 'Photo Gallery')
-                                                        : (block as ProductBlock).name}
+                                    {/* Simple add row */}
+                                    <div className="bento-simple-add">
+                                        {/* Icon picker — real brand SVGs */}
+                                        <div className="bento-icon-picker">
+                                            <div className="bento-icon-display">
+                                                <PlatformIcon id={newIcon} size={20} />
                                             </div>
-                                            <div className="bento-link-url">{block.type} block</div>
+                                            <div className="bento-icon-grid">
+                                                {PLATFORM_ICONS.map(p => (
+                                                    <button
+                                                        key={p.id}
+                                                        title={p.label}
+                                                        className={`bento-icon-opt${newIcon === p.id ? ' sel' : ''}`}
+                                                        onClick={() => setNewIcon(p.id)}
+                                                    >
+                                                        <PlatformIcon id={p.id} size={16} />
+                                                    </button>
+                                                ))}
+                                            </div>
                                         </div>
-                                        <label className="bento-toggle">
-                                            <input type="checkbox" checked={block.enabled} onChange={() => toggleBlock(block.id)} />
-                                            <span className="bento-toggle-track" />
-                                        </label>
-                                        <button className="bento-del" title="Remove" onClick={() => removeBlock(block.id)}>✕</button>
+                                        <input
+                                            className="bento-input bento-flex1"
+                                            placeholder="Title  (e.g. My Website)"
+                                            value={newLabel}
+                                            onChange={e => setNewLabel(e.target.value)}
+                                            onKeyDown={e => e.key === 'Enter' && addLink()}
+                                        />
+                                        <input
+                                            className="bento-input bento-flex2"
+                                            placeholder="URL  (e.g. example.com)"
+                                            value={newUrl}
+                                            onChange={e => setNewUrl(e.target.value)}
+                                            onKeyDown={e => e.key === 'Enter' && addLink()}
+                                        />
+                                        <button className="bento-add-link-btn" onClick={addLink}>+ Add</button>
                                     </div>
-                                ))}
+
+                                    {/* Advanced block toggle */}
+                                    <button className="bento-adv-toggle" onClick={() => setShowAdvanced(v => !v)}>
+                                        {showAdvanced ? '▲ Hide advanced blocks' : '+ Add Music / Photos / Product'}
+                                    </button>
+
+                                    {showAdvanced && (
+                                        <div className="bento-adv-panel">
+                                            <div className="bento-adv-tabs">
+                                                {(['music', 'photo', 'product'] as const).map(t => (
+                                                    <button key={t} className={`bento-adv-tab${advType === t ? ' active' : ''}`} onClick={() => setAdvType(t)}>
+                                                        {t === 'music' ? '🎵 Music' : t === 'photo' ? '📷 Photos' : '🛍️ Product'}
+                                                    </button>
+                                                ))}
+                                            </div>
+
+                                            {advType === 'music' && (
+                                                <div className="bento-adv-fields">
+                                                    <input className="bento-input" placeholder="Song title *" value={mt} onChange={e => setMt(e.target.value)} />
+                                                    <input className="bento-input" placeholder="Artist name" value={ma} onChange={e => setMa(e.target.value)} />
+                                                    <input className="bento-input" placeholder="Spotify / SoundCloud embed URL *" value={me} onChange={e => setMe(e.target.value)} />
+                                                    <input className="bento-input" placeholder="Cover image URL (optional)" value={mc} onChange={e => setMc(e.target.value)} />
+                                                    <button className="bento-save" onClick={addBlock}>Add Music Block</button>
+                                                </div>
+                                            )}
+                                            {advType === 'photo' && (
+                                                <div className="bento-adv-fields">
+                                                    <input className="bento-input" placeholder="Caption (optional)" value={pCap} onChange={e => setPCap(e.target.value)} />
+                                                    <textarea className="bento-input" placeholder="Paste image URLs, separated by commas *" value={pImg} onChange={e => setPImg(e.target.value)} rows={2} style={{ resize: 'none' }} />
+                                                    <button className="bento-save" onClick={addBlock}>Add Photo Block</button>
+                                                </div>
+                                            )}
+                                            {advType === 'product' && (
+                                                <div className="bento-adv-fields">
+                                                    <input className="bento-input" placeholder="Product name *" value={prName} onChange={e => setPrName(e.target.value)} />
+                                                    <input className="bento-input" placeholder="Price (e.g. $49)" value={prPrice} onChange={e => setPrPrice(e.target.value)} />
+                                                    <input className="bento-input" placeholder="Buy URL *" value={prBuy} onChange={e => setPrBuy(e.target.value)} />
+                                                    <input className="bento-input" placeholder="Product image URL (optional)" value={prImg} onChange={e => setPrImg(e.target.value)} />
+                                                    <button className="bento-save" onClick={addBlock}>Add Product</button>
+                                                </div>
+                                            )}
+                                        </div>
+                                    )}
+
+                                    {/* List */}
+                                    <div className="bento-link-list">
+                                        {links.length === 0 && blocks.length === 0 && (
+                                            <div className="bento-empty">✦ Add your first link above to get started</div>
+                                        )}
+                                        {links.map(link => (
+                                            <div key={link.id} className={`bento-link-row${!link.enabled ? ' off' : ''}`}>
+                                                <div className="bento-link-icon-sq">
+                                                    <PlatformIcon id={link.icon} size={18} />
+                                                </div>
+                                                <div className="bento-link-info">
+                                                    <div className="bento-link-name">{link.label}</div>
+                                                    <div className="bento-link-url">{link.url}</div>
+                                                </div>
+                                                <label className="bento-toggle">
+                                                    <input type="checkbox" checked={link.enabled} onChange={() => toggleLink(link.id)} />
+                                                    <span className="bento-toggle-track" />
+                                                </label>
+                                                <button className="bento-del" title="Remove" onClick={() => removeLink(link.id)}>✕</button>
+                                            </div>
+                                        ))}
+                                        {blocks.map(block => (
+                                            <div key={block.id} className={`bento-link-row${!block.enabled ? ' off' : ''}`}>
+                                                <div className="bento-link-icon-sq">
+                                                    <PlatformIcon id={block.type === 'music' ? 'music' : block.type === 'photo' ? 'globe' : 'store'} size={18} />
+                                                </div>
+                                                <div className="bento-link-info">
+                                                    <div className="bento-link-name">
+                                                        {block.type === 'music' ? (block as MusicBlock).title
+                                                            : block.type === 'photo' ? ((block as PhotoBlock).caption || 'Photo Gallery')
+                                                                : (block as ProductBlock).name}
+                                                    </div>
+                                                    <div className="bento-link-url">{block.type} block</div>
+                                                </div>
+                                                <label className="bento-toggle">
+                                                    <input type="checkbox" checked={block.enabled} onChange={() => toggleBlock(block.id)} />
+                                                    <span className="bento-toggle-track" />
+                                                </label>
+                                                <button className="bento-del" title="Remove" onClick={() => removeBlock(block.id)}>✕</button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )} {/* End Links Tab */}
+
+                            {/* ── APPEARANCE ── */}
+                            {activeTab === 'appearance' && (
+                                <div className="bento-inner-page">
+                                    <h1 className="bento-page-title">Appearance</h1>
+                                    <p className="bento-page-sub">Customise how your public profile looks.</p>
+
+                                    <div className="bento-simple-form">
+                                        {/* Avatar */}
+                                        <div className="bento-field-row">
+                                            <label className="bento-field-label">Profile Photo</label>
+                                            <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+                                                <div className="bento-field-avatar-sq">
+                                                    {avatarUrl
+                                                        ? <img src={avatarUrl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
+                                                        : <span style={{ fontSize: '1.1rem' }}>{user?.name?.charAt(0)}</span>
+                                                    }
+                                                </div>
+                                                <label className="bento-btn" style={{ cursor: 'pointer' }}>
+                                                    Upload Photo
+                                                    <input type="file" accept="image/*" style={{ display: 'none' }} onChange={e => onFileChange(e, 'avatar')} />
+                                                </label>
+                                                {avatarUrl && <button className="bento-ghost" onClick={() => setAvatarUrl('')}>Clear</button>}
+                                            </div>
+                                        </div>
+
+                                        {/* Banner */}
+                                        <div className="bento-field-row">
+                                            <label className="bento-field-label">Banner Image</label>
+                                            {bannerUrl && <div style={{ width: '100%', height: 72, borderRadius: 10, backgroundImage: `url(${bannerUrl})`, backgroundSize: 'cover', backgroundPosition: 'center', marginBottom: 10, border: '1.5px solid #e9ecef' }} />}
+                                            <div style={{ display: 'flex', gap: 8 }}>
+                                                <label className="bento-btn" style={{ cursor: 'pointer' }}>
+                                                    Upload Banner
+                                                    <input type="file" accept="image/*" style={{ display: 'none' }} onChange={e => onFileChange(e, 'banner')} />
+                                                </label>
+                                                {bannerUrl && <button className="bento-ghost" onClick={() => setBannerUrl('')}>Clear</button>}
+                                            </div>
+                                        </div>
+
+                                        {/* Display name */}
+                                        <div className="bento-field-row">
+                                            <label className="bento-field-label">Display Name</label>
+                                            <input className="bento-input" style={{ width: '100%' }} value={name} onChange={e => setName(e.target.value)} />
+                                        </div>
+
+                                        {/* Bio */}
+                                        <div className="bento-field-row">
+                                            <label className="bento-field-label">Bio</label>
+                                            <textarea className="bento-input" style={{ width: '100%', resize: 'vertical' }} rows={3} value={bio} onChange={e => setBio(e.target.value)} />
+                                        </div>
+
+                                        <hr className="bento-hr" />
+
+                                        {/* Background image */}
+                                        <div className="bento-field-row">
+                                            <label className="bento-field-label">Background Photo <span className="bento-hint">(fills entire profile background)</span></label>
+                                            {bgImage && <div style={{ width: '100%', height: 88, borderRadius: 10, backgroundImage: `url(${bgImage})`, backgroundSize: 'cover', backgroundPosition: 'center', marginBottom: 10, border: '1.5px solid #e9ecef' }} />}
+                                            <div style={{ display: 'flex', gap: 8 }}>
+                                                <label className="bento-btn" style={{ cursor: 'pointer' }}>
+                                                    Upload Background
+                                                    <input type="file" accept="image/*" style={{ display: 'none' }} onChange={e => onFileChange(e, 'background')} />
+                                                </label>
+                                                {bgImage && <button className="bento-ghost" onClick={() => setBgImage('')}>Clear</button>}
+                                            </div>
+                                        </div>
+
+                                        {/* Solid color override */}
+                                        <div className="bento-field-row">
+                                            <label className="bento-field-label">Background Colour <span className="bento-hint">(overrides theme, used if no photo)</span></label>
+                                            <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                                                <input type="color" value={bgColor || '#7c3aed'} onChange={e => setBgColor(e.target.value)} style={{ width: 40, height: 36, border: '1.5px solid #e5e7eb', borderRadius: 8, padding: 2, cursor: 'pointer', flexShrink: 0 }} />
+                                                <input className="bento-input" style={{ flex: 1 }} placeholder="#hex or rgba()" value={bgColor} onChange={e => setBgColor(e.target.value)} />
+                                                {bgColor && <button className="bento-ghost" onClick={() => setBgColor('')}>Clear</button>}
+                                            </div>
+                                        </div>
+
+                                        {/* Theme grid */}
+                                        <div className="bento-field-row">
+                                            <label className="bento-field-label">Theme Preset <span className="bento-hint">(base background gradient & UI style)</span></label>
+                                            <div className="bento-theme-grid">
+                                                {templatesList.map(t => (
+                                                    <button key={t.id} className={`bento-theme-btn${selTheme === t.id ? ' sel' : ''}`} onClick={() => setSelTheme(t.id)}>
+                                                        <div className="bento-tp" style={{ background: t.bg }}>
+                                                            <div className="bento-tp-circ" />
+                                                            <div className="bento-tp-bar" style={{ background: t.btnBg }} />
+                                                        </div>
+                                                        <div className="bento-theme-name">{t.name}</div>
+                                                        {selTheme === t.id && <div className="bento-tick">✓</div>}
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <button className="bento-save" onClick={saveAppearance}>{savedMsg || 'Save Changes'}</button>
+                                </div>
+                            )} {/* End Appearance Tab */}
+
+                            {/* ── SETTINGS ── */}
+                            {activeTab === 'settings' && (
+                                <div className="bento-inner-page">
+                                    <h1 className="bento-page-title">Settings</h1>
+                                    <p className="bento-page-sub">Manage your account details.</p>
+                                    <div className="bento-simple-form">
+                                        <div className="bento-field-row">
+                                            <label className="bento-field-label">Full Name</label>
+                                            <input className="bento-input" style={{ width: '100%' }} value={settingsName} onChange={e => setSettingsName(e.target.value)} />
+                                        </div>
+                                        <div className="bento-field-row">
+                                            <label className="bento-field-label">Email</label>
+                                            <input className="bento-input" style={{ width: '100%', opacity: 0.5 }} value={user?.email} disabled />
+                                        </div>
+                                        <div className="bento-field-row">
+                                            <label className="bento-field-label">Your Linkzy URL</label>
+                                            <div className="bento-url-row">
+                                                <span className="bento-url-pre">{window.location.host}/</span>
+                                                <span className="bento-url-val">{user?.username}</span>
+                                            </div>
+                                        </div>
+                                        <div style={{ display: 'flex', gap: 12, marginTop: 4 }}>
+                                            <button className="bento-save" onClick={() => { updateUser({ name: settingsName }); flash(); }}>{savedMsg || 'Save'}</button>
+                                            <button style={{ padding: '10px 20px', background: 'transparent', color: '#dc2626', border: '1.5px solid #fecaca', borderRadius: 10, fontFamily: 'inherit', fontSize: '0.875rem', fontWeight: 600, cursor: 'pointer' }} onClick={() => { logout(); navigate('/'); }}>Log out</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            )} {/* End Settings Tab */}
+                        </div> {/* End Left Col */}
+
+                        {/* ── LIVE PREVIEW (Floating Phone) ── */}
+                        <div className="bento-right-col" style={{ display: 'flex', flexDirection: 'column', gap: '24px', alignItems: 'center' }}>
+                            <div className="bento-share-box" style={{ width: '100%', maxWidth: '280px', background: 'var(--surface-1)', border: 'var(--border-subtle)', borderRadius: '16px', padding: '12px 16px', boxShadow: 'var(--shadow-layer-1)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                <span className="bento-share-url" style={{ color: 'var(--text-dark)', fontWeight: 600, fontSize: '0.85rem' }}>{window.location.host}/{user?.username}</span>
+                                <button className="bento-copy" style={{ background: 'color-mix(in srgb, var(--text-dark) 85%, transparent)', color: 'var(--bg-color)', backdropFilter: 'blur(12px)', padding: '6px 12px', borderRadius: '8px' }} onClick={() => navigator.clipboard?.writeText?.(`${window.location.origin}/${user?.username}`)}>Copy</button>
                             </div>
-                        </div>
-                    )} {/* End Links Tab */}
 
-                    {/* ── APPEARANCE ── */}
-                    {activeTab === 'appearance' && (
-                        <div className="bento-inner-page">
-                            <h1 className="bento-page-title">Appearance</h1>
-                            <p className="bento-page-sub">Customise how your public profile looks.</p>
+                            <div className="bento-preview-label" style={{ alignSelf: 'center', margin: '4px 0 8px', letterSpacing: '0.15em', opacity: 0.6 }}>LIVE PREVIEW</div>
 
-                            <div className="bento-simple-form">
-                                {/* Avatar */}
-                                <div className="bento-field-row">
-                                    <label className="bento-field-label">Profile Photo</label>
-                                    <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
-                                        <div className="bento-field-avatar-sq">
+                            <div className="bento-phone-wrap">
+                                <div className="bento-phone">
+                                    <div className="bento-phone-content" style={{ background: previewBg }}>
+                                        {bannerUrl && (
+                                            <div style={{ width: 'calc(100% + 28px)', marginLeft: -14, height: 64, backgroundImage: `url(${bannerUrl})`, backgroundSize: 'cover', backgroundPosition: 'center', marginTop: -18, marginBottom: 12, flexShrink: 0 }} />
+                                        )}
+                                        <div className="bento-phone-avatar" style={{
+                                            width: 64, height: 64, borderRadius: '50%', margin: '0 auto 12px', background: '#333',
+                                            display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', border: '2px solid rgba(255,255,255,0.1)'
+                                        }}>
                                             {avatarUrl
-                                                ? <img src={avatarUrl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
-                                                : <span style={{ fontSize: '1.1rem' }}>{user?.name?.charAt(0)}</span>
+                                                ? <img src={avatarUrl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                                : <span style={{ fontSize: '1.5rem', fontWeight: 700, color: 'rgba(255,255,255,0.9)' }}>{(name || user?.name || 'U').charAt(0)}</span>
                                             }
                                         </div>
-                                        <label className="bento-btn" style={{ cursor: 'pointer' }}>
-                                            Upload Photo
-                                            <input type="file" accept="image/*" style={{ display: 'none' }} onChange={e => onFileChange(e, 'avatar')} />
-                                        </label>
-                                        {avatarUrl && <button className="bento-ghost" onClick={() => setAvatarUrl('')}>Clear</button>}
-                                    </div>
-                                </div>
+                                        <div style={{ fontSize: '1rem', fontWeight: 700, color: theme.textColor, textAlign: 'center', marginBottom: 4 }}>{name || user?.name}</div>
+                                        <div style={{ fontSize: '0.8rem', color: theme.textColor, opacity: 0.8, textAlign: 'center', marginBottom: 20, padding: '0 16px' }}>{bio || user?.bio}</div>
 
-                                {/* Banner */}
-                                <div className="bento-field-row">
-                                    <label className="bento-field-label">Banner Image</label>
-                                    {bannerUrl && <div style={{ width: '100%', height: 72, borderRadius: 10, backgroundImage: `url(${bannerUrl})`, backgroundSize: 'cover', backgroundPosition: 'center', marginBottom: 10, border: '1.5px solid #e9ecef' }} />}
-                                    <div style={{ display: 'flex', gap: 8 }}>
-                                        <label className="bento-btn" style={{ cursor: 'pointer' }}>
-                                            Upload Banner
-                                            <input type="file" accept="image/*" style={{ display: 'none' }} onChange={e => onFileChange(e, 'banner')} />
-                                        </label>
-                                        {bannerUrl && <button className="bento-ghost" onClick={() => setBannerUrl('')}>Clear</button>}
-                                    </div>
-                                </div>
-
-                                {/* Display name */}
-                                <div className="bento-field-row">
-                                    <label className="bento-field-label">Display Name</label>
-                                    <input className="bento-input" style={{ width: '100%' }} value={name} onChange={e => setName(e.target.value)} />
-                                </div>
-
-                                {/* Bio */}
-                                <div className="bento-field-row">
-                                    <label className="bento-field-label">Bio</label>
-                                    <textarea className="bento-input" style={{ width: '100%', resize: 'vertical' }} rows={3} value={bio} onChange={e => setBio(e.target.value)} />
-                                </div>
-
-                                <hr className="bento-hr" />
-
-                                {/* Background image */}
-                                <div className="bento-field-row">
-                                    <label className="bento-field-label">Background Photo <span className="bento-hint">(fills entire profile background)</span></label>
-                                    {bgImage && <div style={{ width: '100%', height: 88, borderRadius: 10, backgroundImage: `url(${bgImage})`, backgroundSize: 'cover', backgroundPosition: 'center', marginBottom: 10, border: '1.5px solid #e9ecef' }} />}
-                                    <div style={{ display: 'flex', gap: 8 }}>
-                                        <label className="bento-btn" style={{ cursor: 'pointer' }}>
-                                            Upload Background
-                                            <input type="file" accept="image/*" style={{ display: 'none' }} onChange={e => onFileChange(e, 'background')} />
-                                        </label>
-                                        {bgImage && <button className="bento-ghost" onClick={() => setBgImage('')}>Clear</button>}
-                                    </div>
-                                </div>
-
-                                {/* Solid color override */}
-                                <div className="bento-field-row">
-                                    <label className="bento-field-label">Background Colour <span className="bento-hint">(overrides theme, used if no photo)</span></label>
-                                    <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-                                        <input type="color" value={bgColor || '#7c3aed'} onChange={e => setBgColor(e.target.value)} style={{ width: 40, height: 36, border: '1.5px solid #e5e7eb', borderRadius: 8, padding: 2, cursor: 'pointer', flexShrink: 0 }} />
-                                        <input className="bento-input" style={{ flex: 1 }} placeholder="#hex or rgba()" value={bgColor} onChange={e => setBgColor(e.target.value)} />
-                                        {bgColor && <button className="bento-ghost" onClick={() => setBgColor('')}>Clear</button>}
-                                    </div>
-                                </div>
-
-                                {/* Theme grid */}
-                                <div className="bento-field-row">
-                                    <label className="bento-field-label">Theme Preset <span className="bento-hint">(base background gradient & UI style)</span></label>
-                                    <div className="bento-theme-grid">
-                                        {templatesList.map(t => (
-                                            <button key={t.id} className={`bento-theme-btn${selTheme === t.id ? ' sel' : ''}`} onClick={() => setSelTheme(t.id)}>
-                                                <div className="bento-tp" style={{ background: t.bg }}>
-                                                    <div className="bento-tp-circ" />
-                                                    <div className="bento-tp-bar" style={{ background: t.btnBg }} />
+                                        <div style={{ display: 'flex', flexDirection: 'column', gap: 12, width: '100%', padding: '0 16px', boxSizing: 'border-box' }}>
+                                            {links.filter(l => l.enabled).slice(0, 4).map(link => (
+                                                <div key={link.id} style={{
+                                                    background: theme.btnBg,
+                                                    color: theme.btnText,
+                                                    borderRadius: theme.borderFormat === 'thick' ? 8 : 24,
+                                                    padding: '12px 16px',
+                                                    fontSize: '0.85rem',
+                                                    fontWeight: 600,
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    gap: 10,
+                                                    border: theme.btnBorder !== 'none' ? theme.btnBorder : undefined,
+                                                    boxShadow: theme.btnShadow !== 'none' ? theme.btnShadow : undefined,
+                                                    backdropFilter: theme.backdropBlur !== 'none' ? theme.backdropBlur : undefined,
+                                                    WebkitBackdropFilter: theme.backdropBlur !== 'none' ? theme.backdropBlur : undefined,
+                                                    fontFamily: theme.fontFamily
+                                                }}>
+                                                    <PlatformIcon id={link.icon} size={18} /><span>{link.label}</span>
                                                 </div>
-                                                <div className="bento-theme-name">{t.name}</div>
-                                                {selTheme === t.id && <div className="bento-tick">✓</div>}
-                                            </button>
-                                        ))}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <button className="bento-save" onClick={saveAppearance}>{savedMsg || 'Save Changes'}</button>
-                        </div>
-                    )} {/* End Appearance Tab */}
-
-                    {/* ── SETTINGS ── */}
-                    {activeTab === 'settings' && (
-                        <div className="bento-inner-page">
-                            <h1 className="bento-page-title">Settings</h1>
-                            <p className="bento-page-sub">Manage your account details.</p>
-                            <div className="bento-simple-form">
-                                <div className="bento-field-row">
-                                    <label className="bento-field-label">Full Name</label>
-                                    <input className="bento-input" style={{ width: '100%' }} value={settingsName} onChange={e => setSettingsName(e.target.value)} />
-                                </div>
-                                <div className="bento-field-row">
-                                    <label className="bento-field-label">Email</label>
-                                    <input className="bento-input" style={{ width: '100%', opacity: 0.5 }} value={user?.email} disabled />
-                                </div>
-                                <div className="bento-field-row">
-                                    <label className="bento-field-label">Your Linkzy URL</label>
-                                    <div className="bento-url-row">
-                                        <span className="bento-url-pre">{window.location.host}/</span>
-                                        <span className="bento-url-val">{user?.username}</span>
-                                    </div>
-                                </div>
-                                <div style={{ display: 'flex', gap: 12, marginTop: 4 }}>
-                                    <button className="bento-save" onClick={() => { updateUser({ name: settingsName }); flash(); }}>{savedMsg || 'Save'}</button>
-                                    <button style={{ padding: '10px 20px', background: 'transparent', color: '#dc2626', border: '1.5px solid #fecaca', borderRadius: 10, fontFamily: 'inherit', fontSize: '0.875rem', fontWeight: 600, cursor: 'pointer' }} onClick={() => { logout(); navigate('/'); }}>Log out</button>
-                                </div>
-                            </div>
-                        </div>
-                    )} {/* End Settings Tab */}
-                </div> {/* End Left Col */}
-
-                {/* ── LIVE PREVIEW (Floating Phone) ── */}
-                <div className="bento-right-col" style={{ display: 'flex', flexDirection: 'column', gap: '24px', alignItems: 'center' }}>
-                    <div className="bento-share-box" style={{ width: '100%', maxWidth: '280px', background: 'var(--surface-1)', border: 'var(--border-subtle)', borderRadius: '16px', padding: '12px 16px', boxShadow: 'var(--shadow-layer-1)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <span className="bento-share-url" style={{ color: 'var(--text-dark)', fontWeight: 600, fontSize: '0.85rem' }}>{window.location.host}/{user?.username}</span>
-                        <button className="bento-copy" style={{ background: 'color-mix(in srgb, var(--text-dark) 85%, transparent)', color: 'var(--bg-color)', backdropFilter: 'blur(12px)', padding: '6px 12px', borderRadius: '8px' }} onClick={() => navigator.clipboard?.writeText?.(`${window.location.origin}/${user?.username}`)}>Copy</button>
-                    </div>
-
-                    <div className="bento-preview-label" style={{ alignSelf: 'center', margin: '4px 0 8px', letterSpacing: '0.15em', opacity: 0.6 }}>LIVE PREVIEW</div>
-
-                    <div className="bento-phone-wrap">
-                        <div className="bento-phone">
-                            <div className="bento-phone-content" style={{ background: previewBg }}>
-                                {bannerUrl && (
-                                    <div style={{ width: 'calc(100% + 28px)', marginLeft: -14, height: 64, backgroundImage: `url(${bannerUrl})`, backgroundSize: 'cover', backgroundPosition: 'center', marginTop: -18, marginBottom: 12, flexShrink: 0 }} />
-                                )}
-                                <div className="bento-phone-avatar" style={{
-                                    width: 64, height: 64, borderRadius: '50%', margin: '0 auto 12px', background: '#333',
-                                    display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', border: '2px solid rgba(255,255,255,0.1)'
-                                }}>
-                                    {avatarUrl
-                                        ? <img src={avatarUrl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                                        : <span style={{ fontSize: '1.5rem', fontWeight: 700, color: 'rgba(255,255,255,0.9)' }}>{(name || user?.name || 'U').charAt(0)}</span>
-                                    }
-                                </div>
-                                <div style={{ fontSize: '1rem', fontWeight: 700, color: theme.textColor, textAlign: 'center', marginBottom: 4 }}>{name || user?.name}</div>
-                                <div style={{ fontSize: '0.8rem', color: theme.textColor, opacity: 0.8, textAlign: 'center', marginBottom: 20, padding: '0 16px' }}>{bio || user?.bio}</div>
-
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: 12, width: '100%', padding: '0 16px', boxSizing: 'border-box' }}>
-                                    {links.filter(l => l.enabled).slice(0, 4).map(link => (
-                                        <div key={link.id} style={{
-                                            background: theme.btnBg,
-                                            color: theme.btnText,
-                                            borderRadius: theme.borderFormat === 'thick' ? 8 : 24,
-                                            padding: '12px 16px',
-                                            fontSize: '0.85rem',
-                                            fontWeight: 600,
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            gap: 10,
-                                            border: theme.btnBorder !== 'none' ? theme.btnBorder : undefined,
-                                            boxShadow: theme.btnShadow !== 'none' ? theme.btnShadow : undefined,
-                                            backdropFilter: theme.backdropBlur !== 'none' ? theme.backdropBlur : undefined,
-                                            WebkitBackdropFilter: theme.backdropBlur !== 'none' ? theme.backdropBlur : undefined,
-                                            fontFamily: theme.fontFamily
-                                        }}>
-                                            <PlatformIcon id={link.icon} size={18} /><span>{link.label}</span>
+                                            ))}
                                         </div>
-                                    ))}
+                                        <div style={{ padding: '24px 0', fontSize: '0.7rem', color: 'rgba(255,255,255,0.4)', textAlign: 'center' }}>Powered by Linkzy</div>
+                                    </div>
                                 </div>
-                                <div style={{ padding: '24px 0', fontSize: '0.7rem', color: 'rgba(255,255,255,0.4)', textAlign: 'center' }}>Powered by Linkzy</div>
                             </div>
                         </div>
                     </div>
-                </div>
+                </main>
             </div>
         </div>
     );
