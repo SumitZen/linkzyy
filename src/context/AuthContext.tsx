@@ -1,8 +1,8 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useState, useEffect } from 'react';
 import type { ReactNode } from 'react';
-import { account, APPWRITE_READY } from '../lib/appwrite';
-import { ID, OAuthProvider } from 'appwrite';
+import { account, APPWRITE_READY, databases, APPWRITE_CONFIG } from '../lib/appwrite';
+import { ID, OAuthProvider, Query } from 'appwrite';
 
 // ── Block / User types ──────────────────────────────────────────────────────
 export interface LinkBlock {
@@ -201,14 +201,54 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
     };
 
-    // ── updateUser: persist local ──
+    // ── updateUser: persist local & remote ──
     const updateUser = (updates: Partial<User>) => {
         setUser((prev) => {
             if (!prev) return null;
             const updated = { ...prev, ...updates };
+
             if (APPWRITE_READY && prev.id) {
+                // Save locally first
                 localStorage.setItem(`linkzy_profile_${prev.id}`, JSON.stringify(updated));
                 localStorage.setItem(SESSION_KEY, JSON.stringify(updated));
+
+                // Sync to Appwrite Database (Fire and forget, ignoring awaits so it doesn't block UI)
+                databases.listDocuments(
+                    APPWRITE_CONFIG.databaseId,
+                    APPWRITE_CONFIG.profilesCollectionId,
+                    [Query.equal('userId', prev.id)]
+                ).then(res => {
+                    const dbPayload = {
+                        userId: updated.id,
+                        username: updated.username || '',
+                        displayName: updated.name || '',
+                        bio: updated.bio || '',
+                        avatarUrl: updated.avatarUrl || '',
+                        bannerUrl: updated.bannerUrl || '',
+                        bgColor: updated.bgColor || '',
+                        bgImage: updated.bgImage || '',
+                        theme: updated.theme || 'editorial-light',
+                        links: JSON.stringify(updated.links || []),
+                        blocks: JSON.stringify(updated.blocks || [])
+                    };
+
+                    if (res.documents.length > 0) {
+                        databases.updateDocument(
+                            APPWRITE_CONFIG.databaseId,
+                            APPWRITE_CONFIG.profilesCollectionId,
+                            res.documents[0].$id,
+                            dbPayload
+                        ).catch(e => console.error('Failed to update remote profile:', e));
+                    } else {
+                        databases.createDocument(
+                            APPWRITE_CONFIG.databaseId,
+                            APPWRITE_CONFIG.profilesCollectionId,
+                            ID.unique(),
+                            dbPayload
+                        ).catch(e => console.error('Failed to create remote profile:', e));
+                    }
+                }).catch(e => console.error('Failed to fetch profile array for sync:', e));
+
             } else {
                 localStorage.setItem(SESSION_KEY, JSON.stringify(updated));
             }
