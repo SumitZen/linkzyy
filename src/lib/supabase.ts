@@ -13,8 +13,15 @@ const isReal = (v?: string) =>
 export const SUPABASE_READY = isReal(supabaseUrl) && isReal(supabaseKey);
 
 // If in production on Vercel, route through the local proxy to bypass ISP blocks (like Jio)
+const getProxyUrl = () => {
+    if (typeof window !== 'undefined') {
+        return `${window.location.origin}/api/supabase`;
+    }
+    return 'https://placeholder.supabase.co'; // Fallback for SSR
+};
+
 const finalUrl = SUPABASE_READY
-    ? (import.meta.env.PROD ? '/api/supabase' : supabaseUrl!)
+    ? (import.meta.env.PROD ? getProxyUrl() : supabaseUrl!)
     : 'https://placeholder.supabase.co'; // Prevent Invalid URL crash
 
 const finalKey = SUPABASE_READY ? supabaseKey! : 'placeholder-key';
