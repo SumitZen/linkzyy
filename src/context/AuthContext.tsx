@@ -98,8 +98,8 @@ async function syncProfileToAppwrite(updated: User): Promise<void> {
         bgColor: updated.bgColor || '',
         bgImage: updated.bgImage || '',
         theme: updated.theme || 'editorial-light',
-        links: (updated.links || []).map(l => JSON.stringify(l)),
-        blocks: (updated.blocks || []).map(b => JSON.stringify(b)),
+        links: JSON.stringify(updated.links || []),
+        blocks: JSON.stringify(updated.blocks || []),
     };
 
     // Check cache first
@@ -119,11 +119,13 @@ async function syncProfileToAppwrite(updated: User): Promise<void> {
 
     if (docId) {
         try {
+            // Remove userId from update payload to avoid potential immutability errors
+            const { userId, ...updatePayload } = dbPayload;
             await databases.updateDocument(
                 APPWRITE_CONFIG.databaseId,
                 APPWRITE_CONFIG.profilesCollectionId,
                 docId,
-                dbPayload
+                updatePayload
             );
             console.log('✅ Appwrite Sync: Success');
         } catch (err: any) {
