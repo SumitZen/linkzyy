@@ -305,7 +305,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setUser(null);
         localStorage.removeItem(SESSION_KEY);
         if (APPWRITE_READY) {
-            // Best-effort remote session removal — ignore errors
+            // Clear the JWT first so deleteSession uses the session cookie (not JWT)
+            // Appwrite rejects deleteSession when a JWT header is present
+            appwriteClient.setJWT('');
             account.deleteSession('current').catch(() => { /* already logged out locally */ });
         }
     };
