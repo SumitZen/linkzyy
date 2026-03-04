@@ -64,15 +64,38 @@ export default function PublicProfile() {
     const theme = templatesList.find(t => t.id === profile.theme) ?? templatesList[0];
     const previewBg = profile.bgImage ? `url(${profile.bgImage}) center/cover no-repeat fixed` : profile.bgColor || theme.screenBg;
 
-    let links: LinkItem[] = [];
+    const forceParseJSON = (data: unknown): any[] => {
+        if (!data) return [];
+        try {
+            if (Array.isArray(data)) {
+                // If Appwrite returned a string array, parse each item
+                if (data.length > 0 && typeof data[0] === 'string') {
+                    const parsedArray = data.map(item => {
+                        try { return JSON.parse(item); } catch { return item; }
+                    });
+                    // If it's an array of length 1 that contains another array, flatten it
+                    if (parsedArray.length === 1 && Array.isArray(parsedArray[0])) return parsedArray[0];
+                    return parsedArray;
+                }
+                return data;
+            }
+            if (typeof data === 'string') {
+                const parsed = JSON.parse(data);
+                // Handle double serialization
+                if (typeof parsed === 'string') return forceParseJSON(parsed);
+                if (Array.isArray(parsed)) return parsed;
+                return [parsed];
+            }
+            return [];
+        } catch (err) {
+            console.error('Failed to parse data:', data, err);
+            return [];
+        }
+    };
+
+    let links: LinkItem[] = forceParseJSON(profile?.links);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let blocks: any[] = [];
-    try {
-        if (profile.links) links = typeof profile.links === 'string' ? JSON.parse(profile.links) : profile.links;
-        if (profile.blocks) blocks = typeof profile.blocks === 'string' ? JSON.parse(profile.blocks) : profile.blocks;
-    } catch (err) {
-        console.error('Data parsing error:', err);
-    }
+    let blocks: any[] = forceParseJSON(profile?.blocks);
 
     return (
         <div style={{
