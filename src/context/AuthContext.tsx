@@ -90,17 +90,16 @@ const docIdCache: Record<string, string> = {};
 async function syncProfileToAppwrite(updated: User): Promise<void> {
     const dbPayload = {
         userId: updated.id,
-        username: (updated.username || '').slice(0, 50),
-        displayName: (updated.name || '').slice(0, 100),
-        bio: (updated.bio || '').slice(0, 250), // Limited to 250 for default schema
-        avatarUrl: (updated.avatarUrl || '').slice(0, 250),
-        bannerUrl: (updated.bannerUrl || '').slice(0, 250),
-        bgColor: (updated.bgColor || '').slice(0, 50),
-        bgImage: (updated.bgImage || '').slice(0, 250),
-        theme: (updated.theme || 'editorial-light').slice(0, 50),
-        // Stringify and truncate links to fit 255 limit
-        links: JSON.stringify((updated.links || []).slice(0, 3)).slice(0, 250),
-        blocks: JSON.stringify((updated.blocks || []).slice(0, 2)).slice(0, 250),
+        username: updated.username || '',
+        displayName: updated.name || '',
+        bio: updated.bio || '',
+        avatarUrl: updated.avatarUrl || '',
+        bannerUrl: updated.bannerUrl || '',
+        bgColor: updated.bgColor || '',
+        bgImage: updated.bgImage || '',
+        theme: updated.theme || 'editorial-light',
+        links: JSON.stringify(updated.links || []),
+        blocks: JSON.stringify(updated.blocks || []),
     };
 
     // Check cache first
@@ -120,6 +119,15 @@ async function syncProfileToAppwrite(updated: User): Promise<void> {
 
     if (docId) {
         try {
+            // Diagnostic: Fetch the actual document to see its structure
+            const existing = await databases.getDocument(
+                APPWRITE_CONFIG.databaseId,
+                APPWRITE_CONFIG.profilesCollectionId,
+                docId
+            );
+            console.log('🔍 Diagnostic: Remote Keys:', Object.keys(existing));
+            console.log('🔍 Diagnostic: Local Payload Keys:', Object.keys(dbPayload));
+
             // Remove userId from update payload to avoid potential immutability errors
             const { userId, ...updatePayload } = dbPayload;
             await databases.updateDocument(
@@ -131,25 +139,6 @@ async function syncProfileToAppwrite(updated: User): Promise<void> {
             console.log('✅ Appwrite Sync: Success');
         } catch (err: any) {
             console.error('❌ Appwrite Sync: Update Failed', { error: err, payload: dbPayload });
-
-            // Safe Isolation Mode: Try fields individually to find the bottleneck
-            if (err.code === 500 || err.code === 400) {
-                console.warn('⚠️ Safe Mode: Attempting to save fields individually...');
-                for (const [key, value] of Object.entries(dbPayload)) {
-                    if (key === 'userId') continue;
-                    try {
-                        await databases.updateDocument(
-                            APPWRITE_CONFIG.databaseId,
-                            APPWRITE_CONFIG.profilesCollectionId,
-                            docId,
-                            { [key]: value }
-                        );
-                        console.log(`✅ Safe Sync: Saved "${key}"`);
-                    } catch (fieldErr) {
-                        console.error(`❌ Safe Sync: Failed to save "${key}"`, fieldErr);
-                    }
-                }
-            }
         }
     } else {
         try {
@@ -163,18 +152,6 @@ async function syncProfileToAppwrite(updated: User): Promise<void> {
             console.log('✅ Appwrite Sync: Created Success');
         } catch (err: any) {
             console.error('❌ Appwrite Sync: Create Failed', { error: err, payload: dbPayload });
-            // Fallback for creation: try basic fields first
-            if (err.code === 500) {
-                console.warn('⚠️ Fallback: Creating with basic fields...');
-                const basicPayload = { ...dbPayload, links: '[]', blocks: '[]' };
-                const fallback = await databases.createDocument(
-                    APPWRITE_CONFIG.databaseId,
-                    APPWRITE_CONFIG.profilesCollectionId,
-                    ID.unique(),
-                    basicPayload
-                ).catch(e => { console.error('❌ Fallback failed:', e); throw e; });
-                if (fallback) docIdCache[updated.id] = fallback.$id;
-            }
         }
     }
 }
