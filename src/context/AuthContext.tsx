@@ -301,14 +301,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     // ── Logout ──
     const logout = () => {
+        // Always clear local state immediately
+        setUser(null);
+        localStorage.removeItem(SESSION_KEY);
         if (APPWRITE_READY) {
-            account.deleteSession('current').finally(() => {
-                setUser(null);
-                localStorage.removeItem(SESSION_KEY);
-            });
-        } else {
-            setUser(null);
-            localStorage.removeItem(SESSION_KEY);
+            // Best-effort remote session removal — ignore errors
+            account.deleteSession('current').catch(() => { /* already logged out locally */ });
         }
     };
 
