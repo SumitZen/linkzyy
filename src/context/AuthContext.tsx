@@ -1,7 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useState, useEffect, useRef } from 'react';
 import type { ReactNode } from 'react';
-import { account, APPWRITE_READY, databases, APPWRITE_CONFIG } from '../lib/appwrite';
+import { account, APPWRITE_READY, databases, APPWRITE_CONFIG, appwriteClient } from '../lib/appwrite';
 import { ID, OAuthProvider, Query } from 'appwrite';
 
 // ── Block / User types ──────────────────────────────────────────────────────
@@ -168,6 +168,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         if (APPWRITE_READY) {
             account.get().then(async (awUser) => {
                 try {
+                    // Set JWT for cookie-less authenticated requests
+                    try {
+                        const jwt = await account.createJWT();
+                        appwriteClient.setJWT(jwt.jwt);
+                    } catch { /* JWT not critical for reads */ }
+
                     // Fetch the latest profile from the database (source of truth)
                     const res = await databases.listDocuments(
                         APPWRITE_CONFIG.databaseId,
@@ -223,6 +229,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         if (APPWRITE_READY) {
             try {
                 await account.createEmailPasswordSession(email, password);
+                // Create JWT for cookie-less authenticated writes
+                try {
+                    const jwt = await account.createJWT();
+                    appwriteClient.setJWT(jwt.jwt);
+                } catch { /* non-critical */ }
                 const awUser = await account.get();
                 const saved = localStorage.getItem(`linkzy_profile_${awUser.$id}`);
                 const extra = saved ? JSON.parse(saved) : {};
@@ -311,17 +322,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         // 1. Update React state immediately for optimistic UI
         setUser(updated);
 
-        // 2. Persist locally
+        // 2. Persist locally — always, even if DB sync fails
         localStorage.setItem(`linkzy_profile_${prev.id}`, JSON.stringify(updated));
         localStorage.setItem(SESSION_KEY, JSON.stringify(updated));
 
         // 3. Sync to Appwrite DB asynchronously — OUTSIDE setState
         if (APPWRITE_READY && prev.id) {
             syncProfileToAppwrite(updated).catch(e => {
-                console.error('DB sync failed, reverting:', e);
-                // Roll back to previous state on failure
-                setUser(prev);
-                localStorage.setItem(SESSION_KEY, JSON.stringify(prev));
+                console.error('DB sync failed (changes saved locally):', e);
+                // Do NOT rollback — keep local changes. DB will update on next successful sync.
             });
         }
     };
