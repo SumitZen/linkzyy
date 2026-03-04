@@ -1,7 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useState, useEffect, useRef } from 'react';
 import type { ReactNode } from 'react';
-import { account, APPWRITE_READY, databases, APPWRITE_CONFIG, appwriteClient } from '../lib/appwrite';
+import { account, APPWRITE_READY, databases, APPWRITE_CONFIG } from '../lib/appwrite';
 import { ID, OAuthProvider, Query } from 'appwrite';
 
 // ── Block / User types ──────────────────────────────────────────────────────
@@ -168,12 +168,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         if (APPWRITE_READY) {
             account.get().then(async (awUser) => {
                 try {
-                    // Set JWT for cookie-less authenticated requests
-                    try {
-                        const jwt = await account.createJWT();
-                        appwriteClient.setJWT(jwt.jwt);
-                    } catch { /* JWT not critical for reads */ }
-
                     // Fetch the latest profile from the database (source of truth)
                     const res = await databases.listDocuments(
                         APPWRITE_CONFIG.databaseId,
@@ -229,11 +223,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         if (APPWRITE_READY) {
             try {
                 await account.createEmailPasswordSession(email, password);
-                // Create JWT for cookie-less authenticated writes
-                try {
-                    const jwt = await account.createJWT();
-                    appwriteClient.setJWT(jwt.jwt);
-                } catch { /* non-critical */ }
                 const awUser = await account.get();
                 const saved = localStorage.getItem(`linkzy_profile_${awUser.$id}`);
                 const extra = saved ? JSON.parse(saved) : {};
@@ -301,14 +290,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     // ── Logout ──
     const logout = () => {
-        // Always clear local state immediately
         setUser(null);
         localStorage.removeItem(SESSION_KEY);
         if (APPWRITE_READY) {
-            // Clear the JWT first so deleteSession uses the session cookie (not JWT)
-            // Appwrite rejects deleteSession when a JWT header is present
-            appwriteClient.setJWT('');
-            account.deleteSession('current').catch(() => { /* already logged out locally */ });
+            account.deleteSession('current').catch(() => { /* ignore — session may already be gone */ });
         }
     };
 
