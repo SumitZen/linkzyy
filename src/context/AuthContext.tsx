@@ -89,19 +89,24 @@ const docIdCache: Record<string, string> = {};
 
 async function syncProfileToAppwrite(updated: User): Promise<void> {
     const dbPayload: any = {
-        userId: updated.id,
         username: updated.username || '',
         displayName: updated.name || '',
         bio: updated.bio || '',
-        avatarUrl: updated.avatarUrl || '',
-        profilePictureUrl: updated.avatarUrl || '', // Remote schema key
-        bannerUrl: updated.bannerUrl || '',
-        bgColor: updated.bgColor || '',
-        bgImage: updated.bgImage || '',
         theme: updated.theme || 'editorial-light',
-        links: JSON.stringify(updated.links || []),
-        blocks: JSON.stringify(updated.blocks || []),
+        bgColor: updated.bgColor || '',
     };
+
+    // Only add non-empty strings/arrays for complex fields to avoid schema errors
+    if (updated.avatarUrl) {
+        dbPayload.avatarUrl = updated.avatarUrl;
+        dbPayload.profilePictureUrl = updated.avatarUrl; // Remote schema key
+    }
+    if (updated.bannerUrl) dbPayload.bannerUrl = updated.bannerUrl;
+    if (updated.bgImage) dbPayload.bgImage = updated.bgImage;
+
+    // Always stringify arrays
+    dbPayload.links = JSON.stringify(updated.links || []);
+    dbPayload.blocks = JSON.stringify(updated.blocks || []);
 
     // Check cache first
     let docId = docIdCache[updated.id];
@@ -120,41 +125,36 @@ async function syncProfileToAppwrite(updated: User): Promise<void> {
 
     if (docId) {
         try {
-            // Diagnostic: Fetch the actual document to see its structure
-            const existing: any = await databases.getDocument(
-                APPWRITE_CONFIG.databaseId,
-                APPWRITE_CONFIG.profilesCollectionId,
-                docId
-            );
-            console.log('🔍 Diagnostic: Remote Links Value:', existing.links);
-            console.log('🔍 Diagnostic: Remote Links Type:', typeof existing.links);
-            console.log('🔍 Diagnostic: Is Remote Links Array?:', Array.isArray(existing.links));
-            console.log('🔍 Diagnostic: Remote Blocks Value:', existing.blocks);
-            console.log('🔍 Diagnostic: Remote Blocks Type:', typeof existing.blocks);
-            console.log('🔍 Diagnostic: Is Remote Blocks Array?:', Array.isArray(existing.blocks));
-            console.log('🔍 Diagnostic: Local Payload Type:', typeof dbPayload.links);
-            console.log('🔍 Diagnostic: Remote Keys:', Object.keys(existing));
-            console.log('🔍 Diagnostic: Local Payload Keys:', Object.keys(dbPayload));
-
-            // Remove userId from update payload to avoid potential immutability errors
-            const { userId, ...updatePayload } = dbPayload;
             await databases.updateDocument(
                 APPWRITE_CONFIG.databaseId,
                 APPWRITE_CONFIG.profilesCollectionId,
                 docId,
-                updatePayload
+                dbPayload
             );
             console.log('✅ Appwrite Sync: Success');
         } catch (err: any) {
             console.error('❌ Appwrite Sync: Update Failed', { error: err, payload: dbPayload });
+
+            // Final Fallback: Try saving just the basic info
+            if (err.code === 500 || err.code === 400) {
+                console.warn('⚠️ Attempting minimal sync...');
+                const minimal = { bio: dbPayload.bio, displayName: dbPayload.displayName };
+                await databases.updateDocument(
+                    APPWRITE_CONFIG.databaseId,
+                    APPWRITE_CONFIG.profilesCollectionId,
+                    docId,
+                    minimal
+                ).catch(() => { });
+            }
         }
     } else {
         try {
+            const createPayload = { ...dbPayload, userId: updated.id };
             const created = await databases.createDocument(
                 APPWRITE_CONFIG.databaseId,
                 APPWRITE_CONFIG.profilesCollectionId,
                 ID.unique(),
-                dbPayload
+                createPayload
             );
             docIdCache[updated.id] = created.$id;
             console.log('✅ Appwrite Sync: Created Success');
