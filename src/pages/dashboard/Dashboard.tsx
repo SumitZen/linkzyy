@@ -46,6 +46,13 @@ export default function Dashboard() {
         if (user) {
             setLinks(user.links ?? []);
             setBlocks(user.blocks ?? []);
+            setName(user.name ?? '');
+            setBio(user.bio ?? '');
+            setAvatarUrl(user.avatarUrl ?? '');
+            setBannerUrl(user.bannerUrl ?? '');
+            setBgColor(user.bgColor ?? '');
+            setBgImage(user.bgImage ?? '');
+            setSelTheme(user.theme ?? 'editorial-light');
         }
     }, [user]);
 
