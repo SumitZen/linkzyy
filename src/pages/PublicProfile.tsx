@@ -147,7 +147,7 @@ export default function PublicProfile() {
 
                 {/* Links */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 16, width: '100%' }}>
-                    {links.filter(l => l.enabled).map(link => (
+                    {links.filter(l => l.enabled !== false).map(link => (
                         <a key={link.id} href={link.url} target="_blank" rel="noopener noreferrer" className="bento-public-link" style={{
                             background: theme.btnBg,
                             color: theme.btnText,
@@ -173,7 +173,7 @@ export default function PublicProfile() {
                 </div>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 16, width: '100%', marginTop: 32 }}>
-                    {blocks.filter(b => b.enabled).map(block => (
+                    {blocks.filter(b => b.enabled !== false).map(block => (
                         <div key={block.id} style={{
                             // @ts-expect-error: blockBg is dynamic and not explicitly typed in ThemeConfig yet
                             width: '100%', marginBottom: 16, background: theme.blockBg || '#fff', color: theme.blockText || '#111',

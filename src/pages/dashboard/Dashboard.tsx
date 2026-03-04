@@ -41,6 +41,14 @@ export default function Dashboard() {
     const [links, setLinks] = useState<LinkItem[]>(user?.links ?? []);
     const [blocks, setBlocks] = useState<Block[]>(user?.blocks ?? []);
 
+    // Sync local state when AuthContext user data updates (e.g. rollback on failed DB saves)
+    useEffect(() => {
+        if (user) {
+            setLinks(user.links ?? []);
+            setBlocks(user.blocks ?? []);
+        }
+    }, [user]);
+
     // Simple link form (always visible)
     const [newIcon, setNewIcon] = useState('link');
     const [newLabel, setNewLabel] = useState('');
