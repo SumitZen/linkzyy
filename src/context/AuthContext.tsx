@@ -88,12 +88,13 @@ function buildUserFromAppwrite(awUser: import('appwrite').Models.User<import('ap
 const docIdCache: Record<string, string> = {};
 
 async function syncProfileToAppwrite(updated: User): Promise<void> {
-    const dbPayload = {
+    const dbPayload: any = {
         userId: updated.id,
         username: updated.username || '',
         displayName: updated.name || '',
         bio: updated.bio || '',
         avatarUrl: updated.avatarUrl || '',
+        profilePictureUrl: updated.avatarUrl || '', // Remote schema key
         bannerUrl: updated.bannerUrl || '',
         bgColor: updated.bgColor || '',
         bgImage: updated.bgImage || '',
@@ -120,11 +121,18 @@ async function syncProfileToAppwrite(updated: User): Promise<void> {
     if (docId) {
         try {
             // Diagnostic: Fetch the actual document to see its structure
-            const existing = await databases.getDocument(
+            const existing: any = await databases.getDocument(
                 APPWRITE_CONFIG.databaseId,
                 APPWRITE_CONFIG.profilesCollectionId,
                 docId
             );
+            console.log('🔍 Diagnostic: Remote Links Value:', existing.links);
+            console.log('🔍 Diagnostic: Remote Links Type:', typeof existing.links);
+            console.log('🔍 Diagnostic: Is Remote Links Array?:', Array.isArray(existing.links));
+            console.log('🔍 Diagnostic: Remote Blocks Value:', existing.blocks);
+            console.log('🔍 Diagnostic: Remote Blocks Type:', typeof existing.blocks);
+            console.log('🔍 Diagnostic: Is Remote Blocks Array?:', Array.isArray(existing.blocks));
+            console.log('🔍 Diagnostic: Local Payload Type:', typeof dbPayload.links);
             console.log('🔍 Diagnostic: Remote Keys:', Object.keys(existing));
             console.log('🔍 Diagnostic: Local Payload Keys:', Object.keys(dbPayload));
 
