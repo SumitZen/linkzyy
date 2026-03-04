@@ -98,8 +98,8 @@ async function syncProfileToAppwrite(updated: User): Promise<void> {
         bgColor: updated.bgColor || '',
         bgImage: updated.bgImage || '',
         theme: updated.theme || 'editorial-light',
-        links: JSON.stringify(updated.links || []),
-        blocks: JSON.stringify(updated.blocks || []),
+        links: (updated.links || []).map(l => JSON.stringify(l)),
+        blocks: (updated.blocks || []).map(b => JSON.stringify(b)),
     };
 
     // Check cache first
@@ -123,11 +123,7 @@ async function syncProfileToAppwrite(updated: User): Promise<void> {
                 APPWRITE_CONFIG.databaseId,
                 APPWRITE_CONFIG.profilesCollectionId,
                 docId,
-                dbPayload,
-                [
-                    Permission.read(Role.any()),
-                    Permission.write(Role.user(updated.id))
-                ]
+                dbPayload
             );
             console.log('✅ Appwrite Sync: Success');
         } catch (err: any) {
@@ -136,8 +132,7 @@ async function syncProfileToAppwrite(updated: User): Promise<void> {
             // Safe Isolation Mode: Try fields individually to find the bottleneck
             if (err.code === 500 || err.code === 400) {
                 console.warn('⚠️ Safe Mode: Attempting to save fields individually...');
-                const fields = Object.entries(dbPayload);
-                for (const [key, value] of fields) {
+                for (const [key, value] of Object.entries(dbPayload)) {
                     if (key === 'userId') continue;
                     try {
                         await databases.updateDocument(
@@ -159,11 +154,7 @@ async function syncProfileToAppwrite(updated: User): Promise<void> {
                 APPWRITE_CONFIG.databaseId,
                 APPWRITE_CONFIG.profilesCollectionId,
                 ID.unique(),
-                dbPayload,
-                [
-                    Permission.read(Role.any()),
-                    Permission.write(Role.user(updated.id))
-                ]
+                dbPayload
             );
             docIdCache[updated.id] = created.$id;
             console.log('✅ Appwrite Sync: Created Success');
@@ -177,8 +168,7 @@ async function syncProfileToAppwrite(updated: User): Promise<void> {
                     APPWRITE_CONFIG.databaseId,
                     APPWRITE_CONFIG.profilesCollectionId,
                     ID.unique(),
-                    basicPayload,
-                    [Permission.read(Role.any()), Permission.write(Role.user(updated.id))]
+                    basicPayload
                 ).catch(e => { console.error('❌ Fallback failed:', e); throw e; });
                 if (fallback) docIdCache[updated.id] = fallback.$id;
             }
