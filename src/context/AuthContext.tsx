@@ -90,9 +90,9 @@ const docIdCache: Record<string, string> = {};
 async function syncProfileToAppwrite(updated: User): Promise<void> {
     const dbPayload = {
         userId: updated.id,
-        username: updated.username || '',
-        displayName: updated.name || '',
-        bio: updated.bio || '',
+        username: (updated.username || '').slice(0, 50),
+        displayName: (updated.name || '').slice(0, 100),
+        bio: (updated.bio || '').slice(0, 500),
         avatarUrl: updated.avatarUrl || '',
         bannerUrl: updated.bannerUrl || '',
         bgColor: updated.bgColor || '',
@@ -132,15 +132,25 @@ async function syncProfileToAppwrite(updated: User): Promise<void> {
             console.log('✅ Appwrite Sync: Success');
         } catch (err: any) {
             console.error('❌ Appwrite Sync: Update Failed', { error: err, payload: dbPayload });
-            // Fallback: try without permissions if it was a 500 (might be permission serialization issue)
-            if (err.code === 500) {
-                console.warn('⚠️ Fallback: Retrying update without explicit permissions...');
-                await databases.updateDocument(
-                    APPWRITE_CONFIG.databaseId,
-                    APPWRITE_CONFIG.profilesCollectionId,
-                    docId,
-                    dbPayload
-                ).catch(e => console.error('❌ Fallback failed:', e));
+
+            // Safe Isolation Mode: Try fields individually to find the bottleneck
+            if (err.code === 500 || err.code === 400) {
+                console.warn('⚠️ Safe Mode: Attempting to save fields individually...');
+                const fields = Object.entries(dbPayload);
+                for (const [key, value] of fields) {
+                    if (key === 'userId') continue;
+                    try {
+                        await databases.updateDocument(
+                            APPWRITE_CONFIG.databaseId,
+                            APPWRITE_CONFIG.profilesCollectionId,
+                            docId,
+                            { [key]: value }
+                        );
+                        console.log(`✅ Safe Sync: Saved "${key}"`);
+                    } catch (fieldErr) {
+                        console.error(`❌ Safe Sync: Failed to save "${key}"`, fieldErr);
+                    }
+                }
             }
         }
     } else {
@@ -159,13 +169,16 @@ async function syncProfileToAppwrite(updated: User): Promise<void> {
             console.log('✅ Appwrite Sync: Created Success');
         } catch (err: any) {
             console.error('❌ Appwrite Sync: Create Failed', { error: err, payload: dbPayload });
+            // Fallback for creation: try basic fields first
             if (err.code === 500) {
-                console.warn('⚠️ Fallback: Retrying create without explicit permissions...');
+                console.warn('⚠️ Fallback: Creating with basic fields...');
+                const basicPayload = { ...dbPayload, links: '[]', blocks: '[]' };
                 const fallback = await databases.createDocument(
                     APPWRITE_CONFIG.databaseId,
                     APPWRITE_CONFIG.profilesCollectionId,
                     ID.unique(),
-                    dbPayload
+                    basicPayload,
+                    [Permission.read(Role.any()), Permission.write(Role.user(updated.id))]
                 ).catch(e => { console.error('❌ Fallback failed:', e); throw e; });
                 if (fallback) docIdCache[updated.id] = fallback.$id;
             }
