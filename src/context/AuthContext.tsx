@@ -92,14 +92,15 @@ async function syncProfileToAppwrite(updated: User): Promise<void> {
         userId: updated.id,
         username: (updated.username || '').slice(0, 50),
         displayName: (updated.name || '').slice(0, 100),
-        bio: (updated.bio || '').slice(0, 500),
-        avatarUrl: updated.avatarUrl || '',
-        bannerUrl: updated.bannerUrl || '',
-        bgColor: updated.bgColor || '',
-        bgImage: updated.bgImage || '',
-        theme: updated.theme || 'editorial-light',
-        links: JSON.stringify(updated.links || []),
-        blocks: JSON.stringify(updated.blocks || []),
+        bio: (updated.bio || '').slice(0, 250), // Limited to 250 for default schema
+        avatarUrl: (updated.avatarUrl || '').slice(0, 250),
+        bannerUrl: (updated.bannerUrl || '').slice(0, 250),
+        bgColor: (updated.bgColor || '').slice(0, 50),
+        bgImage: (updated.bgImage || '').slice(0, 250),
+        theme: (updated.theme || 'editorial-light').slice(0, 50),
+        // Stringify and truncate links to fit 255 limit
+        links: JSON.stringify((updated.links || []).slice(0, 3)).slice(0, 250),
+        blocks: JSON.stringify((updated.blocks || []).slice(0, 2)).slice(0, 250),
     };
 
     // Check cache first
