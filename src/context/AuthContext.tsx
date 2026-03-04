@@ -240,7 +240,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                             dbPayload
                         ).catch(e => {
                             console.error('Failed to update remote profile:', e);
-                            alert(`Appwrite Update Error: ${e.message}. Check if your "links" and "blocks" attributes exist and have enough Size (e.g. 65000).`);
+                            setUser(prev); // Rollback on failure
                         });
                     } else {
                         databases.createDocument(
@@ -250,7 +250,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                             dbPayload
                         ).catch(e => {
                             console.error('Failed to create remote profile:', e);
-                            alert(`Appwrite Create Error: ${e.message}. Check if your collection attributes match the code.`);
+                            setUser(prev); // Rollback on failure
                         });
                     }
                 }).catch(e => console.error('Failed to fetch profile array for sync:', e));

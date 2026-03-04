@@ -63,12 +63,12 @@ export default function PublicProfile() {
     const previewBg = profile.bgImage ? `url(${profile.bgImage}) center/cover no-repeat fixed` : profile.bgColor || theme.screenBg;
 
     let links: LinkItem[] = [];
+    let blocks: any[] = [];
     try {
-        if (profile.links) {
-            links = typeof profile.links === 'string' ? JSON.parse(profile.links) : profile.links;
-        }
+        if (profile.links) links = typeof profile.links === 'string' ? JSON.parse(profile.links) : profile.links;
+        if (profile.blocks) blocks = typeof profile.blocks === 'string' ? JSON.parse(profile.blocks) : profile.blocks;
     } catch (err) {
-        console.error('Link parsing error:', err);
+        console.error('Data parsing error:', err);
     }
 
     return (
@@ -143,6 +143,49 @@ export default function PublicProfile() {
                         }}>
                             <PlatformIcon id={link.icon} size={24} /><span>{link.label}</span>
                         </a>
+                    ))}
+                </div>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 16, width: '100%', marginTop: 32 }}>
+                    {blocks.filter(b => b.enabled).map(block => (
+                        <div key={block.id} style={{
+                            // @ts-expect-error: blockBg is dynamic and not explicitly typed in ThemeConfig yet
+                            width: '100%', marginBottom: 16, background: theme.blockBg || '#fff', color: theme.blockText || '#111',
+                            padding: 16, border: '3px solid #111', borderRadius: theme.borderFormat === 'thick' ? 12 : 32, boxShadow: '4px 4px 0 #111'
+                        }}>
+                            {block.type === 'music' && (
+                                <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
+                                    {block.coverUrl && <img src={block.coverUrl} alt="Cover" style={{ width: 64, height: 64, objectFit: 'cover', borderRadius: 8, border: '2px solid #111' }} />}
+                                    <div style={{ flex: 1 }}>
+                                        <div style={{ fontWeight: 700, fontSize: '1.1rem' }}>{block.title}</div>
+                                        <div style={{ fontSize: '0.9rem', opacity: 0.8 }}>{block.artist}</div>
+                                    </div>
+                                    <a href={block.embedUrl} target="_blank" rel="noreferrer" style={{ padding: '8px 16px', background: '#111', color: '#fff', textDecoration: 'none', fontWeight: 600, borderRadius: 8 }}>Play</a>
+                                </div>
+                            )}
+
+                            {block.type === 'photo' && (
+                                <div>
+                                    {block.caption && <p style={{ fontWeight: 600, marginBottom: 12 }}>{block.caption}</p>}
+                                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: 12 }}>
+                                        {block.images.map((img: string, i: number) => (
+                                            <img key={i} src={img} alt={`img-${i}`} style={{ width: '100%', aspectRatio: '1', objectFit: 'cover', borderRadius: 8, border: '2px solid #111' }} />
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            {block.type === 'product' && (
+                                <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
+                                    {block.imageUrl && <img src={block.imageUrl} alt="Product" style={{ width: 80, height: 80, objectFit: 'cover', borderRadius: 8, border: '2px solid #111' }} />}
+                                    <div style={{ flex: 1 }}>
+                                        <div style={{ fontWeight: 700, fontSize: '1.1rem' }}>{block.name}</div>
+                                        <div style={{ fontWeight: 800, marginTop: 4 }}>{block.price}</div>
+                                    </div>
+                                    <a href={block.buyUrl} target="_blank" rel="noreferrer" style={{ padding: '8px 16px', background: '#7c3aed', color: '#fff', textDecoration: 'none', fontWeight: 600, borderRadius: 8, border: '2px solid #111' }}>Buy Node</a>
+                                </div>
+                            )}
+                        </div>
                     ))}
                 </div>
 

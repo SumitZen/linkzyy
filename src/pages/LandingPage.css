@@ -39,9 +39,7 @@ h6 {
     justify-content: space-between;
     padding: 0 32px;
     height: 64px;
-    background: color-mix(in srgb, var(--surface-1) 30%, transparent);
-    backdrop-filter: blur(32px) saturate(150%);
-    -webkit-backdrop-filter: blur(32px) saturate(150%);
+    background: var(--surface-1);
     border: var(--border-subtle);
     border-radius: var(--border-radius-pill);
     box-shadow: var(--shadow-layer-1);
@@ -118,19 +116,18 @@ h6 {
 }
 
 .btn-signup {
-    background: color-mix(in srgb, var(--text-dark) 85%, transparent);
+    background: var(--text-dark);
     color: var(--bg-color);
-    border: 1px solid color-mix(in srgb, var(--bg-color) 20%, transparent);
+    border: 3px solid var(--text-dark);
     padding: 12px 28px;
-    border-radius: var(--border-radius-pill);
+    border-radius: 8px;
+    /* Neo-brutal standard radius */
     font-family: var(--font-sans);
     font-weight: 600;
     font-size: 0.95rem;
     cursor: pointer;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
     transition: var(--transition-smooth);
-    box-shadow: var(--shadow-layer-1);
+    box-shadow: 4px 4px 0 var(--text-dark);
 }
 
 .btn-signup:hover {
@@ -353,6 +350,87 @@ h6 {
 
 /* Elegant Feature Chips */
 .feature-chips {
+    box-shadow: 4px 4px 0 var(--accent-secondary);
+    border: 1px solid var(--border-subtle);
+}
+
+.mockup-name {
+    font-family: var(--font-serif);
+    font-size: 1.8rem;
+    color: var(--text-dark);
+}
+
+.mockup-bio {
+    font-family: var(--font-sans);
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+.mockup-links {
+    padding: 0 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.mockup-link {
+    background: var(--surface-2);
+    padding: 16px;
+    border-radius: var(--border-radius-md);
+    text-align: center;
+    font-weight: 500;
+    color: var(--text-dark);
+    box-shadow: 4px 4px 0 var(--accent-secondary);
+    border: 1px solid var(--border-subtle);
+}
+
+/* ═══ FEATURES INTEGRATION ═══ */
+
+.sec-customize,
+.sec-share,
+.sec-analytics {
+    padding: 128px 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.section-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+}
+
+.sec-label {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    margin-bottom: 24px;
+    font-size: 0.85rem;
+}
+
+.sec-title {
+    font-family: var(--font-serif);
+    font-size: clamp(3rem, 5vw, 4.5rem);
+    line-height: 1.1;
+    color: var(--text-dark);
+    margin-bottom: 32px;
+}
+
+.sec-customize p,
+.sec-share p,
+.sec-analytics p {
+    font-size: 1.15rem;
+    color: var(--text-muted);
+    margin-bottom: 40px;
+    max-width: 480px;
+}
+
+/* Elegant Feature Chips */
+.feature-chips {
     display: flex;
     flex-wrap: wrap;
     gap: 12px;
@@ -361,13 +439,11 @@ h6 {
 .chip {
     padding: 8px 16px;
     border-radius: var(--border-radius-pill);
-    background: color-mix(in srgb, var(--surface-1) 40%, transparent);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    background: var(--surface-1);
     border: var(--border-subtle);
     font-size: 0.85rem;
     font-weight: 500;
-    box-shadow: var(--shadow-layer-1);
+    box-shadow: 4px 4px 0 var(--accent-secondary);
     color: var(--text-dark);
 }
 

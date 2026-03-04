@@ -13,20 +13,19 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 64px 48px;
-    max-width: 500px;
+    padding: 48px;
+    max-width: 440px;
     width: 100%;
     margin: auto;
 
-    /* Liquid Glass Effect */
-    background: rgba(255, 255, 255, 0.03);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.2),
-        0 24px 48px rgba(0, 0, 0, 0.08);
-    border-radius: 24px;
+    /* Neo-Brutalism styles */
+    background: var(--surface-1);
+    border: 3px solid var(--text-dark);
+    border-radius: 8px;
+    /* Standard Neo Brutalism */
+    box-shadow: 8px 8px 0 var(--text-dark);
+    position: relative;
+    z-index: 10;
 }
 
 .auth-logo {
