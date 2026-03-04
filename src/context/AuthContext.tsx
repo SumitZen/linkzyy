@@ -1,5 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect, useRef } from 'react';
 import type { ReactNode } from 'react';
 import { account, APPWRITE_READY, databases, APPWRITE_CONFIG } from '../lib/appwrite';
 import { ID, OAuthProvider, Query } from 'appwrite';
@@ -83,6 +83,68 @@ function buildUserFromAppwrite(awUser: import('appwrite').Models.User<import('ap
     };
 }
 
+// ── Standalone async DB sync — runs OUTSIDE React state ─────────────────────
+// Caches the Appwrite document ID per userId so we don't list on every save
+const docIdCache: Record<string, string> = {};
+
+async function syncProfileToAppwrite(updated: User): Promise<void> {
+    const dbPayload = {
+        userId: updated.id,
+        username: updated.username || '',
+        displayName: updated.name || '',
+        bio: updated.bio || '',
+        avatarUrl: updated.avatarUrl || '',
+        bannerUrl: updated.bannerUrl || '',
+        bgColor: updated.bgColor || '',
+        bgImage: updated.bgImage || '',
+        theme: updated.theme || 'editorial-light',
+        links: JSON.stringify(updated.links || []),
+        blocks: JSON.stringify(updated.blocks || []),
+    };
+
+    // Check cache first
+    let docId = docIdCache[updated.id];
+
+    if (!docId) {
+        const res = await databases.listDocuments(
+            APPWRITE_CONFIG.databaseId,
+            APPWRITE_CONFIG.profilesCollectionId,
+            [Query.equal('userId', updated.id)]
+        );
+        if (res.documents.length > 0) {
+            docId = res.documents[0].$id;
+            docIdCache[updated.id] = docId;
+        }
+    }
+
+    if (docId) {
+        await databases.updateDocument(
+            APPWRITE_CONFIG.databaseId,
+            APPWRITE_CONFIG.profilesCollectionId,
+            docId,
+            dbPayload
+        );
+    } else {
+        const created = await databases.createDocument(
+            APPWRITE_CONFIG.databaseId,
+            APPWRITE_CONFIG.profilesCollectionId,
+            ID.unique(),
+            dbPayload
+        );
+        docIdCache[updated.id] = created.$id;
+    }
+}
+
+// Helper to parse Appwrite JSON fields (handles string and array cases)
+function parseField(raw: unknown): unknown[] {
+    if (!raw) return [];
+    if (Array.isArray(raw)) return raw;
+    if (typeof raw === 'string') {
+        try { return JSON.parse(raw); } catch { return []; }
+    }
+    return [];
+}
+
 // ── Provider ─────────────────────────────────────────────────────────────────
 export function AuthProvider({ children }: { children: ReactNode }) {
     const [user, setUser] = useState<User | null>(() => {
@@ -98,13 +160,53 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         return null;
     });
     const [isLoading, setIsLoading] = useState(true);
+    // Ref so async functions always read the latest user without stale closures
+    const userRef = useRef(user);
+    useEffect(() => { userRef.current = user; }, [user]);
 
     useEffect(() => {
         if (APPWRITE_READY) {
-            account.get().then((awUser) => {
-                const saved = localStorage.getItem(`linkzy_profile_${awUser.$id}`);
-                const extra = saved ? JSON.parse(saved) : {};
-                setUser(buildUserFromAppwrite(awUser, extra));
+            account.get().then(async (awUser) => {
+                try {
+                    // Fetch the latest profile from the database (source of truth)
+                    const res = await databases.listDocuments(
+                        APPWRITE_CONFIG.databaseId,
+                        APPWRITE_CONFIG.profilesCollectionId,
+                        [Query.equal('userId', awUser.$id)]
+                    );
+
+                    let extra: Partial<User> = {};
+                    if (res.documents.length > 0) {
+                        const doc = res.documents[0];
+                        docIdCache[awUser.$id] = doc.$id;
+                        extra = {
+                            username: doc.username || undefined,
+                            name: doc.displayName || undefined,
+                            bio: doc.bio || '',
+                            avatarUrl: doc.avatarUrl || '',
+                            bannerUrl: doc.bannerUrl || '',
+                            bgColor: doc.bgColor || '',
+                            bgImage: doc.bgImage || '',
+                            theme: doc.theme || 'editorial-light',
+                            links: parseField(doc.links) as LinkItem[],
+                            blocks: parseField(doc.blocks) as Block[],
+                        };
+                    } else {
+                        // No document yet — fall back to localStorage
+                        const saved = localStorage.getItem(`linkzy_profile_${awUser.$id}`);
+                        if (saved) extra = JSON.parse(saved);
+                    }
+
+                    const freshUser = buildUserFromAppwrite(awUser, extra);
+                    setUser(freshUser);
+                    localStorage.setItem(SESSION_KEY, JSON.stringify(freshUser));
+                    localStorage.setItem(`linkzy_profile_${awUser.$id}`, JSON.stringify(freshUser));
+                } catch {
+                    // DB fetch failed — fall back to localStorage snapshot
+                    const saved = localStorage.getItem(`linkzy_profile_${awUser.$id}`);
+                    const extra = saved ? JSON.parse(saved) : {};
+                    setUser(buildUserFromAppwrite(awUser, extra));
+                }
                 setIsLoading(false);
             }).catch(() => {
                 setUser(null);
@@ -112,7 +214,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                 setIsLoading(false);
             });
         } else {
-            // eslint-disable-next-line react-hooks/set-state-in-effect
             setIsLoading(false);
         }
     }, []);
@@ -147,7 +248,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         if (!APPWRITE_READY) {
             throw new Error('Appwrite is not configured. Add VITE_APPWRITE_* variables to .env.local');
         }
-        // Initiates OAuth and navigates away
         account.createOAuth2Session(
             OAuthProvider.Google,
             window.location.origin + '/auth/callback',
@@ -201,65 +301,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
     };
 
-    // ── updateUser: persist local & remote ──
+    // ── updateUser: properly async, runs DB sync OUTSIDE setState ──
     const updateUser = (updates: Partial<User>) => {
-        setUser((prev) => {
-            if (!prev) return null;
-            const updated = { ...prev, ...updates };
+        const prev = userRef.current;
+        if (!prev) return;
 
-            if (APPWRITE_READY && prev.id) {
-                // Save locally first
-                localStorage.setItem(`linkzy_profile_${prev.id}`, JSON.stringify(updated));
-                localStorage.setItem(SESSION_KEY, JSON.stringify(updated));
+        const updated = { ...prev, ...updates };
 
-                // Sync to Appwrite Database (Fire and forget, ignoring awaits so it doesn't block UI)
-                databases.listDocuments(
-                    APPWRITE_CONFIG.databaseId,
-                    APPWRITE_CONFIG.profilesCollectionId,
-                    [Query.equal('userId', prev.id)]
-                ).then(res => {
-                    const dbPayload = {
-                        userId: updated.id,
-                        username: updated.username || '',
-                        displayName: updated.name || '',
-                        bio: updated.bio || '',
-                        avatarUrl: updated.avatarUrl || '',
-                        bannerUrl: updated.bannerUrl || '',
-                        bgColor: updated.bgColor || '',
-                        bgImage: updated.bgImage || '',
-                        theme: updated.theme || 'editorial-light',
-                        links: JSON.stringify(updated.links || []),
-                        blocks: JSON.stringify(updated.blocks || [])
-                    };
+        // 1. Update React state immediately for optimistic UI
+        setUser(updated);
 
-                    if (res.documents.length > 0) {
-                        databases.updateDocument(
-                            APPWRITE_CONFIG.databaseId,
-                            APPWRITE_CONFIG.profilesCollectionId,
-                            res.documents[0].$id,
-                            dbPayload
-                        ).catch(e => {
-                            console.error('Failed to update remote profile:', e);
-                            setUser(prev); // Rollback on failure
-                        });
-                    } else {
-                        databases.createDocument(
-                            APPWRITE_CONFIG.databaseId,
-                            APPWRITE_CONFIG.profilesCollectionId,
-                            ID.unique(),
-                            dbPayload
-                        ).catch(e => {
-                            console.error('Failed to create remote profile:', e);
-                            setUser(prev); // Rollback on failure
-                        });
-                    }
-                }).catch(e => console.error('Failed to fetch profile array for sync:', e));
+        // 2. Persist locally
+        localStorage.setItem(`linkzy_profile_${prev.id}`, JSON.stringify(updated));
+        localStorage.setItem(SESSION_KEY, JSON.stringify(updated));
 
-            } else {
-                localStorage.setItem(SESSION_KEY, JSON.stringify(updated));
-            }
-            return updated;
-        });
+        // 3. Sync to Appwrite DB asynchronously — OUTSIDE setState
+        if (APPWRITE_READY && prev.id) {
+            syncProfileToAppwrite(updated).catch(e => {
+                console.error('DB sync failed, reverting:', e);
+                // Roll back to previous state on failure
+                setUser(prev);
+                localStorage.setItem(SESSION_KEY, JSON.stringify(prev));
+            });
+        }
     };
 
     const value = { user, isLoading, login, loginWithGoogle, signup, logout, updateUser };
