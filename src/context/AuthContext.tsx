@@ -2,7 +2,7 @@
 import { createContext, useContext, useState, useEffect, useRef } from 'react';
 import type { ReactNode } from 'react';
 import { account, APPWRITE_READY, databases, APPWRITE_CONFIG } from '../lib/appwrite';
-import { ID, OAuthProvider, Query, Permission, Role } from 'appwrite';
+import { ID, OAuthProvider, Query } from 'appwrite';
 
 // ── Block / User types ──────────────────────────────────────────────────────
 export interface LinkBlock {
