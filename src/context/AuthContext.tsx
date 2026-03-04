@@ -2,7 +2,7 @@
 import { createContext, useContext, useState, useEffect, useRef } from 'react';
 import type { ReactNode } from 'react';
 import { account, APPWRITE_READY, databases, APPWRITE_CONFIG } from '../lib/appwrite';
-import { ID, OAuthProvider, Query } from 'appwrite';
+import { ID, OAuthProvider, Query, Permission, Role } from 'appwrite';
 
 // ── Block / User types ──────────────────────────────────────────────────────
 export interface LinkBlock {
@@ -122,14 +122,22 @@ async function syncProfileToAppwrite(updated: User): Promise<void> {
             APPWRITE_CONFIG.databaseId,
             APPWRITE_CONFIG.profilesCollectionId,
             docId,
-            dbPayload
+            dbPayload,
+            [
+                Permission.read(Role.any()),           // Keep it public
+                Permission.write(Role.user(updated.id)) // Only owner can edit
+            ]
         );
     } else {
         const created = await databases.createDocument(
             APPWRITE_CONFIG.databaseId,
             APPWRITE_CONFIG.profilesCollectionId,
             ID.unique(),
-            dbPayload
+            dbPayload,
+            [
+                Permission.read(Role.any()),           // Anyone can view
+                Permission.write(Role.user(updated.id)) // Only owner can edit
+            ]
         );
         docIdCache[updated.id] = created.$id;
     }

@@ -180,9 +180,16 @@ export default function Dashboard() {
             // Get public URL
             const publicUrl = storage.getFileView(APPWRITE_CONFIG.storageBucketId, fileId);
 
-            if (cropType === 'avatar') setAvatarUrl(publicUrl);
-            else if (cropType === 'banner') setBannerUrl(publicUrl);
-            else setBgImage(publicUrl);
+            if (cropType === 'avatar') {
+                setAvatarUrl(publicUrl);
+                updateUser({ avatarUrl: publicUrl });
+            } else if (cropType === 'banner') {
+                setBannerUrl(publicUrl);
+                updateUser({ bannerUrl: publicUrl });
+            } else {
+                setBgImage(publicUrl);
+                updateUser({ bgImage: publicUrl });
+            }
 
             setCropImageSrc(null); // Close modal
             flash();
