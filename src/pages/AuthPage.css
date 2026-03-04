@@ -17,13 +17,10 @@
     max-width: 440px;
     width: 100%;
     margin: auto;
-
-    /* Neo-Brutalism styles */
     background: var(--surface-1);
-    border: 3px solid var(--text-dark);
-    border-radius: 8px;
-    /* Standard Neo Brutalism */
-    box-shadow: 8px 8px 0 var(--text-dark);
+    border: 1px solid var(--border-default, #e5e7eb);
+    border-radius: 16px;
+    box-shadow: 0 4px 32px rgba(0, 0, 0, 0.08);
     position: relative;
     z-index: 10;
 }

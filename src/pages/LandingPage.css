@@ -118,21 +118,20 @@ h6 {
 .btn-signup {
     background: var(--text-dark);
     color: var(--bg-color);
-    border: 3px solid var(--text-dark);
-    padding: 12px 28px;
-    border-radius: 8px;
-    /* Neo-brutal standard radius */
+    border: none;
+    padding: 12px 24px;
+    border-radius: 100px;
     font-family: var(--font-sans);
     font-weight: 600;
     font-size: 0.95rem;
     cursor: pointer;
     transition: var(--transition-smooth);
-    box-shadow: 4px 4px 0 var(--text-dark);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.18);
 }
 
 .btn-signup:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-layer-2);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.22);
 }
 
 /* ═══ TYPOGRAPHIC HERO ═══ */
