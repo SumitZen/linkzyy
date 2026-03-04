@@ -268,156 +268,156 @@ export default function Dashboard() {
                         <div className="bento-left-col">
 
 
-                            {/* ── STAT CARDS ── */}
-                            <div className="bento-stat-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16 }}>
-                                <div className="bento-card bento-stat bento-stat-purple">
-                                    <div className="bento-stat-icon">🔗</div>
-                                    <div className="bento-stat-label">Active Links</div>
-                                    <div className="bento-stat-value" style={{ color: '#7c3aed' }}>
-                                        {links.filter(l => l.enabled).length + blocks.filter(b => b.enabled).length}
-                                    </div>
-                                    <div className="bento-stat-sub">of {links.length + blocks.length} total</div>
-                                </div>
-                                <div className="bento-card bento-stat bento-stat-green">
-                                    <div className="bento-stat-icon">👁</div>
-                                    <div className="bento-stat-label">Profile Views</div>
-                                    <div className="bento-stat-value" style={{ color: '#10b981' }}>—</div>
-                                    <div className="bento-stat-sub">Tracking coming soon</div>
-                                </div>
-                            </div>
-
                             {savedMsg && <div className="bento-toast">{savedMsg}</div>}
 
-                            {/* ── LINKS CARD ── */}
+                            {/* ── LINKS TAB (Includes Stats) ── */}
                             {activeTab === 'links' && (
-                                <div className="bento-card bento-links-card">
-                                    <div className="bento-card-header">
-                                        <h2 className="bento-card-title">Your Links</h2>
-                                    </div>
-
-                                    {/* Simple add row */}
-                                    <div className="bento-simple-add">
-                                        {/* Icon picker — real brand SVGs */}
-                                        <div className="bento-icon-picker">
-                                            <div className="bento-icon-display">
-                                                <PlatformIcon id={newIcon} size={20} />
+                                <>
+                                    <div className="bento-stat-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 24 }}>
+                                        <div className="bento-card bento-stat bento-stat-purple">
+                                            <div className="bento-stat-icon">🔗</div>
+                                            <div className="bento-stat-label">Active Links</div>
+                                            <div className="bento-stat-value" style={{ color: '#7c3aed' }}>
+                                                {links.filter(l => l.enabled).length + blocks.filter(b => b.enabled).length}
                                             </div>
-                                            <div className="bento-icon-grid">
-                                                {PLATFORM_ICONS.map(p => (
-                                                    <button
-                                                        key={p.id}
-                                                        title={p.label}
-                                                        className={`bento-icon-opt${newIcon === p.id ? ' sel' : ''}`}
-                                                        onClick={() => setNewIcon(p.id)}
-                                                    >
-                                                        <PlatformIcon id={p.id} size={16} />
-                                                    </button>
-                                                ))}
-                                            </div>
+                                            <div className="bento-stat-sub">of {links.length + blocks.length} total</div>
                                         </div>
-                                        <input
-                                            className="bento-input bento-flex1"
-                                            placeholder="Title  (e.g. My Website)"
-                                            value={newLabel}
-                                            onChange={e => setNewLabel(e.target.value)}
-                                            onKeyDown={e => e.key === 'Enter' && addLink()}
-                                        />
-                                        <input
-                                            className="bento-input bento-flex2"
-                                            placeholder="URL  (e.g. example.com)"
-                                            value={newUrl}
-                                            onChange={e => setNewUrl(e.target.value)}
-                                            onKeyDown={e => e.key === 'Enter' && addLink()}
-                                        />
-                                        <button className="bento-add-link-btn" onClick={addLink}>+ Add</button>
-                                    </div>
-
-                                    {/* Advanced block toggle */}
-                                    <button className="bento-adv-toggle" onClick={() => setShowAdvanced(v => !v)}>
-                                        {showAdvanced ? '▲ Hide advanced blocks' : '+ Add Music / Photos / Product'}
-                                    </button>
-
-                                    {showAdvanced && (
-                                        <div className="bento-adv-panel">
-                                            <div className="bento-adv-tabs">
-                                                {(['music', 'photo', 'product'] as const).map(t => (
-                                                    <button key={t} className={`bento-adv-tab${advType === t ? ' active' : ''}`} onClick={() => setAdvType(t)}>
-                                                        {t === 'music' ? '🎵 Music' : t === 'photo' ? '📷 Photos' : '🛍️ Product'}
-                                                    </button>
-                                                ))}
-                                            </div>
-
-                                            {advType === 'music' && (
-                                                <div className="bento-adv-fields">
-                                                    <input className="bento-input" placeholder="Song title *" value={mt} onChange={e => setMt(e.target.value)} />
-                                                    <input className="bento-input" placeholder="Artist name" value={ma} onChange={e => setMa(e.target.value)} />
-                                                    <input className="bento-input" placeholder="Spotify / SoundCloud embed URL *" value={me} onChange={e => setMe(e.target.value)} />
-                                                    <input className="bento-input" placeholder="Cover image URL (optional)" value={mc} onChange={e => setMc(e.target.value)} />
-                                                    <button className="bento-save" onClick={addBlock}>Add Music Block</button>
-                                                </div>
-                                            )}
-                                            {advType === 'photo' && (
-                                                <div className="bento-adv-fields">
-                                                    <input className="bento-input" placeholder="Caption (optional)" value={pCap} onChange={e => setPCap(e.target.value)} />
-                                                    <textarea className="bento-input" placeholder="Paste image URLs, separated by commas *" value={pImg} onChange={e => setPImg(e.target.value)} rows={2} style={{ resize: 'none' }} />
-                                                    <button className="bento-save" onClick={addBlock}>Add Photo Block</button>
-                                                </div>
-                                            )}
-                                            {advType === 'product' && (
-                                                <div className="bento-adv-fields">
-                                                    <input className="bento-input" placeholder="Product name *" value={prName} onChange={e => setPrName(e.target.value)} />
-                                                    <input className="bento-input" placeholder="Price (e.g. $49)" value={prPrice} onChange={e => setPrPrice(e.target.value)} />
-                                                    <input className="bento-input" placeholder="Buy URL *" value={prBuy} onChange={e => setPrBuy(e.target.value)} />
-                                                    <input className="bento-input" placeholder="Product image URL (optional)" value={prImg} onChange={e => setPrImg(e.target.value)} />
-                                                    <button className="bento-save" onClick={addBlock}>Add Product</button>
-                                                </div>
-                                            )}
+                                        <div className="bento-card bento-stat bento-stat-green">
+                                            <div className="bento-stat-icon">👁</div>
+                                            <div className="bento-stat-label">Profile Views</div>
+                                            <div className="bento-stat-value" style={{ color: '#10b981' }}>—</div>
+                                            <div className="bento-stat-sub">Tracking coming soon</div>
                                         </div>
-                                    )}
+                                    </div>
+                                    <div className="bento-card bento-links-card">
+                                        <div className="bento-card-header">
+                                            <h2 className="bento-card-title">Your Links</h2>
+                                        </div>
 
-                                    {/* List */}
-                                    <div className="bento-link-list">
-                                        {links.length === 0 && blocks.length === 0 && (
-                                            <div className="bento-empty">✦ Add your first link above to get started</div>
-                                        )}
-                                        {links.map(link => (
-                                            <div key={link.id} className={`bento-link-row${!link.enabled ? ' off' : ''}`}>
-                                                <div className="bento-link-icon-sq">
-                                                    <PlatformIcon id={link.icon} size={18} />
+                                        {/* Simple add row */}
+                                        <div className="bento-simple-add">
+                                            {/* Icon picker — real brand SVGs */}
+                                            <div className="bento-icon-picker">
+                                                <div className="bento-icon-display">
+                                                    <PlatformIcon id={newIcon} size={20} />
                                                 </div>
-                                                <div className="bento-link-info">
-                                                    <div className="bento-link-name">{link.label}</div>
-                                                    <div className="bento-link-url">{link.url}</div>
+                                                <div className="bento-icon-grid">
+                                                    {PLATFORM_ICONS.map(p => (
+                                                        <button
+                                                            key={p.id}
+                                                            title={p.label}
+                                                            className={`bento-icon-opt${newIcon === p.id ? ' sel' : ''}`}
+                                                            onClick={() => setNewIcon(p.id)}
+                                                        >
+                                                            <PlatformIcon id={p.id} size={16} />
+                                                        </button>
+                                                    ))}
                                                 </div>
-                                                <label className="bento-toggle">
-                                                    <input type="checkbox" checked={link.enabled} onChange={() => toggleLink(link.id)} />
-                                                    <span className="bento-toggle-track" />
-                                                </label>
-                                                <button className="bento-del" title="Remove" onClick={() => removeLink(link.id)}>✕</button>
                                             </div>
-                                        ))}
-                                        {blocks.map(block => (
-                                            <div key={block.id} className={`bento-link-row${!block.enabled ? ' off' : ''}`}>
-                                                <div className="bento-link-icon-sq">
-                                                    <PlatformIcon id={block.type === 'music' ? 'music' : block.type === 'photo' ? 'globe' : 'store'} size={18} />
+                                            <input
+                                                className="bento-input bento-flex1"
+                                                placeholder="Title  (e.g. My Website)"
+                                                value={newLabel}
+                                                onChange={e => setNewLabel(e.target.value)}
+                                                onKeyDown={e => e.key === 'Enter' && addLink()}
+                                            />
+                                            <input
+                                                className="bento-input bento-flex2"
+                                                placeholder="URL  (e.g. example.com)"
+                                                value={newUrl}
+                                                onChange={e => setNewUrl(e.target.value)}
+                                                onKeyDown={e => e.key === 'Enter' && addLink()}
+                                            />
+                                            <button className="bento-add-link-btn" onClick={addLink}>+ Add</button>
+                                        </div>
+
+                                        {/* Advanced block toggle */}
+                                        <button className="bento-adv-toggle" onClick={() => setShowAdvanced(v => !v)}>
+                                            {showAdvanced ? '▲ Hide advanced blocks' : '+ Add Music / Photos / Product'}
+                                        </button>
+
+                                        {showAdvanced && (
+                                            <div className="bento-adv-panel">
+                                                <div className="bento-adv-tabs">
+                                                    {(['music', 'photo', 'product'] as const).map(t => (
+                                                        <button key={t} className={`bento-adv-tab${advType === t ? ' active' : ''}`} onClick={() => setAdvType(t)}>
+                                                            {t === 'music' ? '🎵 Music' : t === 'photo' ? '📷 Photos' : '🛍️ Product'}
+                                                        </button>
+                                                    ))}
                                                 </div>
-                                                <div className="bento-link-info">
-                                                    <div className="bento-link-name">
-                                                        {block.type === 'music' ? (block as MusicBlock).title
-                                                            : block.type === 'photo' ? ((block as PhotoBlock).caption || 'Photo Gallery')
-                                                                : (block as ProductBlock).name}
+
+                                                {advType === 'music' && (
+                                                    <div className="bento-adv-fields">
+                                                        <input className="bento-input" placeholder="Song title *" value={mt} onChange={e => setMt(e.target.value)} />
+                                                        <input className="bento-input" placeholder="Artist name" value={ma} onChange={e => setMa(e.target.value)} />
+                                                        <input className="bento-input" placeholder="Spotify / SoundCloud embed URL *" value={me} onChange={e => setMe(e.target.value)} />
+                                                        <input className="bento-input" placeholder="Cover image URL (optional)" value={mc} onChange={e => setMc(e.target.value)} />
+                                                        <button className="bento-save" onClick={addBlock}>Add Music Block</button>
                                                     </div>
-                                                    <div className="bento-link-url">{block.type} block</div>
-                                                </div>
-                                                <label className="bento-toggle">
-                                                    <input type="checkbox" checked={block.enabled} onChange={() => toggleBlock(block.id)} />
-                                                    <span className="bento-toggle-track" />
-                                                </label>
-                                                <button className="bento-del" title="Remove" onClick={() => removeBlock(block.id)}>✕</button>
+                                                )}
+                                                {advType === 'photo' && (
+                                                    <div className="bento-adv-fields">
+                                                        <input className="bento-input" placeholder="Caption (optional)" value={pCap} onChange={e => setPCap(e.target.value)} />
+                                                        <textarea className="bento-input" placeholder="Paste image URLs, separated by commas *" value={pImg} onChange={e => setPImg(e.target.value)} rows={2} style={{ resize: 'none' }} />
+                                                        <button className="bento-save" onClick={addBlock}>Add Photo Block</button>
+                                                    </div>
+                                                )}
+                                                {advType === 'product' && (
+                                                    <div className="bento-adv-fields">
+                                                        <input className="bento-input" placeholder="Product name *" value={prName} onChange={e => setPrName(e.target.value)} />
+                                                        <input className="bento-input" placeholder="Price (e.g. $49)" value={prPrice} onChange={e => setPrPrice(e.target.value)} />
+                                                        <input className="bento-input" placeholder="Buy URL *" value={prBuy} onChange={e => setPrBuy(e.target.value)} />
+                                                        <input className="bento-input" placeholder="Product image URL (optional)" value={prImg} onChange={e => setPrImg(e.target.value)} />
+                                                        <button className="bento-save" onClick={addBlock}>Add Product</button>
+                                                    </div>
+                                                )}
                                             </div>
-                                        ))}
+                                        )}
+
+                                        {/* List */}
+                                        <div className="bento-link-list">
+                                            {links.length === 0 && blocks.length === 0 && (
+                                                <div className="bento-empty">✦ Add your first link above to get started</div>
+                                            )}
+                                            {links.map(link => (
+                                                <div key={link.id} className={`bento-link-row${!link.enabled ? ' off' : ''}`}>
+                                                    <div className="bento-link-icon-sq">
+                                                        <PlatformIcon id={link.icon} size={18} />
+                                                    </div>
+                                                    <div className="bento-link-info">
+                                                        <div className="bento-link-name">{link.label}</div>
+                                                        <div className="bento-link-url">{link.url}</div>
+                                                    </div>
+                                                    <label className="bento-toggle">
+                                                        <input type="checkbox" checked={link.enabled} onChange={() => toggleLink(link.id)} />
+                                                        <span className="bento-toggle-track" />
+                                                    </label>
+                                                    <button className="bento-del" title="Remove" onClick={() => removeLink(link.id)}>✕</button>
+                                                </div>
+                                            ))}
+                                            {blocks.map(block => (
+                                                <div key={block.id} className={`bento-link-row${!block.enabled ? ' off' : ''}`}>
+                                                    <div className="bento-link-icon-sq">
+                                                        <PlatformIcon id={block.type === 'music' ? 'music' : block.type === 'photo' ? 'globe' : 'store'} size={18} />
+                                                    </div>
+                                                    <div className="bento-link-info">
+                                                        <div className="bento-link-name">
+                                                            {block.type === 'music' ? (block as MusicBlock).title
+                                                                : block.type === 'photo' ? ((block as PhotoBlock).caption || 'Photo Gallery')
+                                                                    : (block as ProductBlock).name}
+                                                        </div>
+                                                        <div className="bento-link-url">{block.type} block</div>
+                                                    </div>
+                                                    <label className="bento-toggle">
+                                                        <input type="checkbox" checked={block.enabled} onChange={() => toggleBlock(block.id)} />
+                                                        <span className="bento-toggle-track" />
+                                                    </label>
+                                                    <button className="bento-del" title="Remove" onClick={() => removeBlock(block.id)}>✕</button>
+                                                </div>
+                                            ))}
+                                        </div>
                                     </div>
-                                </div>
+                                </>
                             )} {/* End Links Tab */}
 
                             {/* ── APPEARANCE ── */}

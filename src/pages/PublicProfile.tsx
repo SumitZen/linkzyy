@@ -21,6 +21,7 @@ function PlatformIcon({ id, size = 24 }: { id: string; size?: number }) {
 
 export default function PublicProfile() {
     const { username } = useParams<{ username: string }>();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [profile, setProfile] = useState<any>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
@@ -38,8 +39,9 @@ export default function PublicProfile() {
                 } else {
                     setProfile(res.documents[0]);
                 }
-            } catch (err: any) {
-                setError(err.message || 'Error fetching profile');
+            } catch (err: unknown) {
+                const error = err as Error;
+                setError(error.message || 'Error fetching profile');
             } finally {
                 setLoading(false);
             }
@@ -63,6 +65,7 @@ export default function PublicProfile() {
     const previewBg = profile.bgImage ? `url(${profile.bgImage}) center/cover no-repeat fixed` : profile.bgColor || theme.screenBg;
 
     let links: LinkItem[] = [];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let blocks: any[] = [];
     try {
         if (profile.links) links = typeof profile.links === 'string' ? JSON.parse(profile.links) : profile.links;
