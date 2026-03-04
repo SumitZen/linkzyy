@@ -118,28 +118,58 @@ async function syncProfileToAppwrite(updated: User): Promise<void> {
     }
 
     if (docId) {
-        await databases.updateDocument(
-            APPWRITE_CONFIG.databaseId,
-            APPWRITE_CONFIG.profilesCollectionId,
-            docId,
-            dbPayload,
-            [
-                Permission.read(Role.any()),           // Keep it public
-                Permission.write(Role.user(updated.id)) // Only owner can edit
-            ]
-        );
+        try {
+            await databases.updateDocument(
+                APPWRITE_CONFIG.databaseId,
+                APPWRITE_CONFIG.profilesCollectionId,
+                docId,
+                dbPayload,
+                [
+                    Permission.read(Role.any()),
+                    Permission.write(Role.user(updated.id))
+                ]
+            );
+            console.log('✅ Appwrite Sync: Success');
+        } catch (err: any) {
+            console.error('❌ Appwrite Sync: Update Failed', { error: err, payload: dbPayload });
+            // Fallback: try without permissions if it was a 500 (might be permission serialization issue)
+            if (err.code === 500) {
+                console.warn('⚠️ Fallback: Retrying update without explicit permissions...');
+                await databases.updateDocument(
+                    APPWRITE_CONFIG.databaseId,
+                    APPWRITE_CONFIG.profilesCollectionId,
+                    docId,
+                    dbPayload
+                ).catch(e => console.error('❌ Fallback failed:', e));
+            }
+        }
     } else {
-        const created = await databases.createDocument(
-            APPWRITE_CONFIG.databaseId,
-            APPWRITE_CONFIG.profilesCollectionId,
-            ID.unique(),
-            dbPayload,
-            [
-                Permission.read(Role.any()),           // Anyone can view
-                Permission.write(Role.user(updated.id)) // Only owner can edit
-            ]
-        );
-        docIdCache[updated.id] = created.$id;
+        try {
+            const created = await databases.createDocument(
+                APPWRITE_CONFIG.databaseId,
+                APPWRITE_CONFIG.profilesCollectionId,
+                ID.unique(),
+                dbPayload,
+                [
+                    Permission.read(Role.any()),
+                    Permission.write(Role.user(updated.id))
+                ]
+            );
+            docIdCache[updated.id] = created.$id;
+            console.log('✅ Appwrite Sync: Created Success');
+        } catch (err: any) {
+            console.error('❌ Appwrite Sync: Create Failed', { error: err, payload: dbPayload });
+            if (err.code === 500) {
+                console.warn('⚠️ Fallback: Retrying create without explicit permissions...');
+                const fallback = await databases.createDocument(
+                    APPWRITE_CONFIG.databaseId,
+                    APPWRITE_CONFIG.profilesCollectionId,
+                    ID.unique(),
+                    dbPayload
+                ).catch(e => { console.error('❌ Fallback failed:', e); throw e; });
+                if (fallback) docIdCache[updated.id] = fallback.$id;
+            }
+        }
     }
 }
 
