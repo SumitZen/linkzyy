@@ -94,19 +94,13 @@ async function syncProfileToAppwrite(updated: User): Promise<void> {
         bio: updated.bio || '',
         theme: updated.theme || 'editorial-light',
         bgColor: updated.bgColor || '',
+        avatarUrl: updated.avatarUrl || '',
+        profilePictureUrl: updated.avatarUrl || '',
+        bannerUrl: updated.bannerUrl || '',
+        bgImage: updated.bgImage || '',
+        links: JSON.stringify(updated.links || []),
+        blocks: JSON.stringify(updated.blocks || []),
     };
-
-    // Only add non-empty strings/arrays for complex fields to avoid schema errors
-    if (updated.avatarUrl) {
-        dbPayload.avatarUrl = updated.avatarUrl;
-        dbPayload.profilePictureUrl = updated.avatarUrl; // Remote schema key
-    }
-    if (updated.bannerUrl) dbPayload.bannerUrl = updated.bannerUrl;
-    if (updated.bgImage) dbPayload.bgImage = updated.bgImage;
-
-    // Always stringify arrays
-    dbPayload.links = JSON.stringify(updated.links || []);
-    dbPayload.blocks = JSON.stringify(updated.blocks || []);
 
     // Check cache first
     let docId = docIdCache[updated.id];
@@ -124,6 +118,23 @@ async function syncProfileToAppwrite(updated: User): Promise<void> {
     }
 
     if (docId) {
+        console.log('🧪 Granular Sync: Starting check...');
+        for (const [key, value] of Object.entries(dbPayload)) {
+            try {
+                // Try updating just this one field
+                await databases.updateDocument(
+                    APPWRITE_CONFIG.databaseId,
+                    APPWRITE_CONFIG.profilesCollectionId,
+                    docId,
+                    { [key]: value }
+                );
+                console.log(`✅ Granular Sync: "${key}" saved successfully.`);
+            } catch (err: any) {
+                console.error(`❌ Granular Sync: "${key}" FAILED.`, err);
+            }
+        }
+
+        // After granular test, try the full update one last time
         try {
             await databases.updateDocument(
                 APPWRITE_CONFIG.databaseId,
@@ -131,35 +142,22 @@ async function syncProfileToAppwrite(updated: User): Promise<void> {
                 docId,
                 dbPayload
             );
-            console.log('✅ Appwrite Sync: Success');
+            console.log('✅ Appwrite Sync: Full Success');
         } catch (err: any) {
-            console.error('❌ Appwrite Sync: Update Failed', { error: err, payload: dbPayload });
-
-            // Final Fallback: Try saving just the basic info
-            if (err.code === 500 || err.code === 400) {
-                console.warn('⚠️ Attempting minimal sync...');
-                const minimal = { bio: dbPayload.bio, displayName: dbPayload.displayName };
-                await databases.updateDocument(
-                    APPWRITE_CONFIG.databaseId,
-                    APPWRITE_CONFIG.profilesCollectionId,
-                    docId,
-                    minimal
-                ).catch(() => { });
-            }
+            // We don't need to log here since granular logs should have caught it
         }
     } else {
         try {
-            const createPayload = { ...dbPayload, userId: updated.id };
             const created = await databases.createDocument(
                 APPWRITE_CONFIG.databaseId,
                 APPWRITE_CONFIG.profilesCollectionId,
                 ID.unique(),
-                createPayload
+                { ...dbPayload, userId: updated.id }
             );
             docIdCache[updated.id] = created.$id;
             console.log('✅ Appwrite Sync: Created Success');
         } catch (err: any) {
-            console.error('❌ Appwrite Sync: Create Failed', { error: err, payload: dbPayload });
+            console.error('❌ Appwrite Sync: Create Failed', err);
         }
     }
 }
