@@ -1,7 +1,7 @@
 import { Client, Account, Databases, Storage } from 'appwrite';
 
 const appwriteConfig = {
-    endpoint: import.meta.env.VITE_APPWRITE_ENDPOINT || 'https://cloud.appwrite.io/v1',
+    endpoint: import.meta.env.VITE_APPWRITE_ENDPOINT || 'https://sgp.cloud.appwrite.io/v1',
     projectId: import.meta.env.VITE_APPWRITE_PROJECT || 'placeholder',
     databaseId: import.meta.env.VITE_APPWRITE_DATABASE_ID || 'linkzy_db',
     profilesCollectionId: import.meta.env.VITE_APPWRITE_PROFILE_COLLECTION_ID || 'profiles',
