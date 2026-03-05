@@ -557,7 +557,7 @@ export default function Dashboard() {
                                             <label className="bento-field-label">Your Linkzy URL</label>
                                             <div className="bento-url-row">
                                                 <span className="bento-url-pre">{window.location.host}/</span>
-                                                <span className="bento-url-val">{user?.username}</span>
+                                                <span className="bento-url-val">{user?.id}</span>
                                             </div>
                                         </div>
                                         <div style={{ display: 'flex', gap: 12, marginTop: 4 }}>
@@ -572,8 +572,8 @@ export default function Dashboard() {
                         {/* ── LIVE PREVIEW (Floating Phone) ── */}
                         <div className="bento-right-col" style={{ display: 'flex', flexDirection: 'column', gap: '24px', alignItems: 'center' }}>
                             <div className="bento-share-box" style={{ width: '100%', maxWidth: '280px', background: 'var(--surface-1)', border: 'var(--border-subtle)', borderRadius: '16px', padding: '12px 16px', boxShadow: 'var(--shadow-layer-1)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                <span className="bento-share-url" style={{ color: 'var(--text-dark)', fontWeight: 600, fontSize: '0.85rem' }}>{window.location.host}/{user?.username}</span>
-                                <button className="bento-copy" style={{ background: 'color-mix(in srgb, var(--text-dark) 85%, transparent)', color: 'var(--bg-color)', backdropFilter: 'blur(12px)', padding: '6px 12px', borderRadius: '8px' }} onClick={() => navigator.clipboard?.writeText?.(`${window.location.origin}/${user?.username}`)}>Copy</button>
+                                <span className="bento-share-url" style={{ color: 'var(--text-dark)', fontWeight: 600, fontSize: '0.85rem' }}>{window.location.host}/{user?.id}</span>
+                                <button className="bento-copy" style={{ background: 'color-mix(in srgb, var(--text-dark) 85%, transparent)', color: 'var(--bg-color)', backdropFilter: 'blur(12px)', padding: '6px 12px', borderRadius: '8px' }} onClick={() => navigator.clipboard?.writeText?.(`${window.location.origin}/${user?.id}`)}>Copy</button>
                             </div>
 
                             <div className="bento-preview-label" style={{ alignSelf: 'center', margin: '4px 0 8px', letterSpacing: '0.15em', opacity: 0.6 }}>LIVE PREVIEW</div>

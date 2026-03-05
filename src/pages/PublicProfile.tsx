@@ -20,7 +20,7 @@ function PlatformIcon({ id, size = 24 }: { id: string; size?: number }) {
 }
 
 export default function PublicProfile() {
-    const { username } = useParams<{ username: string }>();
+    const { userId } = useParams<{ userId: string }>();
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [profile, setProfile] = useState<any>(null);
     const [loading, setLoading] = useState(true);
@@ -32,7 +32,7 @@ export default function PublicProfile() {
                 const res = await databases.listDocuments(
                     APPWRITE_CONFIG.databaseId,
                     APPWRITE_CONFIG.profilesCollectionId,
-                    [Query.equal('username', username as string), Query.limit(1)]
+                    [Query.equal('userId', userId as string), Query.limit(1)]
                 );
                 if (res.documents.length === 0) {
                     setError('Profile not found.');
@@ -46,8 +46,8 @@ export default function PublicProfile() {
                 setLoading(false);
             }
         };
-        if (username) fetchProfile();
-    }, [username]);
+        if (userId) fetchProfile();
+    }, [userId]);
 
     if (loading) {
         return <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#111', color: '#fff' }}>Loading profile...</div>;

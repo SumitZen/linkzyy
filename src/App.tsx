@@ -45,7 +45,7 @@ export default function App() {
           </Route>
 
           {/* Public profile pages */}
-          <Route path="/:username" element={<PublicProfile />} />
+          <Route path="/:userId" element={<PublicProfile />} />
 
           {/* Protected dashboard */}
           <Route
