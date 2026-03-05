@@ -89,18 +89,24 @@ const docIdCache: Record<string, string> = {};
 
 async function syncProfileToAppwrite(updated: User): Promise<void> {
     const dbPayload: any = {
-        displayName: updated.name || '',
-        bio: updated.bio || '',
+        username: updated.username || null,
+        displayName: updated.name || null,
+        bio: updated.bio || null,
         theme: updated.theme || 'editorial-light',
-        bgColor: updated.bgColor || '',
-        // URL validation requires null instead of empty string
+        bgColor: updated.bgColor || null,
         avatarUrl: updated.avatarUrl || null,
-        profilePictureUrl: updated.avatarUrl || null,
         bannerUrl: updated.bannerUrl || null,
         bgImage: updated.bgImage || null,
         links: JSON.stringify(updated.links || []),
         blocks: JSON.stringify(updated.blocks || []),
     };
+
+    // Appwrite 1.8.1 strictly crashes on "" for string fields, replace with null
+    Object.keys(dbPayload).forEach(key => {
+        if (dbPayload[key] === '') {
+            dbPayload[key] = null;
+        }
+    });
 
     // Check cache first
     let docId = docIdCache[updated.id];
