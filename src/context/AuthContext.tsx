@@ -89,7 +89,6 @@ const docIdCache: Record<string, string> = {};
 
 async function syncProfileToAppwrite(updated: User): Promise<void> {
     const dbPayload: any = {
-        username: updated.username || null,
         displayName: updated.name || null,
         bio: updated.bio || null,
         theme: updated.theme || 'editorial-light',
