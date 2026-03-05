@@ -89,7 +89,6 @@ const docIdCache: Record<string, string> = {};
 
 async function syncProfileToAppwrite(updated: User): Promise<void> {
     const dbPayload: any = {
-        username: updated.username || '',
         displayName: updated.name || '',
         bio: updated.bio || '',
         theme: updated.theme || 'editorial-light',
@@ -119,32 +118,29 @@ async function syncProfileToAppwrite(updated: User): Promise<void> {
     }
 
     if (docId) {
-        console.log('🧪 Granular Sync: Starting check...');
-        let finalError = null;
-        for (const [key, value] of Object.entries(dbPayload)) {
-            try {
-                // Try updating just this one field
+        try {
+            await databases.updateDocument(
+                APPWRITE_CONFIG.databaseId,
+                APPWRITE_CONFIG.profilesCollectionId,
+                docId,
+                dbPayload
+            );
+            console.log('✅ Appwrite Sync: Success');
+        } catch (err: any) {
+            console.error('❌ Appwrite Sync: Update Failed', { error: err, payload: dbPayload });
+
+            // Final Fallback: Try saving just the basic info
+            if (err.code === 500 || err.code === 400) {
+                console.warn('⚠️ Attempting minimal sync...');
+                const minimal = { bio: dbPayload.bio, displayName: dbPayload.displayName };
                 await databases.updateDocument(
                     APPWRITE_CONFIG.databaseId,
                     APPWRITE_CONFIG.profilesCollectionId,
                     docId,
-                    { [key]: value }
-                );
-                console.log(`✅ Granular Sync: "${key}" saved successfully.`);
-            } catch (err: any) {
-                console.error(`❌ Granular Sync: "${key}" FAILED.`, err);
-                if (err.code === 500 || err.code === 400) {
-                    alert(`CRITICAL SYNC ERROR:\nAppwrite rejected the field: "${key}"\n\nError: ${err.message}\nCode: ${err.code}\n\nPlease let me know exactly which field failed!`);
-                    finalError = err;
-                    break;
-                }
+                    minimal
+                ).catch(() => { });
             }
         }
-
-        if (!finalError) {
-            console.log('✅ Appwrite Sync: Full Success');
-        }
-
     } else {
         try {
             const created = await databases.createDocument(
