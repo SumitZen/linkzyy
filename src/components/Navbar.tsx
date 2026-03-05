@@ -77,7 +77,7 @@ export default function Navbar() {
                                 Dashboard
                             </button>
                         </Link>
-                        <button className="btn-signup" onClick={handleLogout}>Log out</button>
+                        <button className="btn-login" onClick={handleLogout}>Log out</button>
                     </>
                 ) : (
                     <>
