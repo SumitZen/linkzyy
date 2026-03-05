@@ -230,9 +230,9 @@
 .bento-grid {
     display: flex;
     flex: 1;
-    gap: 32px;
-    padding: 40px;
-    max-width: 1400px;
+    gap: 48px;
+    padding: 32px 40px;
+    max-width: 1200px;
     margin: 0 auto;
     align-items: flex-start;
 }
@@ -246,16 +246,14 @@
 }
 
 .bento-right-col {
-    width: 320px;
+    width: 340px;
     flex-shrink: 0;
     position: sticky;
-    top: 40px;
+    top: max(40px, calc(50vh - 370px));
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 24px;
-    align-self: flex-start;
-    height: fit-content;
     z-index: 10;
 }
 
@@ -618,11 +616,12 @@
 .bento-phone {
     width: 320px;
     height: 640px;
-    border-radius: 20px;
-    background: #ffffff;
-    border: 1px solid #e5e7eb;
-    box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.08);
-    /* Clean, ultra-soft shadow */
+    flex-shrink: 0;
+    border-radius: 36px;
+    background: #111111;
+    border: 8px solid #111111;
+    /* Premium thick bezel */
+    box-shadow: 0 24px 64px -12px rgba(0, 0, 0, 0.2);
     position: relative;
     overflow: hidden;
     display: flex;
@@ -631,11 +630,15 @@
 
 .bento-phone-content {
     flex: 1;
+    border-radius: 28px;
+    /* Inner screen curvature */
     overflow-y: auto;
     overflow-x: hidden;
     position: relative;
     scrollbar-width: none;
     background: #f9f9f9;
+    background-size: cover !important;
+    background-position: center !important;
 }
 
 .bento-phone-content::-webkit-scrollbar {
