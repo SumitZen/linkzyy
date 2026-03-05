@@ -13,14 +13,14 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 48px;
-    max-width: 440px;
+    padding: 56px 48px;
+    max-width: 460px;
     width: 100%;
     margin: auto;
-    background: var(--surface-1);
-    border: 1px solid var(--border-default, #e5e7eb);
-    border-radius: 16px;
-    box-shadow: 0 4px 32px rgba(0, 0, 0, 0.08);
+    background: #FFFFFF;
+    border: 1px solid #E5E5E5;
+    border-radius: 12px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.07);
     position: relative;
     z-index: 10;
 }
@@ -99,8 +99,8 @@
 }
 
 .auth-field input:focus {
-    border-color: var(--text-dark);
-    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.06);
+    border-color: #7c3aed;
+    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.12);
 }
 
 [data-theme='dark'] .auth-field input:focus {
@@ -234,14 +234,41 @@
 
 /* Right: branded panel */
 .auth-brand-panel {
-    background: linear-gradient(160deg, #0f172a 0%, #1e1b4b 60%, #312e81 100%);
+    background: #0A0A0A;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 64px;
+    padding: 80px 64px;
     position: sticky;
     top: 0;
     min-height: 100vh;
+    text-align: center;
+    gap: 0;
+}
+
+.auth-brand-logo-text {
+    font-family: 'Playfair Display', ui-serif, Georgia, serif;
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: #FFFFFF;
+    letter-spacing: -0.03em;
+    margin-bottom: 20px;
+    line-height: 1;
+}
+
+.auth-brand-logo-text span {
+    color: #a78bfa;
+}
+
+.auth-brand-tagline {
+    font-size: 1.05rem;
+    color: rgba(255, 255, 255, 0.5);
+    font-weight: 400;
+    letter-spacing: 0.01em;
+    max-width: 300px;
+    margin: 0 auto 48px;
+    line-height: 1.6;
 }
 
 .auth-brand-inner {
@@ -328,7 +355,6 @@
     font-size: 1rem;
 }
 
-/* Responsive */
 @media (max-width: 768px) {
     .auth-root {
         grid-template-columns: 1fr;
@@ -339,22 +365,11 @@
     }
 
     .auth-card {
-        padding: 48px 24px;
-    }
-}
-
-/* ═══ MOBILE BREAKPOINTS ═══ */
-@media (max-width: 768px) {
-    .auth-root {
-        grid-template-columns: 1fr;
-    }
-
-    .auth-brand-panel {
-        display: none;
-    }
-
-    .auth-card {
-        padding: 32px 20px;
+        padding: 40px 24px;
+        border-radius: 0;
+        border: none;
+        box-shadow: none;
+        max-width: 100%;
     }
 
     .auth-title {

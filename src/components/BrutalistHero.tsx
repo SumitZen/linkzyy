@@ -1,10 +1,12 @@
 import { useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import gsap from 'gsap';
 
 export default function BrutalistHero() {
     const heroRef = useRef<HTMLDivElement>(null);
     const textRef = useRef<HTMLDivElement>(null);
     const mockupRef = useRef<HTMLDivElement>(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const ctx = gsap.context(() => {
@@ -35,6 +37,7 @@ export default function BrutalistHero() {
     return (
         <section className="hero-section" ref={heroRef}>
             <div className="hero-text-block" ref={textRef}>
+                <div className="hero-badge">✦ One link. All of you.</div>
                 <h1 className="hero-headline">
                     Your Identity, <br />
                     <span>Refined.</span>
@@ -43,8 +46,8 @@ export default function BrutalistHero() {
                     A sophisticated, typography-first link-in-bio platform for creators who demand elegance. Stop settling for basic templates.
                 </p>
                 <div style={{ display: 'flex', gap: '16px', justifyContent: 'center' }}>
-                    <button className="btn-signup" style={{ padding: '16px 36px', fontSize: '1.05rem' }}>Start for free</button>
-                    <button className="btn-login" style={{ padding: '16px 24px' }}>View examples</button>
+                    <button className="btn-signup" style={{ padding: '14px 32px', fontSize: '1rem' }} onClick={() => navigate('/signup')}>Start for free</button>
+                    <button className="btn-login" style={{ padding: '14px 24px' }} onClick={() => navigate('/templates')}>View examples</button>
                 </div>
             </div>
 
@@ -84,7 +87,7 @@ export default function BrutalistHero() {
                 </div>
 
                 {/* Primary Physical Device */}
-                <div className="main-device" style={{ background: 'linear-gradient(160deg,#0f172a 0%,#1e1b4b 55%,#312e81 100%)' }}>
+                <div className="main-device" style={{ background: '#0A0A0A' }}>
                     <div className="mockup-header">
                         <div
                             className="mockup-avatar"

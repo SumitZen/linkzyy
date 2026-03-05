@@ -143,19 +143,17 @@ export default function SignupPage() {
             </div>
 
             <div className="auth-brand-panel">
-                <div className="auth-brand-inner">
-                    <div className="auth-brand-badge">✦ Join for free</div>
-                    <h2 className="auth-brand-headline">Everything you are,<br /><em>one link away.</em></h2>
-                    <p className="auth-brand-sub">Your audience is everywhere. Be findable everywhere.</p>
-                    <div className="auth-feature-list">
-                        {['Unlimited links', 'Custom themes', 'Real-time analytics', 'No-code setup'].map(f => (
-                            <div key={f} className="auth-feature-item">
-                                <span className="auth-check">✓</span> {f}
-                            </div>
-                        ))}
-                    </div>
+                <div className="auth-brand-logo-text">Link<span>zy</span></div>
+                <p className="auth-brand-tagline">One link. Every platform. All of you.</p>
+                <div className="auth-feature-list">
+                    {['Unlimited links', 'Custom themes', 'Real-time analytics', 'No-code setup'].map(f => (
+                        <div key={f} className="auth-feature-item">
+                            <span className="auth-check">✓</span> {f}
+                        </div>
+                    ))}
                 </div>
             </div>
+
         </div>
     );
 }

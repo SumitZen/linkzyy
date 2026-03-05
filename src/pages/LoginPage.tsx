@@ -93,20 +93,17 @@ export default function LoginPage() {
             </div>
 
             <div className="auth-brand-panel">
-                <div className="auth-brand-inner">
-                    <div className="auth-brand-badge">✦ Free to start</div>
-                    <h2 className="auth-brand-headline">Your identity,<br /><em>refined.</em></h2>
-                    <p className="auth-brand-sub">One link. Every platform. All of you.</p>
-                    <div className="auth-avatars">
-                        {[
-                            'https://images.unsplash.com/photo-1534067783941-51c9c23ecefd?ixlib=rb-4.0.3&auto=format&fit=crop&w=80&q=80',
-                            'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&auto=format&fit=crop&w=80&q=80',
-                            'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?ixlib=rb-4.0.3&auto=format&fit=crop&w=80&q=80',
-                        ].map((src, i) => (
-                            <img key={i} src={src} alt="Creator" className="auth-avatar-img" style={{ marginLeft: i === 0 ? 0 : '-10px' }} />
-                        ))}
-                        <span className="auth-creator-count">50k+ creators</span>
-                    </div>
+                <div className="auth-brand-logo-text">Link<span>zy</span></div>
+                <p className="auth-brand-tagline">One link. Every platform. All of you.</p>
+                <div className="auth-avatars">
+                    {[
+                        'https://images.unsplash.com/photo-1534067783941-51c9c23ecefd?ixlib=rb-4.0.3&auto=format&fit=crop&w=80&q=80',
+                        'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&auto=format&fit=crop&w=80&q=80',
+                        'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?ixlib=rb-4.0.3&auto=format&fit=crop&w=80&q=80',
+                    ].map((src, i) => (
+                        <img key={i} src={src} alt="Creator" className="auth-avatar-img" style={{ marginLeft: i === 0 ? 0 : '-10px' }} />
+                    ))}
+                    <span className="auth-creator-count">50k+ creators</span>
                 </div>
             </div>
         </div>

@@ -1,86 +1,95 @@
 :root {
   color-scheme: light;
 
-  /* Premium Grayscale Palette */
-  --bg-color: #F5F5F7;
-  /* Apple-esque light gray bg */
+  /* ── Backgrounds ── */
+  --bg-color: #F9F9F9;
   --surface-1: #FFFFFF;
-  --surface-2: #FAFAFC;
+  --surface-2: #F5F5F5;
 
-  --black: #000000;
-  --white: #FFFFFF;
+  /* ── Text ── */
+  --text-dark: #0A0A0A;
+  --text-muted: #6B7280;
+  --text-light: #F9F9F9;
 
-  --text-dark: #1D1D1F;
-  /* Refined charcoal */
-  --text-muted: #86868B;
-  /* Elegant slate */
-  --text-light: #F5F5F7;
+  /* ── Accent (single purple, everywhere) ── */
+  --accent: #7c3aed;
+  --accent-hover: #6d28d9;
 
-  /* Accent (Strictly monochromatic, using deep metal tones) */
-  --accent-primary: #1D1D1F;
-  --accent-secondary: #86868B;
+  /* Legacy alias (kept for Pricing/Auth that reference these) */
+  --accent-primary: #7c3aed;
+  --accent-secondary: #6B7280;
 
-  /* Typography Systems */
-  /* User requested advanced pairings, introducing Manrope for high-end editorial feel */
-  --font-sans: 'Manrope', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  --font-serif: 'Playfair Display', ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+  /* ── Borders ── */
+  --border-subtle: 1px solid #E5E5E5;
+  --border-default: 1px solid #E5E5E5;
+  --border-strong: 1px solid #D1D5DB;
 
-  /* Premium Liquid Glass Deep Shadows & Highlights */
-  --border-subtle: 1px solid rgba(255, 255, 255, 0.3);
+  /* ── Shadows (clean, no glass effects) ── */
+  --shadow-layer-1: 0 2px 8px rgba(0, 0, 0, 0.06);
+  --shadow-layer-2: 0 4px 16px rgba(0, 0, 0, 0.08);
+  --shadow-layer-3: 0 8px 32px rgba(0, 0, 0, 0.10);
 
-  /* Liquid Glass - High Blur, Soft Glow, Inset Highlight */
-  --shadow-layer-1: 0 8px 32px 0 rgba(31, 38, 135, 0.07), inset 0 1px 1px rgba(255, 255, 255, 0.4);
-  --shadow-layer-2: 0 12px 48px 0 rgba(31, 38, 135, 0.12), inset 0 1px 2px rgba(255, 255, 255, 0.5);
-  --shadow-layer-3: 0 16px 64px 0 rgba(31, 38, 135, 0.18), inset 0 2px 4px rgba(255, 255, 255, 0.6);
+  /* ── Typography ── */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-serif: 'Playfair Display', ui-serif, Georgia, serif;
 
-  /* Premium smooth easing */
-  --transition-smooth: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  /* ── Type scale ── */
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 2rem;
+  --text-4xl: 2.5rem;
+  --text-5xl: 3.5rem;
 
-  /* Layout Spacing (Fluid scale) */
-  --space-1: 8px;
-  --space-2: 16px;
-  --space-3: 24px;
-  --space-4: 32px;
-  --space-5: 40px;
-  --space-6: 48px;
+  /* ── Transitions ── */
+  --transition-smooth: all 0.2s ease;
+
+  /* ── Spacing (8px base) ── */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
   --space-8: 64px;
-  --space-10: 80px;
-  --space-12: 96px;
-  --space-16: 128px;
+  --space-9: 96px;
+  --space-10: 128px;
 
-  /* Rounded aesthetics for tech interfaces */
-  --border-radius-sm: 8px;
-  --border-radius-md: 16px;
-  --border-radius-lg: 24px;
-  --border-radius-xl: 32px;
+  /* ── Radii ── */
+  --border-radius-sm: 6px;
+  --border-radius-md: 8px;
+  --border-radius-lg: 12px;
+  --border-radius-xl: 12px;
   --border-radius-pill: 9999px;
 }
 
-/* Premium Dark Mode - Deep Space Aesthetics / Titanium Harmony */
+/* Dark mode */
 [data-theme='dark'] {
   color-scheme: dark;
-  /* Shift from flat black to a harmonious Titanium/Slate dark gray */
   --bg-color: #0D1117;
-  /* GitHub Dark / Titanium Slate */
   --surface-1: #161B22;
   --surface-2: #21262D;
 
-  /* Text gets a crisp, silvery white glow instead of flat white */
   --text-dark: #F0F6FC;
   --text-muted: #8B949E;
   --text-light: #0D1117;
 
-  --accent-primary: #58A6FF;
-  /* Subtle harmonic metallic blue */
+  --accent: #a78bfa;
+  --accent-hover: #7c3aed;
+  --accent-primary: #a78bfa;
   --accent-secondary: #8B949E;
 
-  /* Polished metallic rim lighting for Liquid Glass */
-  --border-subtle: 1px solid rgba(255, 255, 255, 0.15);
+  --border-subtle: 1px solid rgba(255, 255, 255, 0.1);
+  --border-default: 1px solid rgba(255, 255, 255, 0.12);
+  --border-strong: 1px solid rgba(255, 255, 255, 0.2);
 
-  /* Deep Glass Shadows in Dark Mode */
-  --shadow-layer-1: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.1);
-  --shadow-layer-2: 0 16px 48px rgba(0, 0, 0, 0.6), inset 0 1px 2px rgba(255, 255, 255, 0.15);
-  --shadow-layer-3: 0 24px 64px rgba(0, 0, 0, 0.8), inset 0 2px 4px rgba(255, 255, 255, 0.2);
+  --shadow-layer-1: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-layer-2: 0 4px 16px rgba(0, 0, 0, 0.45);
+  --shadow-layer-3: 0 8px 32px rgba(0, 0, 0, 0.6);
 }
 
 *,
@@ -91,7 +100,7 @@
   padding: 0;
 }
 
-@media(prefers-reduced-motion: reduce) {
+@media (prefers-reduced-motion: reduce) {
   * {
     animation: none !important;
     transition: none !important;
@@ -99,8 +108,6 @@
 }
 
 html {
-  /* Lenis handles smooth scrolling, so we don't strictly need scroll-behavior: smooth 
-     but keeping it for non-JS fallbacks isn't strictly necessary. Lenis docs say NO scroll-behavior */
   scroll-behavior: auto;
 }
 
@@ -111,16 +118,14 @@ body {
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  transition: background-color 0.4s ease, color 0.4s ease;
 }
 
-/* Base link reset */
 a {
   text-decoration: none;
   color: inherit;
 }
 
-/* Hide scrollbar for Chrome, Safari and Opera natively on EVERYTHING */
+/* Hide scrollbars globally */
 ::-webkit-scrollbar,
 *::-webkit-scrollbar,
 html::-webkit-scrollbar,
@@ -131,12 +136,9 @@ body::-webkit-scrollbar {
   background: transparent !important;
 }
 
-/* Hide scrollbar for IE, Edge and Firefox */
 *,
 html,
 body {
   -ms-overflow-style: none !important;
-  /* IE and Edge */
   scrollbar-width: none !important;
-  /* Firefox */
 }

@@ -96,15 +96,15 @@
 
 .pricing-card {
     background: var(--surface-1);
-    border: 1px solid var(--border-subtle);
-    border-radius: 24px;
+    border: 1px solid #E5E5E5;
+    border-radius: 12px;
     padding: 32px;
     width: 300px;
     display: flex;
     flex-direction: column;
     position: relative;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: var(--shadow-layer-1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .pricing-card:hover {
@@ -276,13 +276,14 @@
 }
 
 .comp-row.comp-header {
-    background: var(--text-dark);
-    color: var(--surface-1);
+    background: #F9F9F9;
+    color: #111;
     font-weight: 700;
     font-size: 0.8rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     padding: 16px 24px;
+    border-bottom: 1px solid #E5E5E5;
 }
 
 .comp-feature-col {

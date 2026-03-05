@@ -30,22 +30,23 @@ h6 {
 /* ═══ PREMIUM NAVIGATION ═══ */
 .nav-brutal {
     position: fixed;
-    top: 24px;
+    top: 16px;
     left: 50%;
     transform: translateX(-50%);
     z-index: 999;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 32px;
-    height: 64px;
-    background: var(--surface-1);
-    border: var(--border-subtle);
-    border-radius: var(--border-radius-pill);
-    box-shadow: var(--shadow-layer-1);
-    max-width: 1200px;
+    padding: 0 28px;
+    height: 60px;
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid #E5E5E5;
+    border-radius: 9999px;
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.06);
+    max-width: 1100px;
     width: calc(100% - 48px);
-    transition: var(--transition-smooth);
+    transition: box-shadow 0.2s ease;
+    backdrop-filter: none;
 }
 
 .nav-logo {
@@ -58,17 +59,17 @@ h6 {
 
 .nav-links {
     display: flex;
-    gap: 40px;
+    gap: 32px;
     list-style: none;
 }
 
 .nav-links a {
     color: var(--text-muted);
     text-decoration: none;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     font-weight: 500;
     font-family: var(--font-sans);
-    transition: color 0.3s ease;
+    transition: color 0.15s ease;
 }
 
 .nav-links a:hover {
@@ -116,31 +117,45 @@ h6 {
 }
 
 .btn-signup {
-    background: var(--text-dark);
-    color: var(--bg-color);
+    background: #7c3aed;
+    color: #ffffff;
     border: none;
-    padding: 12px 24px;
-    border-radius: 100px;
+    padding: 10px 22px;
+    border-radius: 9999px;
     font-family: var(--font-sans);
     font-weight: 600;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     cursor: pointer;
-    transition: var(--transition-smooth);
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.18);
+    transition: opacity 0.15s ease;
 }
 
 .btn-signup:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.22);
+    opacity: 0.88;
 }
 
 /* ═══ TYPOGRAPHIC HERO ═══ */
 /* Redesigning BrutalistHero into a deep spatial layout */
 
+/* Hero badge eyebrow */
+.hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 16px;
+    background: #f5f0ff;
+    border: 1px solid #ddd6fe;
+    border-radius: 9999px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #7c3aed;
+    letter-spacing: 0.02em;
+    margin-bottom: 32px;
+}
+
 .hero-section {
     position: relative;
-    padding-top: 200px;
-    padding-bottom: 128px;
+    padding-top: 140px;
+    padding-bottom: 96px;
     max-width: 1400px;
     margin: 0 auto;
     display: flex;
@@ -157,15 +172,16 @@ h6 {
 }
 
 .hero-headline {
-    font-size: clamp(4rem, 8vw, 7rem);
+    font-size: clamp(3.5rem, 7vw, 6.5rem);
     line-height: 1.05;
+    letter-spacing: -0.04em;
     margin-bottom: 24px;
     color: var(--text-dark);
 }
 
 .hero-headline span {
     display: block;
-    color: var(--text-muted);
+    color: #7c3aed;
     font-style: italic;
     font-weight: 400;
 }
@@ -216,15 +232,13 @@ h6 {
 /* Floating Glass UI Cards */
 .floating-card {
     position: absolute;
-    background: rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    border-radius: var(--border-radius-xl);
-    padding: 32px;
-    box-shadow: var(--shadow-layer-2);
+    background: #ffffff;
+    border: 1px solid #E5E5E5;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
     z-index: 40;
-    transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: transform 0.3s ease;
 }
 
 [data-theme='dark'] .floating-card {
@@ -308,7 +322,7 @@ h6 {
 .sec-customize,
 .sec-share,
 .sec-analytics {
-    padding: 128px 24px;
+    padding: 96px 24px;
     max-width: 1200px;
     margin: 0 auto;
 }
@@ -389,7 +403,7 @@ h6 {
 .sec-customize,
 .sec-share,
 .sec-analytics {
-    padding: 128px 24px;
+    padding: 96px 24px;
     max-width: 1200px;
     margin: 0 auto;
 }
@@ -436,14 +450,19 @@ h6 {
 }
 
 .chip {
-    padding: 8px 16px;
-    border-radius: var(--border-radius-pill);
-    background: var(--surface-1);
-    border: var(--border-subtle);
-    font-size: 0.85rem;
+    padding: 7px 15px;
+    border-radius: 9999px;
+    background: #F9F9F9;
+    border: 1px solid #E5E5E5;
+    font-size: 0.83rem;
     font-weight: 500;
-    box-shadow: 4px 4px 0 var(--accent-secondary);
     color: var(--text-dark);
+    transition: border-color 0.15s ease;
+}
+
+.chip:hover {
+    border-color: #7c3aed;
+    color: #7c3aed;
 }
 
 /* Platform Cards */
@@ -454,22 +473,20 @@ h6 {
 }
 
 .plat-card {
-    background: color-mix(in srgb, var(--surface-1) 20%, transparent);
-    backdrop-filter: blur(24px) saturate(120%);
-    -webkit-backdrop-filter: blur(24px) saturate(120%);
-    border: var(--border-subtle);
-    border-radius: var(--border-radius-lg);
-    padding: 24px;
+    background: #ffffff;
+    border: 1px solid #E5E5E5;
+    border-radius: 12px;
+    padding: 20px 24px;
     display: flex;
     align-items: center;
-    gap: 24px;
-    box-shadow: var(--shadow-layer-1);
-    transition: var(--transition-smooth);
+    gap: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
 }
 
 .plat-card:hover {
     transform: translateY(-2px);
-    box-shadow: var(--shadow-layer-2);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
 }
 
 .plat-icon {
