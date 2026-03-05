@@ -297,8 +297,13 @@ export default function Dashboard() {
 
                             {/* ── LINKS TAB (Includes Stats) ── */}
                             {activeTab === 'links' && (
-                                <>
-                                    <div className="bento-stat-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 24 }}>
+                                <div className="bento-fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                                    <div>
+                                        <h1 className="bento-page-title">Links & Blocks</h1>
+                                        <p className="bento-page-sub">Manage the content on your Linkzy profile.</p>
+                                    </div>
+
+                                    <div className="bento-stat-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
                                         <div className="bento-card bento-stat bento-stat-purple">
                                             <div className="bento-stat-icon">🔗</div>
                                             <div className="bento-stat-label">Active Links</div>
@@ -320,7 +325,7 @@ export default function Dashboard() {
                                         </div>
 
                                         {/* Simple add row */}
-                                        <div className="bento-simple-add">
+                                        <div className="bento-simple-add" style={{ position: 'relative' }}>
                                             {/* Brand new interactive icon picker popup */}
                                             <div className="bento-icon-picker-btn" onClick={() => setIsIconPickerOpen(!isIconPickerOpen)}>
                                                 <PlatformIcon id={newIcon} size={20} />
@@ -452,16 +457,18 @@ export default function Dashboard() {
                                             ))}
                                         </div>
                                     </div>
-                                </>
+                                </div>
                             )} {/* End Links Tab */}
 
                             {/* ── APPEARANCE ── */}
                             {activeTab === 'appearance' && (
-                                <div className="bento-inner-page">
-                                    <h1 className="bento-page-title">Appearance</h1>
-                                    <p className="bento-page-sub">Customise how your public profile looks.</p>
+                                <div className="bento-fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                                    <div>
+                                        <h1 className="bento-page-title">Appearance</h1>
+                                        <p className="bento-page-sub">Customise how your public profile looks.</p>
+                                    </div>
 
-                                    <div className="bento-simple-form">
+                                    <div className="bento-card" style={{ padding: '32px' }}>
                                         {/* Avatar */}
                                         <div className="bento-field-row">
                                             <label className="bento-field-label">Profile Photo</label>
@@ -548,35 +555,38 @@ export default function Dashboard() {
                                         </div>
                                     </div>
 
-                                    <button className="bento-save" onClick={saveAppearance}>{savedMsg || 'Save Changes'}</button>
+                                    <button className="bento-save" onClick={saveAppearance} style={{ alignSelf: 'flex-start' }}>{savedMsg || 'Save Changes'}</button>
                                 </div>
                             )} {/* End Appearance Tab */}
 
                             {/* ── SETTINGS ── */}
                             {activeTab === 'settings' && (
-                                <div className="bento-inner-page">
-                                    <h1 className="bento-page-title">Settings</h1>
-                                    <p className="bento-page-sub">Manage your account details.</p>
-                                    <div className="bento-simple-form">
-                                        <div className="bento-field-row">
+                                <div className="bento-fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                                    <div>
+                                        <h1 className="bento-page-title">Settings</h1>
+                                        <p className="bento-page-sub">Manage your account details.</p>
+                                    </div>
+
+                                    <div className="bento-card" style={{ padding: '32px' }}>
+                                        <div className="bento-field-row" style={{ paddingTop: 0 }}>
                                             <label className="bento-field-label">Full Name</label>
-                                            <input className="bento-input" style={{ width: '100%' }} value={settingsName} onChange={e => setSettingsName(e.target.value)} />
+                                            <input className="bento-input" style={{ width: '100%', maxWidth: '400px' }} value={settingsName} onChange={e => setSettingsName(e.target.value)} />
                                         </div>
                                         <div className="bento-field-row">
                                             <label className="bento-field-label">Email</label>
-                                            <input className="bento-input" style={{ width: '100%', opacity: 0.5 }} value={user?.email} disabled />
+                                            <input className="bento-input" style={{ width: '100%', maxWidth: '400px', opacity: 0.5 }} value={user?.email} disabled />
                                         </div>
-                                        <div className="bento-field-row">
+                                        <div className="bento-field-row" style={{ borderBottom: 'none', paddingBottom: 0 }}>
                                             <label className="bento-field-label">Your Linkzy URL</label>
-                                            <div className="bento-url-row">
+                                            <div className="bento-url-row" style={{ maxWidth: '400px' }}>
                                                 <span className="bento-url-pre">{window.location.host}/</span>
                                                 <span className="bento-url-val">{user?.id}</span>
                                             </div>
                                         </div>
-                                        <div style={{ display: 'flex', gap: 12, marginTop: 4 }}>
-                                            <button className="bento-save" onClick={() => { updateUser({ name: settingsName }); flash(); }}>{savedMsg || 'Save'}</button>
-                                            <button style={{ padding: '10px 20px', background: 'transparent', color: '#dc2626', border: '1.5px solid #fecaca', borderRadius: 10, fontFamily: 'inherit', fontSize: '0.875rem', fontWeight: 600, cursor: 'pointer' }} onClick={() => { logout(); navigate('/'); }}>Log out</button>
-                                        </div>
+                                    </div>
+                                    <div style={{ display: 'flex', gap: 12, marginTop: 4 }}>
+                                        <button className="bento-save" onClick={() => { updateUser({ name: settingsName }); flash(); }}>{savedMsg || 'Save'}</button>
+                                        <button style={{ padding: '10px 20px', background: 'transparent', color: '#dc2626', border: '1.5px solid #fecaca', borderRadius: 10, fontFamily: 'inherit', fontSize: '0.875rem', fontWeight: 600, cursor: 'pointer' }} onClick={() => { logout(); navigate('/'); }}>Log out</button>
                                     </div>
                                 </div>
                             )} {/* End Settings Tab */}
@@ -598,8 +608,8 @@ export default function Dashboard() {
                                             <div style={{ width: '100%', height: 96, backgroundImage: `url(${bannerUrl})`, backgroundSize: 'cover', backgroundPosition: 'center', flexShrink: 0 }} />
                                         )}
                                         <div className="bento-phone-avatar" style={{
-                                            width: 80, height: 80, borderRadius: '50%', margin: bannerUrl ? '-40px auto 16px' : '32px auto 16px', background: '#333',
-                                            display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', border: '4px solid #f9f9f9', boxShadow: '0 4px 12px rgba(0,0,0,0.08)'
+                                            width: 80, height: 80, borderRadius: '50%', margin: bannerUrl ? '-40px auto 16px' : '24px auto 16px', background: '#333',
+                                            display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', border: '4px solid currentColor', color: previewBg.includes('#') ? previewBg : '#f9f9f9', boxShadow: '0 4px 12px rgba(0,0,0,0.08)', flexShrink: 0
                                         }}>
                                             {avatarUrl
                                                 ? <img src={avatarUrl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />

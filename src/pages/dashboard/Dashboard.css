@@ -246,7 +246,7 @@
 }
 
 .bento-right-col {
-    width: 340px;
+    width: 320px;
     flex-shrink: 0;
     position: sticky;
     top: 40px;
@@ -254,6 +254,9 @@
     flex-direction: column;
     align-items: center;
     gap: 24px;
+    align-self: flex-start;
+    height: fit-content;
+    z-index: 10;
 }
 
 .bento-tablet-nav {
@@ -784,11 +787,21 @@
     padding: 0;
 }
 
-/* ═══ INNER PAGE (Appearance / Settings / Add Links) ═══ */
-.bento-inner-page {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 24px 0;
+/* ═══ INNER PAGE SCALING ═══ */
+.bento-fade-in {
+    animation: fadeIn 0.2s ease-out forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(4px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .bento-page-title {
@@ -1119,7 +1132,7 @@
 /* ── BRAND NEW ICON PICKER MODAL ── */
 .bento-icon-picker-btn {
     width: 64px;
-    height: 100%;
+    height: 42px;
     margin-right: 12px;
     background: #f9fafb;
     border: 1.5px solid #e5e7eb;
