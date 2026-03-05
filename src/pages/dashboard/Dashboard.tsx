@@ -562,15 +562,15 @@ export default function Dashboard() {
                                     <div className="bento-card" style={{ padding: '32px' }}>
                                         <div className="bento-field-row" style={{ paddingTop: 0 }}>
                                             <label className="bento-field-label">Full Name</label>
-                                            <input className="bento-input" style={{ width: '100%', maxWidth: '400px' }} value={settingsName} onChange={e => setSettingsName(e.target.value)} />
+                                            <input className="bento-input" style={{ width: '100%', maxWidth: '480px' }} value={settingsName} onChange={e => setSettingsName(e.target.value)} />
                                         </div>
                                         <div className="bento-field-row">
                                             <label className="bento-field-label">Email</label>
-                                            <input className="bento-input" style={{ width: '100%', maxWidth: '400px', opacity: 0.5 }} value={user?.email} disabled />
+                                            <input className="bento-input" style={{ width: '100%', maxWidth: '480px', opacity: 0.5 }} value={user?.email} disabled />
                                         </div>
                                         <div className="bento-field-row" style={{ borderBottom: 'none', paddingBottom: 0 }}>
                                             <label className="bento-field-label">Your Linkzy URL</label>
-                                            <div className="bento-url-row" style={{ maxWidth: '400px' }}>
+                                            <div className="bento-url-row" style={{ maxWidth: '480px' }}>
                                                 <span className="bento-url-pre">{window.location.host}/</span>
                                                 <span className="bento-url-val">{user?.id}</span>
                                             </div>
