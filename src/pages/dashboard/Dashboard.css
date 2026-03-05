@@ -384,24 +384,25 @@
     background: #ffffff;
 }
 
-/* STAT CARDS */
+/* STAT CARDS — Fix 1: Equal width side-by-side */
 .bento-stat-grid {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 16px;
-    flex-wrap: wrap;
+    width: 100%;
+    max-width: 480px;
 }
 
 .bento-stat {
-    width: 220px;
-    flex-shrink: 0;
+    background: #ffffff;
+    border: 1px solid #E5E5E5;
+    border-radius: 8px;
+    padding: 24px;
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 8px;
     position: relative;
     overflow: hidden;
-    padding: 24px;
-    border-radius: 12px;
-    border: 1px solid #e5e7eb;
 }
 
 .bento-stat-purple {
@@ -932,23 +933,24 @@
     margin-bottom: 10px;
 }
 
+/* Fix 2: Form inputs — constrained width */
 .bento-input {
-    padding: 9px 13px;
-    border: 1.5px solid #e5e7eb;
+    padding: 10px 14px;
+    border: 1px solid #E5E5E5;
     border-radius: 8px;
-    font-size: 0.875rem;
+    font-size: 0.938rem;
     font-family: inherit;
-    background: #f9fafb;
-    color: #111;
+    background: #ffffff;
+    color: #0A0A0A;
     outline: none;
-    transition: border-color 0.12s, box-shadow 0.12s;
+    transition: border-color 0.15s ease;
     display: block;
+    width: 100%;
+    max-width: 480px;
 }
 
 .bento-input:focus {
-    border-color: #7c3aed;
-    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.12);
-    background: #fff;
+    border-color: #0A0A0A;
 }
 
 .bento-logout {
@@ -969,32 +971,34 @@
 }
 
 
+/* Fix 4: Theme grid — even 3 columns, no orphan */
 .bento-theme-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
+    gap: 12px;
+    width: 100%;
     margin-top: 4px;
 }
 
 .bento-theme-btn {
-    border: 2px solid #e9ecef;
-    border-radius: 12px;
+    border: 1px solid #E5E5E5;
+    border-radius: 8px;
     overflow: hidden;
     cursor: pointer;
     background: none;
     padding: 0;
     position: relative;
-    transition: border-color 0.15s, transform 0.15s;
+    transition: border-color 0.15s ease, transform 0.15s ease;
     text-align: left;
 }
 
 .bento-theme-btn:hover {
+    border-color: #0A0A0A;
     transform: translateY(-2px);
-    border-color: #d1d5db;
 }
 
 .bento-theme-btn.sel {
-    border-color: #7c3aed;
+    border: 2px solid #7c3aed;
 }
 
 .bento-tp {
@@ -1047,17 +1051,21 @@
     font-weight: 700;
 }
 
+/* Fix 5: Save button — primary spec */
 .bento-save {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     padding: 10px 24px;
-    background: #7c3aed;
-    color: #fff;
+    background: #7C3AED;
+    color: #ffffff;
     border: none;
-    border-radius: 10px;
-    font-size: 0.875rem;
-    font-weight: 600;
+    border-radius: 6px;
+    font-size: 0.938rem;
+    font-weight: 500;
     font-family: inherit;
     cursor: pointer;
-    transition: opacity 0.12s;
+    transition: opacity 0.15s ease;
 }
 
 .bento-save:hover {
@@ -1432,25 +1440,28 @@
     font-weight: 600;
 }
 
-/* Ghost / outline button (used for Clear, secondary actions) */
+/* Fix 5: Ghost / outline button */
 .bento-ghost {
-    padding: 8px 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 24px;
     background: transparent;
-    color: #6b7280;
-    border: 1.5px solid #e5e7eb;
-    border-radius: 8px;
+    color: #0A0A0A;
+    border: 1px solid #E5E5E5;
+    border-radius: 6px;
     font-family: inherit;
-    font-size: 0.8rem;
+    font-size: 0.938rem;
     font-weight: 500;
     cursor: pointer;
-    transition: background 0.15s ease, color 0.15s ease;
+    transition: border-color 0.15s ease, background 0.15s ease;
     white-space: nowrap;
     flex-shrink: 0;
 }
 
 .bento-ghost:hover {
-    background: #f3f4f6;
-    color: #374151;
+    border-color: #0A0A0A;
+    background: #F5F5F5;
 }
 
 /* Inline hint label text */
@@ -1460,18 +1471,21 @@
     font-weight: 400;
 }
 
-/* Primary save / action button */
+/* Primary save / action button (duplicate block — scoped overrides) */
 .bento-save {
-    padding: 11px 24px;
-    background: #7c3aed;
-    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 24px;
+    background: #7C3AED;
+    color: #ffffff;
     border: none;
-    border-radius: 10px;
+    border-radius: 6px;
     font-family: inherit;
-    font-size: 0.9rem;
-    font-weight: 600;
+    font-size: 0.938rem;
+    font-weight: 500;
     cursor: pointer;
-    transition: opacity 0.15s ease, transform 0.15s ease;
+    transition: opacity 0.15s ease;
     align-self: flex-start;
 }
 
@@ -1548,4 +1562,37 @@
 .bento-save:hover {
     opacity: 0.88;
     transform: translateY(-1px);
+}
+
+/* Fix 3: Upload zones — dashed drop zone style */
+.bento-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px;
+    background: #FAFAFA;
+    border: 2px dashed #E5E5E5;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    color: #888888;
+    font-family: inherit;
+    font-weight: 500;
+    cursor: pointer;
+    transition: border-color 0.15s ease, background 0.15s ease;
+    max-width: 480px;
+    width: 100%;
+    text-align: center;
+}
+
+.bento-btn:hover {
+    border-color: #AAAAAA;
+    background: #F5F5F5;
+}
+
+/* Fix 5: Form action row */
+.form-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 32px;
 }
