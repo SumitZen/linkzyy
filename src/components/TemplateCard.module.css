@@ -14,25 +14,19 @@
     width: 240px;
     height: 500px;
     border-radius: 36px;
-    background: linear-gradient(135deg, #1c1c1f, #0a0a0c);
-    /* Premium dark chassis */
+    background: #ffffff;
+    /* Clean white chassis */
     padding: 6px;
-    box-shadow:
-        0 0 0 1px rgba(255, 255, 255, 0.1) inset,
-        0 0 0 3px rgba(0, 0, 0, 0.4) inset,
-        0 12px 36px rgba(0, 0, 0, 0.2),
-        0 30px 60px rgba(0, 0, 0, 0.3);
-    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-layer-2);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
     position: relative;
     flex-shrink: 0;
 }
 
 .cardWrapper:hover .phoneMockup {
-    transform: translateY(-10px) scale(1.02);
-    box-shadow:
-        0 4px 12px rgba(0, 0, 0, 0.18),
-        0 24px 60px rgba(0, 0, 0, 0.32),
-        0 0 0 1px rgba(255, 255, 255, 0.08) inset;
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-layer-3);
 }
 
 /* Dynamic Island style cutout */
