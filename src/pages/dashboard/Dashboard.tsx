@@ -209,36 +209,28 @@ export default function Dashboard() {
         <div className="bento-root">
             <Navbar />
 
-            <div className="bento-app-container">
-                {/* ── PRO SIDEBAR ── */}
-                <aside className="bento-sidebar">
-                    <button
-                        className={`bento-sidebar-btn${activeTab === 'links' ? ' active' : ''}`}
-                        onClick={() => setActiveTab('links')}
-                    >
-                        <span className="bento-sidebar-icon">🔗</span>
-                        Links
-                    </button>
-                    <button
-                        className={`bento-sidebar-btn${activeTab === 'appearance' ? ' active' : ''}`}
-                        onClick={() => setActiveTab('appearance')}
-                    >
-                        <span className="bento-sidebar-icon">✨</span>
-                        Appearance
-                    </button>
-                    <button
-                        className={`bento-sidebar-btn${activeTab === 'settings' ? ' active' : ''}`}
-                        onClick={() => setActiveTab('settings')}
-                    >
-                        <span className="bento-sidebar-icon">⚙️</span>
-                        Settings
-                    </button>
-
-                    <div style={{ marginTop: 'auto', padding: '12px 16px', borderTop: '1px solid #f3f4f6' }}>
-                        <div style={{ fontSize: '0.75rem', color: '#9ca3af', fontWeight: 500 }}>LOGGED IN AS</div>
-                        <div style={{ fontSize: '0.85rem', fontWeight: 600, color: '#374151', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{user?.email}</div>
+            {/* ── TOP SUB-NAVIGATION ── */}
+            <div className="bento-subnav-bar">
+                <div className="bento-subnav-content">
+                    <div className="bento-subnav-tabs">
+                        <button className={`bento-subnav-tab${activeTab === 'links' ? ' active' : ''}`} onClick={() => setActiveTab('links')}>
+                            Links
+                        </button>
+                        <button className={`bento-subnav-tab${activeTab === 'appearance' ? ' active' : ''}`} onClick={() => setActiveTab('appearance')}>
+                            Appearance
+                        </button>
+                        <button className={`bento-subnav-tab${activeTab === 'settings' ? ' active' : ''}`} onClick={() => setActiveTab('settings')}>
+                            Settings
+                        </button>
                     </div>
-                </aside>
+                    <div className="bento-subnav-user">
+                        <span style={{ color: '#9ca3af', fontWeight: 500, marginRight: 6 }}>Logged in as</span>
+                        <span style={{ fontWeight: 600, color: '#111' }}>{user?.email}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div className="bento-app-container">
 
                 {/* ── MOBILE BOTTOM NAV ── */}
                 <nav className="bento-tablet-nav">
