@@ -345,3 +345,28 @@
     color: var(--text-muted);
     line-height: 1.6;
 }
+
+/* Current plan highlight */
+.current-plan-badge {
+    position: absolute;
+    top: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #111;
+    color: #fff;
+    border-radius: 100px;
+    padding: 5px 16px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.pricing-card.current-plan {
+    border-color: #111;
+    box-shadow: 0 0 0 1px #111, var(--shadow-layer-2);
+    transform: translateY(-8px);
+}
+
+.pricing-card.current-plan:hover {
+    transform: translateY(-12px);
+}

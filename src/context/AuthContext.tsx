@@ -3,6 +3,7 @@ import { createContext, useContext, useState, useEffect, useRef } from 'react';
 import type { ReactNode } from 'react';
 import { account, APPWRITE_READY, databases, APPWRITE_CONFIG } from '../lib/appwrite';
 import { ID, OAuthProvider, Query } from 'appwrite';
+import PROMO_CODES from '../lib/promoCodes';
 
 // ── Block / User types ──────────────────────────────────────────────────────
 export interface LinkBlock {
@@ -45,6 +46,7 @@ interface AuthContextValue {
     signup: (name: string, email: string, password: string) => Promise<void>;
     logout: () => void;
     updateUser: (updates: Partial<User>) => void;
+    redeemPromoCode: (code: string) => Promise<'ok' | 'invalid' | 'already_active'>;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -98,6 +100,7 @@ async function syncProfileToAppwrite(updated: User): Promise<void> {
         bgImage: updated.bgImage || null,
         links: JSON.stringify(updated.links || []),
         blocks: JSON.stringify(updated.blocks || []),
+        plan: updated.plan || 'free',
     };
 
     // Appwrite 1.8.1 strictly crashes on "" for string fields, replace with null
@@ -215,6 +218,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                             bgColor: doc.bgColor || '',
                             bgImage: doc.bgImage || '',
                             theme: doc.theme || 'editorial-light',
+                            plan: (doc.plan as User['plan']) || 'free',
                             links: parseField(doc.links) as LinkItem[],
                             blocks: parseField(doc.blocks) as Block[],
                         };
@@ -347,7 +351,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
     };
 
-    const value = { user, isLoading, login, loginWithGoogle, signup, logout, updateUser };
+    // ── redeemPromoCode ──
+    const redeemPromoCode = async (code: string): Promise<'ok' | 'invalid' | 'already_active'> => {
+        const currentUser = userRef.current;
+        if (!currentUser) return 'invalid';
+
+        const normalized = code.trim().toUpperCase();
+        const grantedPlan = PROMO_CODES[normalized];
+        if (!grantedPlan) return 'invalid';
+
+        if (currentUser.plan === grantedPlan || currentUser.plan === 'business') {
+            return 'already_active';
+        }
+
+        updateUser({ plan: grantedPlan });
+        return 'ok';
+    };
+
+    const value = { user, isLoading, login, loginWithGoogle, signup, logout, updateUser, redeemPromoCode };
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

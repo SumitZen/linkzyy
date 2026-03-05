@@ -84,6 +84,10 @@ export default function PricingPage() {
     const navigate = useNavigate();
 
     const handleCta = (planId: string) => {
+        if (user && user.plan === planId) {
+            navigate('/dashboard?tab=settings');
+            return;
+        }
         if (user) {
             navigate('/dashboard');
         } else {
@@ -124,9 +128,12 @@ export default function PricingPage() {
                     const period = billing === 'monthly' ? '/mo' : '/yr';
 
                     return (
-                        <div key={plan.id} className={`pricing-card ${plan.popular ? 'popular' : ''}`}>
-                            {plan.popular && (
+                        <div key={plan.id} className={`pricing-card ${plan.popular ? 'popular' : ''} ${user?.plan === plan.id ? 'current-plan' : ''}`}>
+                            {plan.popular && user?.plan !== plan.id && (
                                 <div className="popular-badge">🔥 Most popular</div>
+                            )}
+                            {user?.plan === plan.id && (
+                                <div className="current-plan-badge">✓ Your current plan</div>
                             )}
                             <div className="plan-header">
                                 <div className="plan-name" style={{ color: plan.color }}>{plan.name}</div>
@@ -156,7 +163,7 @@ export default function PricingPage() {
                                 className={`plan-cta ${plan.popular ? 'cta-primary' : 'cta-secondary'}`}
                                 onClick={() => handleCta(plan.id)}
                             >
-                                {plan.cta}
+                                {user?.plan === plan.id ? 'Manage in Settings →' : plan.cta}
                             </button>
                         </div>
                     );

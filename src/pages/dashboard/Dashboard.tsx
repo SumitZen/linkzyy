@@ -31,7 +31,7 @@ function PlatformIcon({ id, size = 18 }: { id: string; size?: number }) {
 }
 
 export default function Dashboard() {
-    const { user, logout, updateUser } = useAuth();
+    const { user, logout, updateUser, redeemPromoCode } = useAuth();
     const navigate = useNavigate();
     const [searchParams, setSearchParams] = useSearchParams();
     const [savedMsg, setSavedMsg] = useState('');
@@ -90,8 +90,10 @@ export default function Dashboard() {
     // ─── Icon Picker State ───
     const [isIconPickerOpen, setIsIconPickerOpen] = useState(false);
 
-    // ─── Settings state ───
+    // ── Settings state ──
     const [settingsName, setSettingsName] = useState(user?.name ?? '');
+    const [promoCode, setPromoCode] = useState('');
+    const [promoStatus, setPromoStatus] = useState<'idle' | 'ok' | 'invalid' | 'already_active' | 'loading'>('idle');
 
     const theme = templatesList.find(t => t.id === selTheme) ?? templatesList[0];
     const previewBg = bgImage ? `url(${bgImage}) center/cover no-repeat` : bgColor || theme.screenBg;
@@ -604,6 +606,63 @@ export default function Dashboard() {
                                     <div style={{ display: 'flex', gap: 12, marginTop: 4 }}>
                                         <button className="bento-save" onClick={() => { updateUser({ name: settingsName }); flash(); }}>{savedMsg || 'Save'}</button>
                                         <button style={{ padding: '10px 20px', background: 'transparent', color: '#dc2626', border: '1.5px solid #fecaca', borderRadius: 10, fontFamily: 'inherit', fontSize: '0.875rem', fontWeight: 600, cursor: 'pointer' }} onClick={() => { logout(); navigate('/'); }}>Log out</button>
+                                    </div>
+
+                                    {/* Promo Code Card */}
+                                    <div className="bento-card promo-card">
+                                        <div className="promo-card__header">
+                                            <div>
+                                                <div className="promo-card__title">Plan &amp; Access</div>
+                                                <div className="promo-card__sub">Your current plan</div>
+                                            </div>
+                                            <span className={`plan-badge plan-badge--${user?.plan ?? 'free'}`}>
+                                                {user?.plan === 'pro' ? '⚡ Pro' : user?.plan === 'business' ? '🏢 Business' : 'Free'}
+                                            </span>
+                                        </div>
+
+                                        {(user?.plan ?? 'free') !== 'business' && (
+                                            <div className="promo-card__redeem">
+                                                <label className="bento-field-label" style={{ marginBottom: 8, display: 'block' }}>Redeem a promo code</label>
+                                                <div className="promo-card__input-row">
+                                                    <input
+                                                        className="bento-input"
+                                                        placeholder="e.g. LINKZY_FRIENDS"
+                                                        value={promoCode}
+                                                        onChange={e => { setPromoCode(e.target.value); setPromoStatus('idle'); }}
+                                                        onKeyDown={async e => {
+                                                            if (e.key === 'Enter') {
+                                                                setPromoStatus('loading');
+                                                                const result = await redeemPromoCode(promoCode);
+                                                                setPromoStatus(result);
+                                                                if (result === 'ok') setPromoCode('');
+                                                            }
+                                                        }}
+                                                        style={{ flex: 1, maxWidth: '100%' }}
+                                                    />
+                                                    <button
+                                                        className="bento-save"
+                                                        disabled={promoStatus === 'loading' || promoCode.trim() === ''}
+                                                        onClick={async () => {
+                                                            setPromoStatus('loading');
+                                                            const result = await redeemPromoCode(promoCode);
+                                                            setPromoStatus(result);
+                                                            if (result === 'ok') setPromoCode('');
+                                                        }}
+                                                    >
+                                                        {promoStatus === 'loading' ? 'Checking…' : 'Redeem'}
+                                                    </button>
+                                                </div>
+                                                {promoStatus === 'ok' && (
+                                                    <div className="promo-feedback promo-feedback--ok">🎉 Code activated! Your plan has been upgraded.</div>
+                                                )}
+                                                {promoStatus === 'invalid' && (
+                                                    <div className="promo-feedback promo-feedback--error">✗ Invalid code. Double-check and try again.</div>
+                                                )}
+                                                {promoStatus === 'already_active' && (
+                                                    <div className="promo-feedback promo-feedback--warn">✓ You already have this plan active.</div>
+                                                )}
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             )} {/* End Settings Tab */}
