@@ -336,8 +336,8 @@
 }
 
 .theme-item:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px -8px rgba(0, 0, 0, 0.08);
 }
 
 .bento-card {
@@ -350,11 +350,9 @@
 }
 
 .bento-card:hover {
-    transform: translateY(-4px);
-    box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.3),
-        0 24px 48px rgba(0, 0, 0, 0.1);
-    background: rgba(255, 255, 255, 0.06);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.08);
+    background: #ffffff;
 }
 
 /* STAT CARDS */
@@ -611,20 +609,17 @@
     align-items: center;
     justify-content: center;
     flex: 1;
+    width: 100%;
 }
 
 .bento-phone {
-    width: 280px;
-    height: 580px;
-    border-radius: 46px;
-    background: rgba(0, 0, 0, 0.85);
-    /* Premium dark glass */
-    padding: 10px;
-    box-shadow:
-        0 0 0 1px rgba(255, 255, 255, 0.15),
-        0 0 0 4px #000,
-        0 0 0 5px rgba(255, 255, 255, 0.08),
-        0 32px 64px -12px rgba(0, 0, 0, 0.5);
+    width: 320px;
+    height: 640px;
+    border-radius: 20px;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.08);
+    /* Clean, ultra-soft shadow */
     position: relative;
     overflow: hidden;
     display: flex;
@@ -633,34 +628,20 @@
 
 .bento-phone-content {
     flex: 1;
-    border-radius: 36px;
     overflow-y: auto;
     overflow-x: hidden;
     position: relative;
     scrollbar-width: none;
+    background: #f9f9f9;
 }
 
 .bento-phone-content::-webkit-scrollbar {
     display: none;
 }
 
-/* The true Dynamic Island Notch */
-.bento-phone-notch {
-    position: absolute;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100px;
-    height: 28px;
-    background: #000;
-    border-radius: 20px;
-    z-index: 99;
-}
-
 .bento-phone-screen {
-    border-radius: 28px;
-    min-height: 380px;
-    padding: 18px 14px 14px;
+    min-height: 100%;
+    padding: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
