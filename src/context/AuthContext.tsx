@@ -120,6 +120,7 @@ async function syncProfileToAppwrite(updated: User): Promise<void> {
 
     if (docId) {
         console.log('🧪 Granular Sync: Starting check...');
+        let finalError = null;
         for (const [key, value] of Object.entries(dbPayload)) {
             try {
                 // Try updating just this one field
@@ -132,21 +133,18 @@ async function syncProfileToAppwrite(updated: User): Promise<void> {
                 console.log(`✅ Granular Sync: "${key}" saved successfully.`);
             } catch (err: any) {
                 console.error(`❌ Granular Sync: "${key}" FAILED.`, err);
+                if (err.code === 500 || err.code === 400) {
+                    alert(`CRITICAL SYNC ERROR:\nAppwrite rejected the field: "${key}"\n\nError: ${err.message}\nCode: ${err.code}\n\nPlease let me know exactly which field failed!`);
+                    finalError = err;
+                    break;
+                }
             }
         }
 
-        // After granular test, try the full update one last time
-        try {
-            await databases.updateDocument(
-                APPWRITE_CONFIG.databaseId,
-                APPWRITE_CONFIG.profilesCollectionId,
-                docId,
-                dbPayload
-            );
+        if (!finalError) {
             console.log('✅ Appwrite Sync: Full Success');
-        } catch (err: any) {
-            // We don't need to log here since granular logs should have caught it
         }
+
     } else {
         try {
             const created = await databases.createDocument(
