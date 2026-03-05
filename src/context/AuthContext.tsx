@@ -94,10 +94,11 @@ async function syncProfileToAppwrite(updated: User): Promise<void> {
         bio: updated.bio || '',
         theme: updated.theme || 'editorial-light',
         bgColor: updated.bgColor || '',
-        avatarUrl: updated.avatarUrl || '',
-        profilePictureUrl: updated.avatarUrl || '',
-        bannerUrl: updated.bannerUrl || '',
-        bgImage: updated.bgImage || '',
+        // URL validation requires null instead of empty string
+        avatarUrl: updated.avatarUrl || null,
+        profilePictureUrl: updated.avatarUrl || null,
+        bannerUrl: updated.bannerUrl || null,
+        bgImage: updated.bgImage || null,
         links: JSON.stringify(updated.links || []),
         blocks: JSON.stringify(updated.blocks || []),
     };
