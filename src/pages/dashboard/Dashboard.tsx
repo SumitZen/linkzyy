@@ -87,6 +87,9 @@ export default function Dashboard() {
     const [isUploading, setIsUploading] = useState(false);
     const [cropType, setCropType] = useState<'avatar' | 'banner' | 'background'>('background');
 
+    // ─── Icon Picker State ───
+    const [isIconPickerOpen, setIsIconPickerOpen] = useState(false);
+
     // ─── Settings state ───
     const [settingsName, setSettingsName] = useState(user?.name ?? '');
 
@@ -318,24 +321,34 @@ export default function Dashboard() {
 
                                         {/* Simple add row */}
                                         <div className="bento-simple-add">
-                                            {/* Icon picker — real brand SVGs */}
-                                            <div className="bento-icon-picker">
-                                                <div className="bento-icon-display">
-                                                    <PlatformIcon id={newIcon} size={20} />
-                                                </div>
-                                                <div className="bento-icon-grid">
-                                                    {PLATFORM_ICONS.map(p => (
-                                                        <button
-                                                            key={p.id}
-                                                            title={p.label}
-                                                            className={`bento-icon-opt${newIcon === p.id ? ' sel' : ''}`}
-                                                            onClick={() => setNewIcon(p.id)}
-                                                        >
-                                                            <PlatformIcon id={p.id} size={16} />
-                                                        </button>
-                                                    ))}
-                                                </div>
+                                            {/* Brand new interactive icon picker popup */}
+                                            <div className="bento-icon-picker-btn" onClick={() => setIsIconPickerOpen(!isIconPickerOpen)}>
+                                                <PlatformIcon id={newIcon} size={20} />
+                                                <div className="bento-icon-caret">▼</div>
                                             </div>
+
+                                            {isIconPickerOpen && (
+                                                <div className="bento-icon-picker-modal">
+                                                    <div className="bento-icon-picker-header">
+                                                        Select Icon
+                                                        <button onClick={() => setIsIconPickerOpen(false)}>✕</button>
+                                                    </div>
+                                                    <div className="bento-icon-grid-large">
+                                                        {PLATFORM_ICONS.map(p => (
+                                                            <button
+                                                                key={p.id}
+                                                                title={p.label}
+                                                                className={`bento-icon-opt-lg${newIcon === p.id ? ' sel' : ''}`}
+                                                                onClick={() => { setNewIcon(p.id); setIsIconPickerOpen(false); }}
+                                                            >
+                                                                <PlatformIcon id={p.id} size={24} />
+                                                                <span className="bento-icon-label">{p.label}</span>
+                                                            </button>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            )}
+
                                             <input
                                                 className="bento-input bento-flex1"
                                                 placeholder="Title  (e.g. My Website)"
@@ -582,15 +595,15 @@ export default function Dashboard() {
                                 <div className="bento-phone">
                                     <div className="bento-phone-content" style={{ background: previewBg }}>
                                         {bannerUrl && (
-                                            <div style={{ width: 'calc(100% + 28px)', marginLeft: -14, height: 64, backgroundImage: `url(${bannerUrl})`, backgroundSize: 'cover', backgroundPosition: 'center', marginTop: -18, marginBottom: 12, flexShrink: 0 }} />
+                                            <div style={{ width: '100%', height: 96, backgroundImage: `url(${bannerUrl})`, backgroundSize: 'cover', backgroundPosition: 'center', flexShrink: 0 }} />
                                         )}
                                         <div className="bento-phone-avatar" style={{
-                                            width: 64, height: 64, borderRadius: '50%', margin: '0 auto 12px', background: '#333',
-                                            display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', border: '2px solid rgba(255,255,255,0.1)'
+                                            width: 80, height: 80, borderRadius: '50%', margin: bannerUrl ? '-40px auto 16px' : '32px auto 16px', background: '#333',
+                                            display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', border: '4px solid #f9f9f9', boxShadow: '0 4px 12px rgba(0,0,0,0.08)'
                                         }}>
                                             {avatarUrl
                                                 ? <img src={avatarUrl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                                                : <span style={{ fontSize: '1.5rem', fontWeight: 700, color: 'rgba(255,255,255,0.9)' }}>{(name || user?.name || 'U').charAt(0)}</span>
+                                                : <span style={{ fontSize: '1.5rem', fontWeight: 700, color: 'rgba(255,255,255,0.9)' }}>{(name || user?.name || 'U').charAt(0).toUpperCase()}</span>
                                             }
                                         </div>
                                         <div style={{ fontSize: '1rem', fontWeight: 700, color: theme.textColor, textAlign: 'center', marginBottom: 4 }}>{name || user?.name}</div>

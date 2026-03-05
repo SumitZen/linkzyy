@@ -1116,62 +1116,112 @@
     flex-shrink: 0;
 }
 
-.bento-icon-display {
-    width: 42px;
-    height: 40px;
+/* ── BRAND NEW ICON PICKER MODAL ── */
+.bento-icon-picker-btn {
+    width: 64px;
+    height: 100%;
+    margin-right: 12px;
+    background: #f9fafb;
     border: 1.5px solid #e5e7eb;
     border-radius: 8px;
-    background: #fff;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.15rem;
+    gap: 6px;
     cursor: pointer;
-    user-select: none;
+    transition: all 0.15s;
+    color: #111;
 }
 
-.bento-icon-grid {
-    display: none;
-    position: absolute;
-    top: calc(100% + 6px);
-    left: 0;
-    background: #fff;
-    border: 1.5px solid #e5e7eb;
-    border-radius: 10px;
-    padding: 8px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-    grid-template-columns: repeat(4, 1fr);
-    gap: 4px;
-    z-index: 50;
-    width: 160px;
-}
-
-.bento-icon-picker:hover .bento-icon-grid,
-.bento-icon-picker:focus-within .bento-icon-grid {
-    display: grid;
-}
-
-.bento-icon-opt {
-    width: 32px;
-    height: 32px;
-    border: 1.5px solid transparent;
-    border-radius: 6px;
-    background: transparent;
-    font-size: 1rem;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background 0.1s;
-}
-
-.bento-icon-opt:hover {
+.bento-icon-picker-btn:hover {
     background: #f3f4f6;
+    border-color: #d1d5db;
 }
 
-.bento-icon-opt.sel {
-    border-color: #7c3aed;
+.bento-icon-caret {
+    font-size: 0.55rem;
+    color: #9ca3af;
+}
+
+.bento-icon-picker-modal {
+    position: absolute;
+    top: 60px;
+    left: 0;
+    width: 380px;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.12);
+    z-index: 1000;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.bento-icon-picker-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    background: #f9fafb;
+    border-bottom: 1px solid #e5e7eb;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #374151;
+}
+
+.bento-icon-picker-header button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: #9ca3af;
+    font-size: 1rem;
+    transition: color 0.15s;
+}
+
+.bento-icon-picker-header button:hover {
+    color: #dc2626;
+}
+
+.bento-icon-grid-large {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    padding: 16px;
+    max-height: 280px;
+    overflow-y: auto;
+}
+
+.bento-icon-opt-lg {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 8px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    background: transparent;
+    cursor: pointer;
+    color: #4b5563;
+    transition: all 0.1s;
+}
+
+.bento-icon-opt-lg:hover {
+    background: #f3f4f6;
+    color: #111;
+}
+
+.bento-icon-opt-lg.sel {
     background: #f5f0ff;
+    color: #7c3aed;
+    border-color: #ddd6fe;
+}
+
+.bento-icon-label {
+    font-size: 0.65rem;
+    font-family: inherit;
+    font-weight: 500;
 }
 
 /* Flex utils */
