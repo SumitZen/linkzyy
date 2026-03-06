@@ -406,9 +406,7 @@
 
 .bento-right-col {
     width: 100%;
-    position: sticky;
-    top: var(--space-6);
-    height: calc(100vh - var(--space-10));
+    /* Removed sticky scroll constraints per user feedback */
     display: flex;
     flex-direction: column;
     align-items: center;
