@@ -207,10 +207,10 @@
 
 /* ═══ FOOTER ═══ */
 footer {
-    background: rgba(7, 7, 15, 0.95);
+    padding: 100px 48px 48px;
+    background: var(--surface-1);
     border-top: 1px solid var(--border-subtle);
-    padding: var(--space-9) var(--space-6) var(--space-7);
-    margin-top: 0;
+    margin-top: 80px;
     width: 100vw;
     position: relative;
     left: 50%;
@@ -220,58 +220,57 @@ footer {
 .footer-top {
     display: grid;
     grid-template-columns: 2fr 1fr 1fr 1fr;
-    gap: var(--space-8);
+    gap: 60px;
     max-width: 1200px;
-    margin: 0 auto var(--space-8);
+    margin: 0 auto 80px;
 }
 
 .footer-brand p {
-    font-size: var(--text-sm);
-    color: var(--text-tertiary);
-    margin-top: var(--space-3);
-    max-width: 280px;
-    line-height: 1.6;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    margin-top: 24px;
+    max-width: 300px;
+    font-family: var(--font-sans);
 }
 
 .footer-col h4 {
-    font-size: var(--text-sm);
+    font-family: var(--font-sans);
     font-weight: 600;
-    color: var(--text-primary);
-    margin-bottom: var(--space-4);
+    margin-bottom: 24px;
+    color: var(--text-dark);
 }
 
 .footer-col ul {
     list-style: none;
     display: flex;
     flex-direction: column;
+    gap: 16px;
     padding: 0;
 }
 
 .footer-col ul a {
-    display: block;
-    font-size: var(--text-sm);
-    color: var(--text-tertiary);
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    transition: color 0.3s ease;
+    font-family: var(--font-sans);
     text-decoration: none;
-    margin-bottom: var(--space-3);
-    transition: color 0.15s ease;
 }
 
 .footer-col ul a:hover {
-    color: var(--text-primary);
+    color: var(--text-dark);
 }
 
 .footer-bottom {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding-top: var(--space-6);
-    border-top: 1px solid var(--border-subtle);
-    margin-top: var(--space-7);
-    font-size: var(--text-xs);
-    color: var(--text-tertiary);
     max-width: 1200px;
-    margin-left: auto;
-    margin-right: auto;
+    margin: 0 auto;
+    padding-top: 32px;
+    border-top: 1px solid var(--border-subtle);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    font-family: var(--font-sans);
 }
 
 .footer-socs {

@@ -560,7 +560,7 @@ export default function Dashboard() {
                                         <div className="bento-field-row">
                                             <label className="bento-field-label">Theme Preset <span className="bento-hint">(base background gradient & UI style)</span></label>
                                             <div className="bento-theme-grid">
-                                                {templatesList.filter(t => !t.hidden).map(t => (
+                                                {templatesList.map(t => (
                                                     <button key={t.id} className={`bento-theme-btn${selTheme === t.id ? ' sel' : ''}`} onClick={() => setSelTheme(t.id)}>
                                                         <div className="bento-tp" style={{ background: t.bg }}>
                                                             <div className="bento-tp-circ" />
