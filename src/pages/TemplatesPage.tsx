@@ -18,7 +18,7 @@ export default function TemplatesPage() {
             </div>
 
             <div className={styles.grid}>
-                {templatesList.map(theme => (
+                {templatesList.filter(t => !t.hidden).map(theme => (
                     <TemplateCard key={theme.id} theme={theme} isLoggedIn={!!user} />
                 ))}
             </div>
