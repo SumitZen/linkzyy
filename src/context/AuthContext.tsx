@@ -90,67 +90,47 @@ function buildUserFromAppwrite(awUser: import('appwrite').Models.User<import('ap
 const docIdCache: Record<string, string> = {};
 
 async function syncProfileToAppwrite(updated: User): Promise<void> {
+    // Aggressive sanitization for Appwrite: convert "" and undefined to null
+    const sanitize = (val: string | undefined | null) => (!val || val.trim() === '') ? null : val;
+
     const dbPayload: any = {
-        displayName: updated.name || null,
-        bio: updated.bio || null,
+        displayName: sanitize(updated.name),
+        bio: sanitize(updated.bio),
         theme: updated.theme || 'editorial-light',
-        bgColor: updated.bgColor || null,
-        avatarUrl: updated.avatarUrl || null,
-        bannerUrl: updated.bannerUrl || null,
-        bgImage: updated.bgImage || null,
+        bgColor: sanitize(updated.bgColor),
+        avatarUrl: sanitize(updated.avatarUrl),
+        bannerUrl: sanitize(updated.bannerUrl),
+        bgImage: sanitize(updated.bgImage),
         links: JSON.stringify(updated.links || []),
         blocks: JSON.stringify(updated.blocks || []),
         plan: updated.plan || 'free',
     };
 
-    // Appwrite 1.8.1 strictly crashes on "" for string fields, replace with null
-    Object.keys(dbPayload).forEach(key => {
-        if (dbPayload[key] === '') {
-            dbPayload[key] = null;
-        }
-    });
-
     // Check cache first
     let docId = docIdCache[updated.id];
 
-    if (!docId) {
-        const res = await databases.listDocuments(
-            APPWRITE_CONFIG.databaseId,
-            APPWRITE_CONFIG.profilesCollectionId,
-            [Query.equal('userId', updated.id)]
-        );
-        if (res.documents.length > 0) {
-            docId = res.documents[0].$id;
-            docIdCache[updated.id] = docId;
+    try {
+        if (!docId) {
+            const res = await databases.listDocuments(
+                APPWRITE_CONFIG.databaseId,
+                APPWRITE_CONFIG.profilesCollectionId,
+                [Query.equal('userId', updated.id)]
+            );
+            if (res.documents.length > 0) {
+                docId = res.documents[0].$id;
+                docIdCache[updated.id] = docId;
+            }
         }
-    }
 
-    if (docId) {
-        try {
+        if (docId) {
             await databases.updateDocument(
                 APPWRITE_CONFIG.databaseId,
                 APPWRITE_CONFIG.profilesCollectionId,
                 docId,
                 dbPayload
             );
-            console.log('✅ Appwrite Sync: Success');
-        } catch (err: any) {
-            console.error('❌ Appwrite Sync: Update Failed', { error: err, payload: dbPayload });
-
-            // Final Fallback: Try saving just the basic info
-            if (err.code === 500 || err.code === 400) {
-                console.warn('⚠️ Attempting minimal sync...');
-                const minimal = { bio: dbPayload.bio, displayName: dbPayload.displayName };
-                await databases.updateDocument(
-                    APPWRITE_CONFIG.databaseId,
-                    APPWRITE_CONFIG.profilesCollectionId,
-                    docId,
-                    minimal
-                ).catch(() => { });
-            }
-        }
-    } else {
-        try {
+            console.log('✅ Appwrite Sync: Update Success');
+        } else {
             const created = await databases.createDocument(
                 APPWRITE_CONFIG.databaseId,
                 APPWRITE_CONFIG.profilesCollectionId,
@@ -158,10 +138,12 @@ async function syncProfileToAppwrite(updated: User): Promise<void> {
                 { ...dbPayload, userId: updated.id }
             );
             docIdCache[updated.id] = created.$id;
-            console.log('✅ Appwrite Sync: Created Success');
-        } catch (err: any) {
-            console.error('❌ Appwrite Sync: Create Failed', err);
+            console.log('✅ Appwrite Sync: Created Profile Success');
         }
+    } catch (err: any) {
+        console.error('❌ Appwrite Sync Failed:', err.message, dbPayload);
+        // We do NOT reset local state here. The user's changes remain in UI and localStorage.
+        // They will sync next time or on page reload if the network recovers.
     }
 }
 
