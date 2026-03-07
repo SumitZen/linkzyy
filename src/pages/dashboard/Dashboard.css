@@ -155,14 +155,13 @@ body {
 .bento-nav {
     display: flex;
     align-items: center;
-    gap: 16px;
+    justify-content: space-between;
     padding: 0 40px;
     height: 64px;
     background: rgba(10, 10, 15, 0.75);
     backdrop-filter: var(--blur-heavy);
     -webkit-backdrop-filter: var(--blur-heavy);
     border-bottom: 1px solid var(--border-glass);
-    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.05);
     position: sticky;
     top: 0;
     z-index: 200;
@@ -194,7 +193,8 @@ body {
     padding: 0 40px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
+    gap: 32px;
 }
 
 .bento-subnav-tabs {
@@ -241,17 +241,22 @@ body {
 
 .bento-app-container {
     display: flex;
+    flex-direction: column;
     min-height: calc(100vh - 116px);
 }
 
+.bento-tablet-nav {
+    display: none;
+}
+
 .bento-grid {
-    display: flex;
-    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 380px;
     gap: 48px;
     padding: 48px 40px;
     max-width: 1200px;
     margin: 0 auto;
-    align-items: flex-start;
+    width: 100%;
 }
 
 .bento-left-col {
@@ -260,6 +265,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 32px;
+    margin-right: -12px;
 }
 
 /* ════ COMPONENTS ════ */
@@ -365,6 +371,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 20px;
+    height: fit-content;
 }
 
 .bento-phone-wrap {
