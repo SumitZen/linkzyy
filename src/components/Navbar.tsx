@@ -47,80 +47,43 @@ export default function Navbar() {
     };
 
     return (
-        <nav className="nav-brutal">
-            <Link to="/" className="nav-logo" style={{ textDecoration: 'none' }}>Linkzy</Link>
+        <nav className="bento-nav">
+            <Link to="/" className="bento-logo">Linkzy</Link>
 
-            {/* Desktop links */}
-            <ul className="nav-links nav-links--desktop">
+            <ul className="bento-nav-links">
                 <li><Link to="/templates">Templates</Link></li>
                 <li><Link to="/pricing">Pricing</Link></li>
                 <li><Link to="/blog">Blog</Link></li>
             </ul>
 
-            {/* Desktop right actions */}
-            <div className="nav-end nav-end--desktop">
-                <button className="btn-theme-toggle" onClick={toggleTheme} aria-label="Toggle Dark Mode">
+            <div className="bento-nav-actions">
+                <button className="btn-glass" style={{ padding: '8px 12px', minWidth: '44px' }} onClick={toggleTheme} aria-label="Toggle Dark Mode">
                     {isDarkMode ? '☀️' : '🌙'}
                 </button>
                 {user ? (
                     <>
                         <Link to="/dashboard">
-                            <button className="btn-login" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            <button className="btn-primary" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 20px' }}>
                                 <span style={{
-                                    width: '22px', height: '22px', borderRadius: '50%',
-                                    background: 'var(--text-dark)', color: 'var(--surface-1)',
+                                    width: '20px', height: '20px', borderRadius: '50%',
+                                    background: 'rgba(255,255,255,0.2)', color: '#fff',
                                     display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                                    fontSize: '0.75rem', fontWeight: 700, flexShrink: 0
+                                    fontSize: '0.7rem', fontWeight: 700
                                 }}>
                                     {user.name.charAt(0).toUpperCase()}
                                 </span>
                                 Dashboard
                             </button>
                         </Link>
-                        <button className="btn-login" onClick={handleLogout}>Log out</button>
+                        <button className="btn-ghost" style={{ padding: '8px 20px' }} onClick={handleLogout}>Log out</button>
                     </>
                 ) : (
                     <>
-                        <Link to="/login"><button className="btn-login">Log in</button></Link>
-                        <Link to="/signup"><button className="btn-signup">Sign up free</button></Link>
+                        <Link to="/login"><button className="btn-glass" style={{ padding: '8px 20px' }}>Log in</button></Link>
+                        <Link to="/signup"><button className="btn-primary" style={{ padding: '8px 20px' }}>Sign up</button></Link>
                     </>
                 )}
             </div>
-
-            {/* Mobile: theme toggle + hamburger */}
-            <div className="nav-mobile-right">
-                <button className="btn-theme-toggle" onClick={toggleTheme} aria-label="Toggle Dark Mode">
-                    {isDarkMode ? '☀️' : '🌙'}
-                </button>
-                <button
-                    className={`nav-hamburger${menuOpen ? ' open' : ''}`}
-                    onClick={e => { e.stopPropagation(); setMenuOpen(o => !o); }}
-                    aria-label="Open menu"
-                >
-                    <span /><span /><span />
-                </button>
-            </div>
-
-            {/* Mobile dropdown */}
-            {menuOpen && (
-                <div className="nav-mobile-menu" onClick={e => e.stopPropagation()}>
-                    <Link to="/templates" onClick={() => setMenuOpen(false)}>Templates</Link>
-                    <Link to="/pricing" onClick={() => setMenuOpen(false)}>Pricing</Link>
-                    <Link to="/blog" onClick={() => setMenuOpen(false)}>Blog</Link>
-                    <hr style={{ border: 'none', borderTop: '1px solid #eee', margin: '4px 0' }} />
-                    {user ? (
-                        <>
-                            <Link to="/dashboard" onClick={() => setMenuOpen(false)}>Dashboard</Link>
-                            <button onClick={handleLogout} style={{ textAlign: 'left', background: 'none', border: 'none', color: '#dc2626', fontFamily: 'inherit', fontSize: '0.95rem', cursor: 'pointer', padding: '10px 0', width: '100%' }}>Log out</button>
-                        </>
-                    ) : (
-                        <>
-                            <Link to="/login" onClick={() => setMenuOpen(false)}>Log in</Link>
-                            <Link to="/signup" onClick={() => setMenuOpen(false)} style={{ fontWeight: 700 }}>Sign up free →</Link>
-                        </>
-                    )}
-                </div>
-            )}
         </nav>
     );
 }

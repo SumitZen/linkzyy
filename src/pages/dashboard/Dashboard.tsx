@@ -392,7 +392,7 @@ export default function Dashboard() {
                                                 onChange={e => setNewUrl(e.target.value)}
                                                 onKeyDown={e => e.key === 'Enter' && addLink()}
                                             />
-                                            <button className="bento-add-link-btn" onClick={addLink}>+ Add</button>
+                                            <button className="btn-primary" onClick={addLink}>+ Add</button>
                                         </div>
 
                                         {/* Advanced block toggle */}
@@ -416,14 +416,14 @@ export default function Dashboard() {
                                                         <input className="bento-input" placeholder="Artist name" value={ma} onChange={e => setMa(e.target.value)} />
                                                         <input className="bento-input" placeholder="Spotify / SoundCloud embed URL *" value={me} onChange={e => setMe(e.target.value)} />
                                                         <input className="bento-input" placeholder="Cover image URL (optional)" value={mc} onChange={e => setMc(e.target.value)} />
-                                                        <button className="bento-save" onClick={addBlock}>Add Music Block</button>
+                                                        <button className="btn-primary" onClick={addBlock}>Add Music Block</button>
                                                     </div>
                                                 )}
                                                 {advType === 'photo' && (
                                                     <div className="bento-adv-fields">
                                                         <input className="bento-input" placeholder="Caption (optional)" value={pCap} onChange={e => setPCap(e.target.value)} />
                                                         <textarea className="bento-input" placeholder="Paste image URLs, separated by commas *" value={pImg} onChange={e => setPImg(e.target.value)} rows={2} style={{ resize: 'none' }} />
-                                                        <button className="bento-save" onClick={addBlock}>Add Photo Block</button>
+                                                        <button className="btn-primary" onClick={addBlock}>Add Photo Block</button>
                                                     </div>
                                                 )}
                                                 {advType === 'product' && (
@@ -432,7 +432,7 @@ export default function Dashboard() {
                                                         <input className="bento-input" placeholder="Price (e.g. $49)" value={prPrice} onChange={e => setPrPrice(e.target.value)} />
                                                         <input className="bento-input" placeholder="Buy URL *" value={prBuy} onChange={e => setPrBuy(e.target.value)} />
                                                         <input className="bento-input" placeholder="Product image URL (optional)" value={prImg} onChange={e => setPrImg(e.target.value)} />
-                                                        <button className="bento-save" onClick={addBlock}>Add Product</button>
+                                                        <button className="btn-primary" onClick={addBlock}>Add Product</button>
                                                     </div>
                                                 )}
                                             </div>
