@@ -102,7 +102,6 @@ async function syncProfileToAppwrite(updated: User): Promise<void> {
         bgImage: sanitize(updated.bgImage),
         links: JSON.stringify(updated.links || []),
         blocks: JSON.stringify(updated.blocks || []),
-        plan: updated.plan || 'free',
     };
 
     let docId = docIdCache[updated.id];
