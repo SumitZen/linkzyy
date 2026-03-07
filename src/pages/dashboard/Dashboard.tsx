@@ -229,8 +229,8 @@ export default function Dashboard() {
                         </button>
                     </div>
                     <div className="bento-subnav-user">
-                        <span style={{ color: '#9ca3af', fontWeight: 500, marginRight: 6 }}>Logged in as</span>
-                        <span style={{ fontWeight: 600, color: '#111' }}>{user?.email}</span>
+                        <span style={{ color: 'var(--text-tertiary)', fontWeight: 500, marginRight: 6 }}>Logged in as</span>
+                        <span style={{ fontWeight: 600, color: 'var(--text-secondary)' }}>{user?.email}</span>
                     </div>
                 </div>
             </div>

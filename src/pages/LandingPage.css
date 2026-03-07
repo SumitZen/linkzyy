@@ -39,14 +39,15 @@ h6 {
     justify-content: space-between;
     padding: 0 28px;
     height: 60px;
-    background: rgba(255, 255, 255, 0.95);
-    border: 1px solid #E5E5E5;
+    background: rgba(10, 10, 15, 0.7);
+    backdrop-filter: var(--blur-heavy);
+    -webkit-backdrop-filter: var(--blur-heavy);
+    border: 1px solid var(--border-glass);
     border-radius: 9999px;
-    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.06);
+    box-shadow: var(--shadow-glass);
     max-width: 1100px;
     width: calc(100% - 48px);
-    transition: box-shadow 0.2s ease;
-    backdrop-filter: none;
+    transition: all 0.2s ease;
 }
 
 .nav-logo {
@@ -791,24 +792,27 @@ h6 {
     top: calc(100% + 12px);
     left: 0;
     right: 0;
-    background: var(--surface-1);
-    border: var(--border-subtle);
+    background: var(--bg-elevated);
+    backdrop-filter: var(--blur-heavy);
+    -webkit-backdrop-filter: var(--blur-heavy);
+    border: 1px solid var(--border-glass-strong);
     border-radius: 20px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+    box-shadow: var(--shadow-elevated);
     display: flex;
     flex-direction: column;
     padding: 16px 20px;
     gap: 4px;
     z-index: 1000;
+    text-align: center;
 }
 
 .nav-mobile-menu a {
-    color: var(--text-dark);
+    color: var(--text-primary);
     text-decoration: none;
     font-size: 0.95rem;
     font-weight: 500;
-    padding: 10px 0;
-    border-bottom: 1px solid transparent;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border-subtle);
 }
 
 .nav-mobile-menu a:hover {
@@ -823,8 +827,6 @@ h6 {
         top: 12px;
         padding: 0 20px;
         height: 56px;
-        width: calc(100% - 24px);
-        position: relative;
     }
 
     .nav-links--desktop,
