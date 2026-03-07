@@ -62,8 +62,10 @@ export default function PublicProfile() {
         );
     }
 
-    const theme = templatesList.find(t => t.id === profile.theme) ?? templatesList[0];
-    const previewBg = profile.bgImage ? `url(${profile.bgImage}) center/cover no-repeat` : profile.bgColor || theme.screenBg;
+    const rawThemeString = profile.theme || 'editorial-light';
+    const [themeId, manualTextColor] = rawThemeString.includes('|') ? rawThemeString.split('|') : [rawThemeString, ''];
+    const theme = templatesList.find(t => t.id === themeId) ?? templatesList[0];
+    const previewBg = profile.bgImage ? `url(${profile.bgImage}) top center/cover no-repeat` : profile.bgColor || theme.screenBg;
 
     const forceParseJSON = (data: unknown): any[] => {
         if (!data) return [];
@@ -146,7 +148,7 @@ export default function PublicProfile() {
                 <h1 style={{ 
                     fontSize: '1.5rem', 
                     fontWeight: 700, 
-                    color: profile.textColor || (profile.bgImage ? '#fff' : (profile.bgColor ? getContrastingColor(profile.bgColor) : theme.textColor)), 
+                    color: manualTextColor || (profile.bgImage ? '#fff' : (profile.bgColor ? getContrastingColor(profile.bgColor) : theme.textColor)), 
                     textShadow: profile.bgImage ? '0 2px 10px rgba(0,0,0,0.5)' : 'none',
                     textAlign: 'center', 
                     marginBottom: 8, 
@@ -156,8 +158,8 @@ export default function PublicProfile() {
                 </h1>
                 <p style={{ 
                     fontSize: '1rem', 
-                    color: profile.textColor || (profile.bgImage ? '#fff' : (profile.bgColor ? getContrastingColor(profile.bgColor) : theme.textColor)), 
-                    opacity: profile.textColor || profile.bgImage ? 1 : 0.8,
+                    color: manualTextColor || (profile.bgImage ? '#fff' : (profile.bgColor ? getContrastingColor(profile.bgColor) : theme.textColor)), 
+                    opacity: manualTextColor || profile.bgImage ? 1 : 0.8,
                     textShadow: profile.bgImage ? '0 1px 4px rgba(0,0,0,0.4)' : 'none',
                     textAlign: 'center', 
                     marginBottom: 32, 

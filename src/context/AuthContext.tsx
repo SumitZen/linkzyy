@@ -96,14 +96,13 @@ async function syncProfileToAppwrite(updated: User): Promise<void> {
     const dbPayload: any = {
         displayName: sanitize(updated.name),
         bio: sanitize(updated.bio),
-        theme: updated.theme || 'editorial-light',
+        theme: updated.textColor ? `${updated.theme}|${updated.textColor}` : (updated.theme || 'editorial-light'),
         bgColor: sanitize(updated.bgColor),
         avatarUrl: sanitize(updated.avatarUrl),
         bannerUrl: sanitize(updated.bannerUrl),
         bgImage: sanitize(updated.bgImage),
         links: JSON.stringify(updated.links || []),
         blocks: JSON.stringify(updated.blocks || []),
-        textColor: sanitize(updated.textColor),
     };
 
     let docId = docIdCache[updated.id];
@@ -197,6 +196,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                     if (res.documents.length > 0) {
                         const doc = res.documents[0];
                         docIdCache[awUser.$id] = doc.$id;
+
+                        const rawTheme = doc.theme || 'editorial-light';
+                        const [themeId, textColorFromTheme] = rawTheme.includes('|') ? rawTheme.split('|') : [rawTheme, ''];
+
                         extra = {
                             username: doc.username || undefined,
                             name: doc.displayName || undefined,
@@ -205,11 +208,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                             bannerUrl: doc.bannerUrl || '',
                             bgColor: doc.bgColor || '',
                             bgImage: doc.bgImage || '',
-                            theme: doc.theme || 'editorial-light',
+                            theme: themeId,
                             plan: (doc.plan as User['plan']) || 'free',
                             links: parseField(doc.links) as LinkItem[],
                             blocks: parseField(doc.blocks) as Block[],
-                            textColor: doc.textColor || '',
+                            textColor: textColorFromTheme || doc.textColor || '',
                         };
                     } else {
                         // No document yet — fall back to localStorage
