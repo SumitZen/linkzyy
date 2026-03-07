@@ -453,3 +453,294 @@
 .bento-toggle input:checked + .bento-toggle-track { background: var(--accent); }
 .bento-toggle input:checked + .bento-toggle-track:before { transform: translateX(20px); }
 .bento-toggle input { opacity: 0; width: 0; height: 0; }
+
+/* ════ DASHBOARD FORM REFINEMENTS (Appearance & Settings) ════ */
+
+/* Standardized Glass Card (maps to .bento-card and .promo-card) */
+.bento-card, .promo-card, .dashboard-section-card {
+  background: rgba(255,255,255,0.06);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 20px;
+  padding: 32px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.25),
+              inset 0 1px 0 rgba(255,255,255,0.08);
+  margin-bottom: 24px;
+}
+
+/* Field Group Mapping (.field-group -> .bento-field-row) */
+.bento-field-row, .field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 20px;
+  max-width: 520px;
+}
+
+/* Field Label Mapping */
+.bento-field-label, .field-label, .field-group label {
+  font-size: 0.813rem;
+  font-weight: 500;
+  color: rgba(255,255,255,0.55);
+  letter-spacing: 0.01em;
+  margin-bottom: 4px;
+  display: block;
+}
+
+/* Text inputs & textareas (.bento-input -> .dashboard-input) */
+.bento-input, .dashboard-input,
+.bento-field-row input[type="text"],
+.bento-field-row input[type="email"],
+.bento-field-row input[type="url"],
+.bento-field-row textarea {
+  width: 100%;
+  padding: 11px 16px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 10px;
+  color: rgba(255,255,255,0.92);
+  font-size: 0.938rem;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+}
+
+.bento-input::placeholder {
+  color: rgba(255,255,255,0.22);
+}
+
+.bento-input:focus {
+  border-color: #7c3aed;
+  background: rgba(255,255,255,0.09);
+  box-shadow: 0 0 0 3px rgba(124,58,237,0.22),
+              inset 0 1px 0 rgba(255,255,255,0.05);
+}
+
+.bento-input[disabled], .bento-input[readonly] {
+  background: rgba(255,255,255,0.03);
+  color: rgba(255,255,255,0.35);
+  cursor: not-allowed;
+  border-color: rgba(255,255,255,0.07);
+  opacity: 1; /* Reset default browser opacity */
+}
+
+/* Buttons and Actions */
+.bento-save, .btn-save {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px 28px;
+  background: #7c3aed;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.938rem;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition: opacity 0.15s ease, transform 0.2s ease;
+  min-height: 44px;
+  box-shadow: 0 4px 16px rgba(124,58,237,0.35);
+}
+
+.bento-save:hover {
+  opacity: 0.87;
+  transform: translateY(-1px);
+}
+
+/* Logout button in settings */
+.bento-save + button, .btn-logout {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 11px 24px;
+  background: transparent !important;
+  color: rgba(248,113,113,0.85) !important;
+  border: 1px solid rgba(248,113,113,0.35) !important;
+  border-radius: 10px !important;
+  font-size: 0.938rem !important;
+  font-weight: 500 !important;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+  min-height: 44px;
+}
+
+.bento-save + button:hover {
+  background: rgba(248,113,113,0.10) !important;
+  border-color: rgba(248,113,113,0.60) !important;
+}
+
+.bento-ghost, .btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 11px 20px;
+  background: rgba(255,255,255,0.07);
+  color: rgba(255,255,255,0.70);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 10px;
+  font-size: 0.875rem;
+  font-weight: 400;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.15s ease;
+  min-height: 44px;
+}
+
+.bento-ghost:hover {
+  background: rgba(255,255,255,0.11);
+}
+
+/* Appearance Specifics */
+.profile-photo-upload, .bento-field-row:has(.bento-field-avatar-sq) {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 20px !important;
+  margin-bottom: 24px !important;
+}
+
+.bento-field-avatar-sq {
+  width: 80px !important;
+  height: 80px !important;
+  min-width: 80px;
+  border-radius: 50% !important;
+  object-fit: cover;
+  border: 2px solid rgba(255,255,255,0.15);
+  flex-shrink: 0;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bento-field-avatar-sq img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-photo-upload__actions { display: flex; flex-direction: column; gap: 8px; }
+
+/* Upload labels (bento-btn -> bento-ghost styling for uploads) */
+.bento-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 18px;
+  background: rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.75);
+  border: 1px solid rgba(255,255,255,0.14);
+  border-radius: 10px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s ease;
+  min-height: 44px;
+}
+.bento-btn:hover { background: rgba(255,255,255,0.12); }
+
+/* Color overrides */
+.bento-field-row input[type="color"] {
+  width: 44px !important;
+  height: 44px !important;
+  border: 1.5px solid rgba(255,255,255,0.15) !important;
+  background: none !important;
+  border-radius: 8px !important;
+  cursor: pointer;
+  padding: 2px !important;
+}
+
+/* Theme preset update */
+.bento-theme-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.bento-theme-btn {
+  position: relative;
+  background: rgba(255,255,255,0.04) !important;
+  backdrop-filter: blur(8px);
+  border: 2px solid transparent !important;
+  border-radius: 12px !important;
+  overflow: hidden;
+  padding: 8px !important;
+  cursor: pointer;
+  transition: border-color 0.15s ease, transform 0.15s ease, background 0.15s ease;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  min-height: auto !important;
+  width: 100% !important;
+  height: auto !important;
+}
+
+.bento-theme-btn:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255,255,255,0.25) !important;
+  background: rgba(255,255,255,0.07) !important;
+}
+
+.bento-theme-btn.sel {
+  border-color: #7c3aed !important;
+  background: rgba(124,58,237,0.1) !important;
+  box-shadow: 0 0 0 1px #7c3aed;
+}
+
+.bento-theme-name {
+  margin-top: 8px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: rgba(255,255,255,0.7);
+}
+
+.bento-tick { display: none; } /* Hide legacy tick if styling handles it */
+
+/* Settings Specifics */
+.bento-url-row, .settings-url-field {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 11px 16px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 10px;
+  font-family: monospace;
+  font-size: 0.875rem;
+  width: 100%;
+  max-width: 480px;
+}
+
+.bento-url-pre { color: rgba(255,255,255,0.3); }
+.bento-url-val { color: rgba(255,255,255,0.6); font-weight: 600; }
+
+/* Promo card input row */
+.promo-card__input-row, .promo-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+  width: 100%;
+}
+
+.promo-card__input-row input { flex: 1; min-width: 0; }
+.promo-card__input-row button { white-space: nowrap; flex-shrink: 0; }
+
+/* Responsive tweaks */
+@media (max-width: 600px) {
+  .bento-theme-grid { grid-template-columns: repeat(2, 1fr) !important; }
+}
+
+@media (max-width: 480px) {
+  .bento-card { padding: 24px 20px; border-radius: 16px; }
+  .bento-save, .bento-save + button, .bento-ghost, .bento-btn { width: 100%; }
+  .promo-card__input-row { flex-direction: column; align-items: stretch; }
+  .bento-field-row { max-width: 100%; }
+  .bento-theme-grid { grid-template-columns: 1fr !important; }
+}
