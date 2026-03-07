@@ -211,110 +211,102 @@ export default function Dashboard() {
     };
 
     return (
-        <div className="bento-root">
+        <div className="dashboard-wrapper">
             <Navbar />
 
-            {/* ── TOP SUB-NAVIGATION ── */}
-            <div className="bento-subnav-bar">
-                <div className="bento-subnav-content">
-                    <div className="bento-subnav-tabs">
-                        <button className={`bento-subnav-tab${activeTab === 'links' ? ' active' : ''}`} onClick={() => setActiveTab('links')}>
-                            Links
-                        </button>
-                        <button className={`bento-subnav-tab${activeTab === 'appearance' ? ' active' : ''}`} onClick={() => setActiveTab('appearance')}>
-                            Appearance
-                        </button>
-                        <button className={`bento-subnav-tab${activeTab === 'settings' ? ' active' : ''}`} onClick={() => setActiveTab('settings')}>
-                            Settings
-                        </button>
-                    </div>
-                    <div className="bento-subnav-user">
-                        <span style={{ color: 'var(--text-tertiary)', fontWeight: 500, marginRight: 6 }}>Logged in as</span>
-                        <span style={{ fontWeight: 600, color: 'var(--text-secondary)' }}>{user?.email}</span>
+            {/* ── SECTION 2 / 7 — TOP SUB-NAVIGATION & MOBILE BOTTOM NAV ── */}
+            <nav className="bento-subnav">
+                <button className={`bento-subnav__tab${activeTab === 'links' ? ' bento-subnav__tab--active' : ''}`} onClick={() => setActiveTab('links')}>
+                    🔗 Links
+                </button>
+                <button className={`bento-subnav__tab${activeTab === 'appearance' ? ' bento-subnav__tab--active' : ''}`} onClick={() => setActiveTab('appearance')}>
+                    🎨 Appearance
+                </button>
+                <button className={`bento-subnav__tab${activeTab === 'settings' ? ' bento-subnav__tab--active' : ''}`} onClick={() => setActiveTab('settings')}>
+                    ⚙️ Settings
+                </button>
+
+                <div className="bento-subnav__right">
+                    <div className="bento-url-copy" onClick={() => navigator.clipboard?.writeText?.(`${window.location.origin}/${user?.id}`)}>
+                        <span>{window.location.host}/{user?.id}</span>
+                        <small>Copy</small>
                     </div>
                 </div>
-            </div>
+            </nav>
 
-            <div className="bento-app-container">
+            {/* Mobile Bottom Nav */}
+            <nav className="bento-mobile-nav">
+                <button className={`bento-mobile-nav__item${activeTab === 'links' ? ' bento-mobile-nav__item--active' : ''}`} onClick={() => setActiveTab('links')}>
+                    <span className="bento-mobile-nav__icon">🔗</span>
+                    <span className="bento-mobile-nav__label">Links</span>
+                </button>
+                <button className={`bento-mobile-nav__item${activeTab === 'appearance' ? ' bento-mobile-nav__item--active' : ''}`} onClick={() => setActiveTab('appearance')}>
+                    <span className="bento-mobile-nav__icon">🎨</span>
+                    <span className="bento-mobile-nav__label">Style</span>
+                </button>
+                <button className={`bento-mobile-nav__item${activeTab === 'settings' ? ' bento-mobile-nav__item--active' : ''}`} onClick={() => setActiveTab('settings')}>
+                    <span className="bento-mobile-nav__icon">⚙️</span>
+                    <span className="bento-mobile-nav__label">Setup</span>
+                </button>
+            </nav>
 
-                {/* ── MOBILE BOTTOM NAV ── */}
-                <nav className="bento-tablet-nav">
-                    <div className="bento-tablet-dock">
-                        <button className={`bento-tablet-btn${activeTab === 'links' ? ' active' : ''}`} onClick={() => setActiveTab('links')}>
-                            <span className="bento-tablet-icon">🔗</span>
-                            Links
-                        </button>
-                        <button className={`bento-tablet-btn${activeTab === 'appearance' ? ' active' : ''}`} onClick={() => setActiveTab('appearance')}>
-                            <span className="bento-tablet-icon">✨</span>
-                            Appearance
-                        </button>
-                        <button className={`bento-tablet-btn${activeTab === 'settings' ? ' active' : ''}`} onClick={() => setActiveTab('settings')}>
-                            <span className="bento-tablet-icon">⚙️</span>
-                            Settings
-                        </button>
-                    </div>
-                </nav>
-
-                <main className="bento-main-view">
-                    {/* ── BENTO GRID ── */}
-                    <div className="bento-grid">
-
-                        {/* ── CROP MODAL (Global) ── */}
-                        {cropImageSrc && (
-                            <div className="crop-overlay">
-                                <div className="crop-modal">
-                                    <div className="crop-modal__header">
-                                        <div>
-                                            <div className="crop-modal__title">
-                                                {cropType === 'avatar' ? 'Crop Profile Photo' : cropType === 'banner' ? 'Crop Banner Image' : 'Crop Background'}
-                                            </div>
-                                            <div className="crop-modal__hint">
-                                                {cropType === 'avatar' ? 'Drag to reposition · Scroll or use slider to zoom' : 'Drag to reposition · Use slider to zoom'}
-                                            </div>
-                                        </div>
-                                        <button className="crop-modal__close" onClick={() => setCropImageSrc(null)} aria-label="Close">✕</button>
-                                    </div>
-
-                                    <div className="crop-modal__canvas">
-                                        <Cropper
-                                            image={cropImageSrc}
-                                            crop={crop}
-                                            zoom={zoom}
-                                            aspect={cropType === 'avatar' ? 1 : cropType === 'banner' ? 3 / 1 : 9 / 16}
-                                            cropShape={cropType === 'avatar' ? 'round' : 'rect'}
-                                            onCropChange={setCrop}
-                                            onZoomChange={setZoom}
-                                            onCropComplete={onCropComplete}
-                                            showGrid={false}
-                                        />
-                                    </div>
-
-                                    <div className="crop-modal__footer">
-                                        <div className="crop-modal__zoom">
-                                            <span className="crop-modal__zoom-label">Zoom</span>
-                                            <input
-                                                type="range"
-                                                min={1}
-                                                max={3}
-                                                step={0.05}
-                                                value={zoom}
-                                                onChange={e => setZoom(Number(e.target.value))}
-                                                className="crop-modal__zoom-slider"
-                                            />
-                                            <span className="crop-modal__zoom-val">{Math.round(zoom * 100)}%</span>
-                                        </div>
-                                        <div className="crop-modal__actions">
-                                            <button className="bento-ghost" onClick={() => setCropImageSrc(null)} disabled={isUploading}>Cancel</button>
-                                            <button className="bento-save" onClick={uploadCroppedImage} disabled={isUploading}>
-                                                {isUploading ? 'Saving…' : 'Crop & Save'}
-                                            </button>
-                                        </div>
-                                    </div>
+            {/* ── CROP MODAL (Global) ── */}
+            {cropImageSrc && (
+                <div className="crop-overlay">
+                    <div className="crop-modal">
+                        <div className="crop-modal__header">
+                            <div>
+                                <div className="crop-modal__title">
+                                    {cropType === 'avatar' ? 'Crop Profile Photo' : cropType === 'banner' ? 'Crop Banner Image' : 'Crop Background'}
+                                </div>
+                                <div className="crop-modal__hint">
+                                    {cropType === 'avatar' ? 'Drag to reposition · Scroll or use slider to zoom' : 'Drag to reposition · Use slider to zoom'}
                                 </div>
                             </div>
-                        )}
+                            <button className="crop-modal__close" onClick={() => setCropImageSrc(null)} aria-label="Close">✕</button>
+                        </div>
 
-                        <div className="bento-left-col">
+                        <div className="crop-modal__canvas">
+                            <Cropper
+                                image={cropImageSrc}
+                                crop={crop}
+                                zoom={zoom}
+                                aspect={cropType === 'avatar' ? 1 : cropType === 'banner' ? 3 / 1 : 9 / 16}
+                                cropShape={cropType === 'avatar' ? 'round' : 'rect'}
+                                onCropChange={setCrop}
+                                onZoomChange={setZoom}
+                                onCropComplete={onCropComplete}
+                                showGrid={false}
+                            />
+                        </div>
+
+                        <div className="crop-modal__footer">
+                            <div className="crop-modal__zoom">
+                                <span className="crop-modal__zoom-label">Zoom</span>
+                                <input
+                                    type="range"
+                                    min={1}
+                                    max={3}
+                                    step={0.05}
+                                    value={zoom}
+                                    onChange={e => setZoom(Number(e.target.value))}
+                                    className="crop-modal__zoom-slider"
+                                />
+                                <span className="crop-modal__zoom-val">{Math.round(zoom * 100)}%</span>
+                            </div>
+                            <div className="crop-modal__actions">
+                                <button className="bento-ghost" onClick={() => setCropImageSrc(null)} disabled={isUploading}>Cancel</button>
+                                <button className="bento-save" onClick={uploadCroppedImage} disabled={isUploading}>
+                                    {isUploading ? 'Saving…' : 'Crop & Save'}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            <div className="bento-layout">
+                <main className="bento-left-col">
 
 
                             {savedMsg && <div className="bento-toast">{savedMsg}</div>}
@@ -322,34 +314,43 @@ export default function Dashboard() {
                             {/* ── LINKS TAB (Includes Stats) ── */}
                             {activeTab === 'links' && (
                                 <div className="bento-fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-                                    <div>
-                                        <h1 className="bento-page-title">Links & Blocks</h1>
-                                        <p className="bento-page-sub">Manage the content on your Linkzy profile.</p>
+                                    <header className="bento-page-header">
+                                        <h1>Links & Blocks</h1>
+                                        <p>Manage the content on your Linkzy profile.</p>
+                                    </header>
+
+                                    {/* SECTION 9 — Quick Actions Bar */}
+                                    <div className="quick-actions-bar">
+                                        <div className="quick-actions-bar__url">{window.location.host}/{user?.id}</div>
+                                        <button className="quick-actions-bar__btn quick-actions-bar__btn--copy" onClick={() => navigator.clipboard?.writeText?.(`${window.location.origin}/${user?.id}`)}>
+                                            Copy Link
+                                        </button>
+                                        <button className="quick-actions-bar__btn quick-actions-bar__btn--preview" onClick={() => navigate(`/${user?.id}`)}>
+                                            Preview
+                                        </button>
                                     </div>
 
-                                    <div className="bento-stat-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
-                                        <div className="bento-card bento-stat bento-stat-purple">
-                                            <div className="bento-stat-icon">🔗</div>
-                                            <div className="bento-stat-label">Active Links</div>
-                                            <div className="bento-stat-value" style={{ color: '#7c3aed' }}>
+                                    <div className="stats-grid">
+                                        <div className="stat-card">
+                                            <div className="stat-card__icon">🔗</div>
+                                            <div className="stat-card__label">Active Links</div>
+                                            <div className="stat-card__value">
                                                 {links.filter(l => l.enabled).length + blocks.filter(b => b.enabled).length}
                                             </div>
-                                            <div className="bento-stat-sub">of {links.length + blocks.length} total</div>
+                                            <div className="stat-card__sub">of {links.length + blocks.length} total</div>
                                         </div>
-                                        <div className="bento-card bento-stat bento-stat-green">
-                                            <div className="bento-stat-icon">👁</div>
-                                            <div className="bento-stat-label">Profile Views</div>
-                                            <div className="bento-stat-value" style={{ color: '#10b981' }}>—</div>
-                                            <div className="bento-stat-sub">Tracking coming soon</div>
+                                        <div className="stat-card">
+                                            <div className="stat-card__icon">👁</div>
+                                            <div className="stat-card__label">Profile Views</div>
+                                            <div className="stat-card__value">—</div>
+                                            <div className="stat-card__sub">Tracking coming soon</div>
                                         </div>
                                     </div>
-                                    <div className="bento-card bento-links-card">
-                                        <div className="bento-card-header">
-                                            <h2 className="bento-card-title">Your Links</h2>
-                                        </div>
+                                    <div className="links-card">
+                                        <h2 className="links-card__title">Your Links</h2>
 
                                         {/* Simple add row */}
-                                        <div className="bento-simple-add" style={{ position: 'relative' }}>
+                                        <div className="links-add-row" style={{ position: 'relative' }}>
                                             {/* Brand new interactive icon picker popup */}
                                             <div className="bento-icon-picker-btn" onClick={() => setIsIconPickerOpen(!isIconPickerOpen)}>
                                                 <PlatformIcon id={newIcon} size={20} />
@@ -379,20 +380,18 @@ export default function Dashboard() {
                                             )}
 
                                             <input
-                                                className="bento-input bento-flex1"
-                                                placeholder="Title  (e.g. My Website)"
+                                                placeholder="Title"
                                                 value={newLabel}
                                                 onChange={e => setNewLabel(e.target.value)}
                                                 onKeyDown={e => e.key === 'Enter' && addLink()}
                                             />
                                             <input
-                                                className="bento-input bento-flex2"
-                                                placeholder="URL  (e.g. example.com)"
+                                                placeholder="URL"
                                                 value={newUrl}
                                                 onChange={e => setNewUrl(e.target.value)}
                                                 onKeyDown={e => e.key === 'Enter' && addLink()}
                                             />
-                                            <button className="bento-add-link-btn" onClick={addLink}>+ Add</button>
+                                            <button className="btn-add-link" onClick={addLink}>+ Add</button>
                                         </div>
 
                                         {/* Advanced block toggle */}
@@ -439,44 +438,48 @@ export default function Dashboard() {
                                         )}
 
                                         {/* List */}
-                                        <div className="bento-link-list">
+                                        <div className="link-list">
                                             {links.length === 0 && blocks.length === 0 && (
                                                 <div className="bento-empty">✦ Add your first link above to get started</div>
                                             )}
                                             {links.map(link => (
-                                                <div key={link.id} className={`bento-link-row${!link.enabled ? ' off' : ''}`}>
-                                                    <div className="bento-link-icon-sq">
+                                                <div key={link.id} className={`link-item${!link.enabled ? ' off' : ''}`}>
+                                                    <div className="link-item__icon">
                                                         <PlatformIcon id={link.icon} size={18} />
                                                     </div>
-                                                    <div className="bento-link-info">
-                                                        <div className="bento-link-name">{link.label}</div>
-                                                        <div className="bento-link-url">{link.url}</div>
+                                                    <div className="link-item__text">
+                                                        <div className="link-item__title">{link.label}</div>
+                                                        <div className="link-item__url">{link.url}</div>
                                                     </div>
-                                                    <label className="bento-toggle">
-                                                        <input type="checkbox" checked={link.enabled} onChange={() => toggleLink(link.id)} />
-                                                        <span className="bento-toggle-track" />
-                                                    </label>
-                                                    <button className="bento-del" title="Remove" onClick={() => removeLink(link.id)}>✕</button>
+                                                    <div className="link-item__actions">
+                                                        <label className="bento-toggle">
+                                                            <input type="checkbox" checked={link.enabled} onChange={() => toggleLink(link.id)} />
+                                                            <span className="bento-toggle-track" />
+                                                        </label>
+                                                        <button className="link-item__delete" title="Remove" onClick={() => removeLink(link.id)}>✕</button>
+                                                    </div>
                                                 </div>
                                             ))}
                                             {blocks.map(block => (
-                                                <div key={block.id} className={`bento-link-row${!block.enabled ? ' off' : ''}`}>
-                                                    <div className="bento-link-icon-sq">
+                                                <div key={block.id} className={`link-item${!block.enabled ? ' off' : ''}`}>
+                                                    <div className="link-item__icon">
                                                         <PlatformIcon id={block.type === 'music' ? 'music' : block.type === 'photo' ? 'globe' : 'store'} size={18} />
                                                     </div>
-                                                    <div className="bento-link-info">
-                                                        <div className="bento-link-name">
+                                                    <div className="link-item__text">
+                                                        <div className="link-item__title">
                                                             {block.type === 'music' ? (block as MusicBlock).title
                                                                 : block.type === 'photo' ? ((block as PhotoBlock).caption || 'Photo Gallery')
                                                                     : (block as ProductBlock).name}
                                                         </div>
-                                                        <div className="bento-link-url">{block.type} block</div>
+                                                        <div className="link-item__url">{block.type} block</div>
                                                     </div>
-                                                    <label className="bento-toggle">
-                                                        <input type="checkbox" checked={block.enabled} onChange={() => toggleBlock(block.id)} />
-                                                        <span className="bento-toggle-track" />
-                                                    </label>
-                                                    <button className="bento-del" title="Remove" onClick={() => removeBlock(block.id)}>✕</button>
+                                                    <div className="link-item__actions">
+                                                        <label className="bento-toggle">
+                                                            <input type="checkbox" checked={block.enabled} onChange={() => toggleBlock(block.id)} />
+                                                            <span className="bento-toggle-track" />
+                                                        </label>
+                                                        <button className="link-item__delete" title="Remove" onClick={() => removeBlock(block.id)}>✕</button>
+                                                    </div>
                                                 </div>
                                             ))}
                                         </div>
@@ -487,10 +490,10 @@ export default function Dashboard() {
                             {/* ── APPEARANCE ── */}
                             {activeTab === 'appearance' && (
                                 <div className="bento-fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-                                    <div>
-                                        <h1 className="bento-page-title">Appearance</h1>
-                                        <p className="bento-page-sub">Customise how your public profile looks.</p>
-                                    </div>
+                                    <header className="bento-page-header">
+                                        <h1>Appearance</h1>
+                                        <p>Customise how your public profile looks.</p>
+                                    </header>
 
                                     <div className="bento-card" style={{ padding: '32px' }}>
                                         {/* Avatar */}
@@ -613,10 +616,10 @@ export default function Dashboard() {
                             {/* ── SETTINGS ── */}
                             {activeTab === 'settings' && (
                                 <div className="bento-fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-                                    <div>
-                                        <h1 className="bento-page-title">Settings</h1>
-                                        <p className="bento-page-sub">Manage your account details.</p>
-                                    </div>
+                                    <header className="bento-page-header">
+                                        <h1>Settings</h1>
+                                        <p>Manage your account details.</p>
+                                    </header>
 
                                     <div className="bento-card" style={{ padding: '32px' }}>
                                         <div className="bento-field-row" style={{ paddingTop: 0 }}>
@@ -698,98 +701,90 @@ export default function Dashboard() {
                                     </div>
                                 </div>
                             )} {/* End Settings Tab */}
-                        </div> {/* End Left Col */}
+                        </main>
 
-                        {/* ── LIVE PREVIEW (Floating Phone) ── */}
-                        <div className="bento-right-col" style={{ display: 'flex', flexDirection: 'column', gap: '24px', alignItems: 'center' }}>
-                            <div className="bento-share-box" style={{ width: '100%', maxWidth: '280px', background: 'var(--surface-1)', border: 'var(--border-subtle)', borderRadius: '16px', padding: '12px 16px', boxShadow: 'var(--shadow-layer-1)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                <span className="bento-share-url" style={{ color: 'var(--text-dark)', fontWeight: 600, fontSize: '0.85rem' }}>{window.location.host}/{user?.id}</span>
-                                <button className="bento-copy" style={{ background: 'color-mix(in srgb, var(--text-dark) 85%, transparent)', color: 'var(--bg-color)', backdropFilter: 'blur(12px)', padding: '6px 12px', borderRadius: '8px' }} onClick={() => navigator.clipboard?.writeText?.(`${window.location.origin}/${user?.id}`)}>Copy</button>
-                            </div>
+                <aside className="bento-right-col">
+                    <div className="bento-preview-label" style={{ alignSelf: 'center', margin: '4px 0 16px', letterSpacing: '0.15em', opacity: 0.6, fontSize: '0.65rem', fontWeight: 700 }}>LIVE PREVIEW</div>
 
-                            <div className="bento-preview-label" style={{ alignSelf: 'center', margin: '4px 0 8px', letterSpacing: '0.15em', opacity: 0.6 }}>LIVE PREVIEW</div>
-
-                            <div className="bento-phone-wrap">
-                                <div className="bento-phone">
-                                    <div className="bento-phone-content" style={{ background: previewBg, display: 'flex', flexDirection: 'column' }}>
-                                        {bannerUrl && (
-                                            <div style={{ width: '100%', height: 110, backgroundImage: `url(${bannerUrl})`, backgroundSize: 'cover', backgroundPosition: 'center', flexShrink: 0 }} />
-                                        )}
-                                        <div style={{
-                                            width: '100%',
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                            alignItems: 'center',
-                                            marginTop: bannerUrl ? -40 : 40,
-                                            padding: '0 20px 40px',
-                                            position: 'relative',
-                                            zIndex: 10,
-                                            flex: 1
-                                        }}>
-                                            <div className="bento-phone-avatar" style={{
-                                                width: 80, height: 80, borderRadius: '50%', marginBottom: 16, background: '#333',
-                                                display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', border: '3px solid rgba(255,255,255,0.15)', boxShadow: '0 8px 24px rgba(0,0,0,0.15)', flexShrink: 0
-                                            }}>
-                                                {avatarUrl
-                                                    ? <img src={avatarUrl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                                                    : <span style={{ fontSize: '1.5rem', fontWeight: 700, color: 'rgba(255,255,255,0.9)' }}>{(name || user?.name || 'U').charAt(0).toUpperCase()}</span>
-                                                }
-                                            </div>
-                                            <div style={{ 
-                                                fontSize: '1.1rem', 
-                                                fontWeight: 700, 
-                                                color: manualTextColor || (bgImage ? '#fff' : (bgColor ? getContrastingColor(bgColor) : theme.textColor)), 
-                                                textShadow: bgImage ? '0 2px 8px rgba(0,0,0,0.4)' : 'none',
-                                                textAlign: 'center', 
-                                                marginBottom: 4 
-                                            }}>{name || user?.name}</div>
-                                            <div style={{ 
-                                                fontSize: '0.85rem', 
-                                                color: manualTextColor || (bgImage ? '#fff' : (bgColor ? getContrastingColor(bgColor) : theme.textColor)), 
-                                                opacity: manualTextColor || bgImage ? 1 : 0.8,
-                                                textShadow: bgImage ? '0 1px 4px rgba(0,0,0,0.4)' : 'none',
-                                                textAlign: 'center', 
-                                                marginBottom: 24 
-                                            }}>{bio || user?.bio}</div>
-
-                                            <div style={{ display: 'flex', flexDirection: 'column', gap: 12, width: '100%', boxSizing: 'border-box' }}>
-                                                {links.filter(l => l.enabled).slice(0, 4).map(link => (
-                                                    <div key={link.id} style={{
-                                                        background: theme.btnBg,
-                                                        color: theme.btnText,
-                                                        borderRadius: theme.borderFormat === 'thick' ? 8 : 24,
-                                                        padding: '12px 16px',
-                                                        fontSize: '0.85rem',
-                                                        fontWeight: 600,
-                                                        display: 'flex',
-                                                        alignItems: 'center',
-                                                        gap: 10,
-                                                        border: theme.btnBorder !== 'none' ? theme.btnBorder : undefined,
-                                                        boxShadow: theme.btnShadow !== 'none' ? theme.btnShadow : undefined,
-                                                        backdropFilter: theme.backdropBlur !== 'none' ? theme.backdropBlur : undefined,
-                                                        WebkitBackdropFilter: theme.backdropBlur !== 'none' ? theme.backdropBlur : undefined,
-                                                        fontFamily: theme.fontFamily
-                                                    }}>
-                                                        <PlatformIcon id={link.icon} size={18} /><span>{link.label}</span>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                            <div style={{ 
-                                                width: '100%',
-                                                padding: '40px 0 24px', 
-                                                fontSize: '0.7rem', 
-                                                color: bgImage || (bgColor && getContrastingColor(bgColor).includes('255')) ? 'rgba(255,255,255,0.4)' : 'rgba(0,0,0,0.4)', 
-                                                textAlign: 'center', 
-                                                fontWeight: 600,
-                                                flexShrink: 0
-                                            }}>Powered by Linkzy</div>
-                                        </div>
+                    <div className="bento-phone-wrap">
+                        <div className="bento-phone">
+                            <div className="bento-phone-content" style={{ background: previewBg, display: 'flex', flexDirection: 'column' }}>
+                                {bannerUrl && (
+                                    <div style={{ width: '100%', height: 110, backgroundImage: `url(${bannerUrl})`, backgroundSize: 'cover', backgroundPosition: 'center', flexShrink: 0 }} />
+                                )}
+                                <div style={{
+                                    width: '100%',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    marginTop: bannerUrl ? -40 : 40,
+                                    padding: '0 20px 40px',
+                                    position: 'relative',
+                                    zIndex: 10,
+                                    flex: 1
+                                }}>
+                                    <div className="bento-phone-avatar" style={{
+                                        width: 80, height: 80, borderRadius: '50%', marginBottom: 16, background: '#333',
+                                        display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', border: '3px solid rgba(255,255,255,0.15)', boxShadow: '0 8px 24px rgba(0,0,0,0.15)', flexShrink: 0
+                                    }}>
+                                        {avatarUrl
+                                            ? <img src={avatarUrl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                            : <span style={{ fontSize: '1.5rem', fontWeight: 700, color: 'rgba(255,255,255,0.9)' }}>{(name || user?.name || 'U').charAt(0).toUpperCase()}</span>
+                                        }
                                     </div>
+                                    <div style={{ 
+                                        fontSize: '1.1rem', 
+                                        fontWeight: 700, 
+                                        color: manualTextColor || (bgImage ? '#fff' : (bgColor ? getContrastingColor(bgColor) : theme.textColor)), 
+                                        textShadow: bgImage ? '0 2px 8px rgba(0,0,0,0.4)' : 'none',
+                                        textAlign: 'center', 
+                                        marginBottom: 4 
+                                    }}>{name || user?.name}</div>
+                                    <div style={{ 
+                                        fontSize: '0.85rem', 
+                                        color: manualTextColor || (bgImage ? '#fff' : (bgColor ? getContrastingColor(bgColor) : theme.textColor)), 
+                                        opacity: manualTextColor || bgImage ? 1 : 0.8,
+                                        textShadow: bgImage ? '0 1px 4px rgba(0,0,0,0.4)' : 'none',
+                                        textAlign: 'center', 
+                                        marginBottom: 24 
+                                    }}>{bio || user?.bio}</div>
+
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: 12, width: '100%', boxSizing: 'border-box' }}>
+                                        {links.filter(l => l.enabled).slice(0, 4).map(link => (
+                                            <div key={link.id} style={{
+                                                background: theme.btnBg,
+                                                color: theme.btnText,
+                                                borderRadius: theme.borderFormat === 'thick' ? 8 : 24,
+                                                padding: '12px 16px',
+                                                fontSize: '0.85rem',
+                                                fontWeight: 600,
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                gap: 10,
+                                                border: theme.btnBorder !== 'none' ? theme.btnBorder : undefined,
+                                                boxShadow: theme.btnShadow !== 'none' ? theme.btnShadow : undefined,
+                                                backdropFilter: theme.backdropBlur !== 'none' ? theme.backdropBlur : undefined,
+                                                WebkitBackdropFilter: theme.backdropBlur !== 'none' ? theme.backdropBlur : undefined,
+                                                fontFamily: theme.fontFamily
+                                            }}>
+                                                <PlatformIcon id={link.icon} size={18} /><span>{link.label}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <div style={{ 
+                                        width: '100%',
+                                        padding: '40px 0 24px', 
+                                        fontSize: '0.7rem', 
+                                        color: bgImage || (bgColor && getContrastingColor(bgColor).includes('255')) ? 'rgba(255,255,255,0.4)' : 'rgba(0,0,0,0.4)', 
+                                        textAlign: 'center', 
+                                        fontWeight: 600,
+                                        flexShrink: 0
+                                    }}>Powered by Linkzy</div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </main>
+                </aside>
             </div>
         </div>
     );
