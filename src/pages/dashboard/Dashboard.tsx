@@ -709,7 +709,7 @@ export default function Dashboard() {
 
                             <div className="bento-phone-wrap">
                                 <div className="bento-phone">
-                                    <div className="bento-phone-content" style={{ background: previewBg }}>
+                                    <div className="bento-phone-content" style={{ background: previewBg, display: 'flex', flexDirection: 'column' }}>
                                         {bannerUrl && (
                                             <div style={{ width: '100%', height: 110, backgroundImage: `url(${bannerUrl})`, backgroundSize: 'cover', backgroundPosition: 'center', flexShrink: 0 }} />
                                         )}
@@ -721,7 +721,8 @@ export default function Dashboard() {
                                             marginTop: bannerUrl ? -40 : 40,
                                             padding: '0 20px 40px',
                                             position: 'relative',
-                                            zIndex: 10
+                                            zIndex: 10,
+                                            flex: 1
                                         }}>
                                             <div className="bento-phone-avatar" style={{
                                                 width: 80, height: 80, borderRadius: '50%', marginBottom: 16, background: '#333',
@@ -771,7 +772,15 @@ export default function Dashboard() {
                                                     </div>
                                                 ))}
                                             </div>
-                                            <div style={{ padding: '32px 0 0', fontSize: '0.7rem', color: theme.textColor, opacity: 0.4, textAlign: 'center', fontWeight: 500 }}>Powered by Linkzy</div>
+                                            <div style={{ 
+                                                width: '100%',
+                                                padding: '40px 0 24px', 
+                                                fontSize: '0.7rem', 
+                                                color: bgImage || (bgColor && getContrastingColor(bgColor).includes('255')) ? 'rgba(255,255,255,0.4)' : 'rgba(0,0,0,0.4)', 
+                                                textAlign: 'center', 
+                                                fontWeight: 600,
+                                                flexShrink: 0
+                                            }}>Powered by Linkzy</div>
                                         </div>
                                     </div>
                                 </div>

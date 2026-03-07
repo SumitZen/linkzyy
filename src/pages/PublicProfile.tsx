@@ -127,7 +127,8 @@ export default function PublicProfile() {
                 alignItems: 'center',
                 marginTop: profile.bannerUrl ? -52 : 64,
                 position: 'relative',
-                zIndex: 10
+                zIndex: 10,
+                flex: 1
             }}>
                 {/* Avatar */}
                 <div style={{
@@ -244,19 +245,17 @@ export default function PublicProfile() {
 
             </div> {/* End scrollable content wrap */}
 
-            {/* Bottom Watermark - Fixed at bottom */}
+            {/* Bottom Watermark - Pushed to bottom by flex: 1 above */}
             <div style={{ 
                 width: '100%',
-                padding: '24px 0', 
-                fontSize: '0.9rem', 
-                color: 'rgba(255,255,255,0.6)', 
+                padding: '40px 0 24px', 
+                fontSize: '0.85rem', 
+                color: profile.bgImage || (profile.bgColor && getContrastingColor(profile.bgColor).includes('255')) ? 'rgba(255,255,255,0.4)' : 'rgba(0,0,0,0.4)', 
                 textAlign: 'center', 
                 fontWeight: 600,
-                background: 'linear-gradient(to top, rgba(0,0,0,0.4), transparent)',
-                backdropFilter: 'blur(4px)',
-                WebkitBackdropFilter: 'blur(4px)'
+                flexShrink: 0
             }}>
-                <a href="/" style={{ color: 'inherit', textDecoration: 'none', textShadow: '0 1px 4px rgba(0,0,0,0.3)' }}>Powered by Linkzy</a>
+                <a href="/" style={{ color: 'inherit', textDecoration: 'none' }}>Powered by Linkzy</a>
             </div>
         </div>
     );
