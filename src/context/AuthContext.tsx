@@ -35,6 +35,7 @@ export interface User {
     links: LinkItem[];
     blocks: Block[];
     theme: string;
+    textColor?: string;
 }
 
 // ── Context type ─────────────────────────────────────────────────────────────
@@ -102,6 +103,7 @@ async function syncProfileToAppwrite(updated: User): Promise<void> {
         bgImage: sanitize(updated.bgImage),
         links: JSON.stringify(updated.links || []),
         blocks: JSON.stringify(updated.blocks || []),
+        textColor: sanitize(updated.textColor),
     };
 
     let docId = docIdCache[updated.id];
@@ -207,6 +209,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                             plan: (doc.plan as User['plan']) || 'free',
                             links: parseField(doc.links) as LinkItem[],
                             blocks: parseField(doc.blocks) as Block[],
+                            textColor: doc.textColor || '',
                         };
                     } else {
                         // No document yet — fall back to localStorage

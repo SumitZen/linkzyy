@@ -54,6 +54,7 @@ export default function Dashboard() {
             setBgColor(user.bgColor ?? '');
             setBgImage(user.bgImage ?? '');
             setSelTheme(user.theme ?? 'editorial-light');
+            setManualTextColor(user.textColor ?? '');
         }
     }, [user]);
 
@@ -79,6 +80,7 @@ export default function Dashboard() {
     const [bgColor, setBgColor] = useState(user?.bgColor ?? '');
     const [bgImage, setBgImage] = useState(user?.bgImage ?? '');
     const [selTheme, setSelTheme] = useState(user?.theme ?? 'editorial-light');
+    const [manualTextColor, setManualTextColor] = useState(user?.textColor ?? '');
 
     // ─── Image Crop & Upload state ───
     const [cropImageSrc, setCropImageSrc] = useState<string | null>(null);
@@ -145,7 +147,7 @@ export default function Dashboard() {
         setShowAdvanced(false);
     };
 
-    const saveAppearance = () => { updateUser({ name, bio, avatarUrl, bannerUrl, bgColor, bgImage, theme: selTheme }); flash(); };
+    const saveAppearance = () => { updateUser({ name, bio, avatarUrl, bannerUrl, bgColor, bgImage, theme: selTheme, textColor: manualTextColor }); flash(); };
 
     // ─── Cropping & Upload Logic ───
     const onFileChange = async (e: ChangeEvent<HTMLInputElement>, type: 'avatar' | 'banner' | 'background') => {
@@ -557,6 +559,16 @@ export default function Dashboard() {
                                             </div>
                                         </div>
 
+                                        {/* Manual Text color override */}
+                                        <div className="bento-field-row">
+                                            <label className="bento-field-label">Font Colour <span className="bento-hint">(overrides theme & auto-contrast)</span></label>
+                                            <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                                                <input type="color" value={manualTextColor || '#ffffff'} onChange={e => setManualTextColor(e.target.value)} style={{ width: 40, height: 36, border: '1.5px solid #e5e7eb', borderRadius: 8, padding: 2, cursor: 'pointer', flexShrink: 0 }} />
+                                                <input className="bento-input" style={{ flex: 1 }} placeholder="#hex or rgba()" value={manualTextColor} onChange={e => setManualTextColor(e.target.value)} />
+                                                {manualTextColor && <button className="bento-ghost" onClick={() => setManualTextColor('')}>Reset</button>}
+                                            </div>
+                                        </div>
+
                                         {/* Theme grid */}
                                         <div className="bento-field-row">
                                             <label className="bento-field-label">Theme Preset <span className="bento-hint">(base background gradient & UI style)</span></label>
@@ -578,6 +590,7 @@ export default function Dashboard() {
                                                         setSelTheme(t.id);
                                                         setBgImage('');
                                                         setBgColor('');
+                                                        setManualTextColor('');
                                                     }}>
                                                         <div className="bento-tp" style={{ background: t.bg }}>
                                                             <div className="bento-tp-circ" />
@@ -722,15 +735,15 @@ export default function Dashboard() {
                                             <div style={{ 
                                                 fontSize: '1.1rem', 
                                                 fontWeight: 700, 
-                                                color: bgImage ? '#fff' : (bgColor ? getContrastingColor(bgColor) : theme.textColor), 
+                                                color: manualTextColor || (bgImage ? '#fff' : (bgColor ? getContrastingColor(bgColor) : theme.textColor)), 
                                                 textShadow: bgImage ? '0 2px 8px rgba(0,0,0,0.4)' : 'none',
                                                 textAlign: 'center', 
                                                 marginBottom: 4 
                                             }}>{name || user?.name}</div>
                                             <div style={{ 
                                                 fontSize: '0.85rem', 
-                                                color: bgImage ? '#fff' : (bgColor ? getContrastingColor(bgColor) : theme.textColor), 
-                                                opacity: bgImage ? 1 : 0.8,
+                                                color: manualTextColor || (bgImage ? '#fff' : (bgColor ? getContrastingColor(bgColor) : theme.textColor)), 
+                                                opacity: manualTextColor || bgImage ? 1 : 0.8,
                                                 textShadow: bgImage ? '0 1px 4px rgba(0,0,0,0.4)' : 'none',
                                                 textAlign: 'center', 
                                                 marginBottom: 24 
