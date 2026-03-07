@@ -90,7 +90,6 @@ function buildUserFromAppwrite(awUser: import('appwrite').Models.User<import('ap
 const docIdCache: Record<string, string> = {};
 
 async function syncProfileToAppwrite(updated: User): Promise<void> {
-    // Aggressive sanitization for Appwrite: convert "" and undefined to null
     const sanitize = (val: string | undefined | null) => (!val || val.trim() === '') ? null : val;
 
     const dbPayload: any = {
@@ -106,7 +105,6 @@ async function syncProfileToAppwrite(updated: User): Promise<void> {
         plan: updated.plan || 'free',
     };
 
-    // Check cache first
     let docId = docIdCache[updated.id];
 
     try {
@@ -114,7 +112,7 @@ async function syncProfileToAppwrite(updated: User): Promise<void> {
             const res = await databases.listDocuments(
                 APPWRITE_CONFIG.databaseId,
                 APPWRITE_CONFIG.profilesCollectionId,
-                [Query.equal('userId', updated.id)]
+                [Query.equal('userId', updated.id), Query.limit(1)]
             );
             if (res.documents.length > 0) {
                 docId = res.documents[0].$id;
@@ -142,8 +140,15 @@ async function syncProfileToAppwrite(updated: User): Promise<void> {
         }
     } catch (err: any) {
         console.error('❌ Appwrite Sync Failed:', err.message, dbPayload);
-        // We do NOT reset local state here. The user's changes remain in UI and localStorage.
-        // They will sync next time or on page reload if the network recovers.
+        
+        // Critical Fix: If 404 (document not found), clear the cache because it is invalid.
+        if (err.code === 404) {
+            delete docIdCache[updated.id];
+            console.warn('⚠️ Cleared corrupted docIdCache for user', updated.id);
+        }
+
+        // Throw the error so updateUser can alert the dashboard UI
+        throw err;
     }
 }
 
@@ -327,8 +332,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         // 3. Sync to Appwrite DB asynchronously — OUTSIDE setState
         if (APPWRITE_READY && prev.id) {
             syncProfileToAppwrite(updated).catch(e => {
-                console.error('DB sync failed (changes saved locally):', e);
-                // Do NOT rollback — keep local changes. DB will update on next successful sync.
+                console.error('DB sync failed:', e);
+                // Rollback UI so it doesn't lie to the user about what is live
+                alert(`Failed to save changes: ${e.message}. Please check your connection or try again.`);
+                setUser(prev);
+                localStorage.setItem(`linkzy_profile_${prev.id}`, JSON.stringify(prev));
+                localStorage.setItem(SESSION_KEY, JSON.stringify(prev));
             });
         }
     };
