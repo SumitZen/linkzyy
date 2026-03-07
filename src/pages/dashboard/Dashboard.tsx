@@ -14,6 +14,7 @@ import { ID } from 'appwrite';
 
 import getCroppedImg from '../../lib/cropImage';
 import Navbar from '../../components/Navbar';
+import { getContrastingColor } from '../../lib/utils';
 import './Dashboard.css';
 
 // Icon helper — renders real SVG from a platform id (falls back to a generic link icon)
@@ -560,14 +561,30 @@ export default function Dashboard() {
                                         <div className="bento-field-row">
                                             <label className="bento-field-label">Theme Preset <span className="bento-hint">(base background gradient & UI style)</span></label>
                                             <div className="bento-theme-grid">
+                                                {/* Custom State Indicator */}
+                                                {(bgImage || bgColor) && (
+                                                    <div className="bento-theme-btn sel">
+                                                        <div className="bento-tp" style={{ background: bgImage ? `url(${bgImage}) center/cover` : (bgColor || 'transparent'), border: '1.5px dashed var(--border-glass)' }}>
+                                                            <div className="bento-tp-circ" style={{ background: 'rgba(255,255,255,0.2)' }} />
+                                                            <div className="bento-tp-bar" style={{ background: 'rgba(255,255,255,0.1)' }} />
+                                                        </div>
+                                                        <div className="bento-theme-name" style={{ color: 'var(--accent)' }}>Custom</div>
+                                                        <div className="bento-tick">✓</div>
+                                                    </div>
+                                                )}
+
                                                 {templatesList.map(t => (
-                                                    <button key={t.id} className={`bento-theme-btn${selTheme === t.id ? ' sel' : ''}`} onClick={() => setSelTheme(t.id)}>
+                                                    <button key={t.id} className={['bento-theme-btn', (selTheme === t.id && !bgImage && !bgColor) ? 'sel' : ''].filter(Boolean).join(' ')} onClick={() => {
+                                                        setSelTheme(t.id);
+                                                        setBgImage('');
+                                                        setBgColor('');
+                                                    }}>
                                                         <div className="bento-tp" style={{ background: t.bg }}>
                                                             <div className="bento-tp-circ" />
                                                             <div className="bento-tp-bar" style={{ background: t.btnBg }} />
                                                         </div>
                                                         <div className="bento-theme-name">{t.name}</div>
-                                                        {selTheme === t.id && <div className="bento-tick">✓</div>}
+                                                        {(selTheme === t.id && !bgImage && !bgColor) && <div className="bento-tick">✓</div>}
                                                     </button>
                                                 ))}
                                             </div>
@@ -702,8 +719,22 @@ export default function Dashboard() {
                                                     : <span style={{ fontSize: '1.5rem', fontWeight: 700, color: 'rgba(255,255,255,0.9)' }}>{(name || user?.name || 'U').charAt(0).toUpperCase()}</span>
                                                 }
                                             </div>
-                                            <div style={{ fontSize: '1.1rem', fontWeight: 700, color: theme.textColor, textAlign: 'center', marginBottom: 4 }}>{name || user?.name}</div>
-                                            <div style={{ fontSize: '0.85rem', color: theme.textColor, opacity: 0.8, textAlign: 'center', marginBottom: 24 }}>{bio || user?.bio}</div>
+                                            <div style={{ 
+                                                fontSize: '1.1rem', 
+                                                fontWeight: 700, 
+                                                color: bgImage ? '#fff' : (bgColor ? getContrastingColor(bgColor) : theme.textColor), 
+                                                textShadow: bgImage ? '0 2px 8px rgba(0,0,0,0.4)' : 'none',
+                                                textAlign: 'center', 
+                                                marginBottom: 4 
+                                            }}>{name || user?.name}</div>
+                                            <div style={{ 
+                                                fontSize: '0.85rem', 
+                                                color: bgImage ? '#fff' : (bgColor ? getContrastingColor(bgColor) : theme.textColor), 
+                                                opacity: bgImage ? 1 : 0.8,
+                                                textShadow: bgImage ? '0 1px 4px rgba(0,0,0,0.4)' : 'none',
+                                                textAlign: 'center', 
+                                                marginBottom: 24 
+                                            }}>{bio || user?.bio}</div>
 
                                             <div style={{ display: 'flex', flexDirection: 'column', gap: 12, width: '100%', boxSizing: 'border-box' }}>
                                                 {links.filter(l => l.enabled).slice(0, 4).map(link => (

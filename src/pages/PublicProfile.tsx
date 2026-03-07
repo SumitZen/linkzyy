@@ -5,6 +5,7 @@ import { Query } from 'appwrite';
 import { templatesList } from '../lib/themes';
 import { PLATFORM_ICONS, PLATFORM_COLORS } from '../lib/platformIcons';
 import type { LinkItem } from '../context/AuthContext';
+import { getContrastingColor } from '../lib/utils';
 
 function PlatformIcon({ id, size = 24 }: { id: string; size?: number }) {
     const found = PLATFORM_ICONS.find(p => p.id === id);
@@ -138,10 +139,27 @@ export default function PublicProfile() {
                 </div>
 
                 {/* Name & Bio */}
-                <h1 style={{ fontSize: '1.5rem', fontWeight: 700, color: theme.textColor, textAlign: 'center', marginBottom: 8, margin: 0 }}>
+                <h1 style={{ 
+                    fontSize: '1.5rem', 
+                    fontWeight: 700, 
+                    color: profile.bgImage ? '#fff' : (profile.bgColor ? getContrastingColor(profile.bgColor) : theme.textColor), 
+                    textShadow: profile.bgImage ? '0 2px 10px rgba(0,0,0,0.5)' : 'none',
+                    textAlign: 'center', 
+                    marginBottom: 8, 
+                    margin: 0 
+                }}>
                     {profile.displayName || profile.username}
                 </h1>
-                <p style={{ fontSize: '1rem', color: theme.textColor, opacity: 0.8, textAlign: 'center', marginBottom: 32, maxWidth: 500, lineHeight: 1.6 }}>
+                <p style={{ 
+                    fontSize: '1rem', 
+                    color: profile.bgImage ? '#fff' : (profile.bgColor ? getContrastingColor(profile.bgColor) : theme.textColor), 
+                    opacity: profile.bgImage ? 1 : 0.8,
+                    textShadow: profile.bgImage ? '0 1px 4px rgba(0,0,0,0.4)' : 'none',
+                    textAlign: 'center', 
+                    marginBottom: 32, 
+                    maxWidth: 500, 
+                    lineHeight: 1.6 
+                }}>
                     {profile.bio}
                 </p>
 
