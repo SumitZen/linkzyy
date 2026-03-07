@@ -577,35 +577,46 @@ export default function Dashboard() {
                                         {/* Theme grid */}
                                         <div className="bento-field-row">
                                             <label className="bento-field-label">Theme Preset <span className="bento-hint">(base background gradient & UI style)</span></label>
-                                            <div className="bento-theme-grid">
-                                                {/* Custom State Indicator */}
-                                                {(bgImage || bgColor) && (
-                                                    <div className="bento-theme-btn sel">
-                                                        <div className="bento-tp" style={{ background: bgImage ? `url(${bgImage}) center/cover` : (bgColor || 'transparent'), border: '1.5px dashed var(--border-glass)' }}>
-                                                            <div className="bento-tp-circ" style={{ background: 'rgba(255,255,255,0.2)' }} />
-                                                            <div className="bento-tp-bar" style={{ background: 'rgba(255,255,255,0.1)' }} />
-                                                        </div>
-                                                        <div className="bento-theme-name" style={{ color: 'var(--accent)' }}>Custom</div>
-                                                        <div className="bento-tick">✓</div>
-                                                    </div>
-                                                )}
+                                            {(() => {
+                                                const swatchGradients: Record<string, string> = {
+                                                    '1-vision': 'linear-gradient(135deg, #0a1628, #1e3a5f)',
+                                                    '2-midnight': 'linear-gradient(135deg, #0d1117, #1a2744)',
+                                                    '3-ocean': 'linear-gradient(135deg, #0c1f3f, #0a3d62)',
+                                                    '4-blush': 'linear-gradient(135deg, #2d1b1b, #7c2d2d)',
+                                                    '5-prism': 'linear-gradient(135deg, #e8e0f0, #c8b8e0)',
+                                                    '6-onyx': 'linear-gradient(135deg, #0a0a0a, #1c1c1c)',
+                                                    '7-stripe': 'linear-gradient(135deg, #0a0f2e, #1a2060)',
+                                                    '8-nordic': 'linear-gradient(135deg, #1a2030, #2a3545)',
+                                                    '9-sand': 'linear-gradient(135deg, #2a1f0f, #4a3520)',
+                                                    '10-brutal': 'linear-gradient(135deg, #1a1a1a, #333333)',
+                                                };
 
-                                                {templatesList.map(t => (
-                                                    <button key={t.id} className={['bento-theme-btn', (selTheme === t.id && !bgImage && !bgColor) ? 'sel' : ''].filter(Boolean).join(' ')} onClick={() => {
-                                                        setSelTheme(t.id);
-                                                        setBgImage('');
-                                                        setBgColor('');
-                                                        setManualTextColor('');
-                                                    }}>
-                                                        <div className="bento-tp" style={{ background: t.bg }}>
-                                                            <div className="bento-tp-circ" />
-                                                            <div className="bento-tp-bar" style={{ background: t.btnBg }} />
-                                                        </div>
-                                                        <div className="bento-theme-name">{t.name}</div>
-                                                        {(selTheme === t.id && !bgImage && !bgColor) && <div className="bento-tick">✓</div>}
-                                                    </button>
-                                                ))}
-                                            </div>
+                                                return (
+                                                    <div className="bento-theme-grid">
+                                                        {(bgImage || bgColor) && (
+                                                            <div className="bento-theme-btn sel" style={{ background: bgImage ? `url(${bgImage}) center/cover` : (bgColor ? bgColor : 'linear-gradient(135deg, rgba(124,58,237,0.5), #07070f)') }}>
+                                                                <div className="bento-theme-name">Custom</div>
+                                                            </div>
+                                                        )}
+
+                                                        {templatesList.map(t => (
+                                                            <button 
+                                                                key={t.id} 
+                                                                className={['bento-theme-btn', (selTheme === t.id && !bgImage && !bgColor) ? 'sel' : ''].filter(Boolean).join(' ')} 
+                                                                style={{ background: swatchGradients[t.id] || t.bg }}
+                                                                onClick={() => {
+                                                                    setSelTheme(t.id);
+                                                                    setBgImage('');
+                                                                    setBgColor('');
+                                                                    setManualTextColor('');
+                                                                }}
+                                                            >
+                                                                <div className="bento-theme-name">{t.name}</div>
+                                                            </button>
+                                                        ))}
+                                                    </div>
+                                                );
+                                            })()}
                                         </div>
                                     </div>
 
