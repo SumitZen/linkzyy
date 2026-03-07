@@ -229,8 +229,8 @@ export default function Dashboard() {
                         </button>
                     </div>
                     <div className="bento-subnav-user">
-                        <span style={{ color: '#9ca3af', fontWeight: 500, marginRight: 6 }}>Logged in as</span>
-                        <span style={{ fontWeight: 600, color: '#111' }}>{user?.email}</span>
+                        <span style={{ color: 'var(--text-tertiary)', fontWeight: 500, marginRight: 6 }}>Logged in as</span>
+                        <span style={{ fontWeight: 600, color: 'var(--text-secondary)' }}>{user?.email}</span>
                     </div>
                 </div>
             </div>
@@ -239,18 +239,20 @@ export default function Dashboard() {
 
                 {/* ── MOBILE BOTTOM NAV ── */}
                 <nav className="bento-tablet-nav">
-                    <button className={`bento-tablet-btn${activeTab === 'links' ? ' active' : ''}`} onClick={() => setActiveTab('links')}>
-                        <span className="bento-tablet-icon">🔗</span>
-                        Links
-                    </button>
-                    <button className={`bento-tablet-btn${activeTab === 'appearance' ? ' active' : ''}`} onClick={() => setActiveTab('appearance')}>
-                        <span className="bento-tablet-icon">✨</span>
-                        Appearance
-                    </button>
-                    <button className={`bento-tablet-btn${activeTab === 'settings' ? ' active' : ''}`} onClick={() => setActiveTab('settings')}>
-                        <span className="bento-tablet-icon">⚙️</span>
-                        Settings
-                    </button>
+                    <div className="bento-tablet-dock">
+                        <button className={`bento-tablet-btn${activeTab === 'links' ? ' active' : ''}`} onClick={() => setActiveTab('links')}>
+                            <span className="bento-tablet-icon">🔗</span>
+                            Links
+                        </button>
+                        <button className={`bento-tablet-btn${activeTab === 'appearance' ? ' active' : ''}`} onClick={() => setActiveTab('appearance')}>
+                            <span className="bento-tablet-icon">✨</span>
+                            Appearance
+                        </button>
+                        <button className={`bento-tablet-btn${activeTab === 'settings' ? ' active' : ''}`} onClick={() => setActiveTab('settings')}>
+                            <span className="bento-tablet-icon">⚙️</span>
+                            Settings
+                        </button>
+                    </div>
                 </nav>
 
                 <main className="bento-main-view">
