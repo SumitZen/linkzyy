@@ -97,7 +97,7 @@ export default function Dashboard() {
     const [promoStatus, setPromoStatus] = useState<'idle' | 'ok' | 'invalid' | 'already_active' | 'loading'>('idle');
 
     const theme = templatesList.find(t => t.id === selTheme) ?? templatesList[0];
-    const previewBg = bgImage ? `url(${bgImage}) center/cover no-repeat` : bgColor || theme.screenBg;
+    const previewBg = bgImage ? `url(${bgImage}) top center/cover no-repeat` : bgColor || theme.screenBg;
 
     const flash = () => { setSavedMsg('Saved!'); setTimeout(() => setSavedMsg(''), 1800); };
 

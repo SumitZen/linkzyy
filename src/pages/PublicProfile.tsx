@@ -63,7 +63,7 @@ export default function PublicProfile() {
     }
 
     const theme = templatesList.find(t => t.id === profile.theme) ?? templatesList[0];
-    const previewBg = profile.bgImage ? `url(${profile.bgImage}) center/cover no-repeat fixed` : profile.bgColor || theme.screenBg;
+    const previewBg = profile.bgImage ? `url(${profile.bgImage}) center/cover no-repeat` : profile.bgColor || theme.screenBg;
 
     const forceParseJSON = (data: unknown): any[] => {
         if (!data) return [];
@@ -103,6 +103,9 @@ export default function PublicProfile() {
             minHeight: '100vh',
             width: '100%',
             background: previewBg,
+            backgroundPosition: 'top center',
+            backgroundSize: 'cover',
+            backgroundAttachment: 'scroll',
             fontFamily: 'Inter, sans-serif',
             display: 'flex',
             flexDirection: 'column',
