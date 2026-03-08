@@ -62,7 +62,9 @@ html, body {
   color: var(--text-primary) !important;
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
+  overflow-x: hidden !important;
+  width: 100% !important;
+  position: relative !important;
 }
 
 h1, h2, h3,
@@ -130,6 +132,8 @@ main,
     radial-gradient(ellipse 60% 60% at 90% 100%,
       rgba(181, 99, 122, 0.09) 0%, transparent 55%) !important;
   min-height: 100vh;
+  width: 100% !important;
+  overflow-x: hidden !important;
 }
 
 /* ═══ STEP 4: GLOBAL BUTTONS & FORMS ═══ */
