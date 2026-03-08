@@ -176,6 +176,13 @@ export default function Dashboard() {
         }
     };
 
+    const handleThemeSelect = (themeId: string) => {
+        setSelTheme(themeId);
+        updateUser({ theme: themeId });
+        const name = themeId.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+        showToast(`Theme: ${name}`, 'info', '✨');
+    };
+
     const saveAppearance = () => { 
         updateUser({ name, bio, avatarUrl, bannerUrl, bgColor, bgImage, theme: selTheme, textColor: manualTextColor }); 
         showToast('Appearance updated', 'success', '🎨');
@@ -637,13 +644,18 @@ export default function Dashboard() {
                                         {/* Display name */}
                                         <div className="field-group">
                                             <label className="field-label">Display Name</label>
-                                            <input type="text" value={name} onChange={e => setName(e.target.value)} />
+                                            <input
+                                                type="text"
+                                                value={name}
+                                                onChange={e => setName(e.target.value)}
+                                                onBlur={() => { if (name !== user?.name) { updateUser({ name }); showToast('Name saved', 'info', '👤'); } }}
+                                            />
                                         </div>
 
                                         {/* Bio */}
                                         <div className="field-group">
                                             <label className="field-label">Bio</label>
-                                            <textarea rows={3} value={bio} onChange={e => setBio(e.target.value)} />
+                                            <textarea rows={3} value={bio} onChange={e => setBio(e.target.value)} onBlur={() => { if (bio !== user?.bio) { updateUser({ bio }); showToast('Bio saved', 'info', '📝'); } }} />
                                         </div>
 
                                         <div className="appearance-section-divider"></div>
@@ -712,10 +724,10 @@ export default function Dashboard() {
                                                                 className={['bento-theme-btn', (selTheme === t.id && !bgImage && !bgColor) ? 'sel' : ''].filter(Boolean).join(' ')} 
                                                                 style={{ background: swatchGradients[t.id] || t.bg }}
                                                                 onClick={() => {
-                                                                    setSelTheme(t.id);
                                                                     setBgImage('');
                                                                     setBgColor('');
                                                                     setManualTextColor('');
+                                                                    handleThemeSelect(t.id);
                                                                 }}
                                                             >
                                                                 <div className="bento-theme-name">{t.name}</div>
@@ -782,15 +794,19 @@ export default function Dashboard() {
                                                         onKeyDown={async e => {
                                                             if (e.key === 'Enter') {
                                                                 setPromoStatus('loading');
-                                                                const result = await redeemPromoCode(promoCode);
-                                                                setPromoStatus(result);
-                                                                if (result === 'ok') {
-                                                                    setPromoCode('');
-                                                                    showToast('🎉 Code activated! Your plan has been upgraded.', 'success');
-                                                                } else if (result === 'invalid') {
-                                                                    showToast('✗ Invalid code. Double-check and try again.', 'error');
-                                                                } else if (result === 'already_active') {
-                                                                    showToast('✓ You already have this plan active.', 'info');
+                                                                try {
+                                                                    const success = await redeemPromoCode(promoCode.trim());
+                                                                    if (success) {
+                                                                        setPromoStatus('ok');
+                                                                        setPromoCode('');
+                                                                        showToast('Pro Features Unlocked!', 'success', '🚀');
+                                                                    } else {
+                                                                        setPromoStatus('invalid');
+                                                                        showToast('Invalid promo code', 'error', '✕');
+                                                                    }
+                                                                } catch (err) {
+                                                                    setPromoStatus('invalid');
+                                                                    showToast('Redemption failed', 'error');
                                                                 }
                                                             }
                                                         }}
@@ -801,15 +817,19 @@ export default function Dashboard() {
                                                         disabled={promoStatus === 'loading' || promoCode.trim() === ''}
                                                         onClick={async () => {
                                                             setPromoStatus('loading');
-                                                            const result = await redeemPromoCode(promoCode);
-                                                            setPromoStatus(result);
-                                                            if (result === 'ok') {
-                                                                setPromoCode('');
-                                                                showToast('🎉 Code activated! Your plan has been upgraded.', 'success');
-                                                            } else if (result === 'invalid') {
-                                                                showToast('✗ Invalid code. Double-check and try again.', 'error');
-                                                            } else if (result === 'already_active') {
-                                                                showToast('✓ You already have this plan active.', 'info');
+                                                            try {
+                                                                const success = await redeemPromoCode(promoCode.trim());
+                                                                if (success) {
+                                                                    setPromoStatus('ok');
+                                                                    setPromoCode('');
+                                                                    showToast('Pro Features Unlocked!', 'success', '🚀');
+                                                                } else {
+                                                                    setPromoStatus('invalid');
+                                                                    showToast('Invalid promo code', 'error', '✕');
+                                                                }
+                                                            } catch (err) {
+                                                                setPromoStatus('invalid');
+                                                                showToast('Redemption failed', 'error');
                                                             }
                                                         }}
                                                     >
