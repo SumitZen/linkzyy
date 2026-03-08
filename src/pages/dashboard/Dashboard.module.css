@@ -68,3 +68,19 @@
   background: #1e2d4a;
   color: #ffffff;
 }
+
+@media (max-width: 600px) {
+  .subnav {
+    width: calc(100% - 24px) !important;
+    max-width: none !important;
+    padding: 4px !important;
+    gap: 0 !important;
+  }
+  .tab {
+    flex: 1 !important;
+    padding: 8px 4px !important;
+    justify-content: center !important;
+    font-size: 0.8rem !important;
+    gap: 4px !important;
+  }
+}

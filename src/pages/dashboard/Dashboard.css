@@ -326,12 +326,20 @@
 
 .bento-layout {
   display: grid;
-  grid-template-columns: 1fr 400px;
+  grid-template-columns: 1fr 440px;
   gap: 40px;
-  max-width: 1240px;
+  max-width: 1440px;
   margin: 0 auto;
   padding: 24px 40px 80px !important;
   align-items: start;
+}
+
+@media (max-width: 1200px) {
+  .bento-layout { 
+    grid-template-columns: 1fr 380px; 
+    gap: 24px;
+    padding: 24px 20px 80px !important;
+  }
 }
 
 .bento-right-col {
@@ -345,9 +353,26 @@
 }
 
 @media (max-width: 960px) {
-  .bento-layout { grid-template-columns: 1fr !important; padding: 24px 16px 100px !important; }
-  .bento-right-col { display: none !important; }
+  .bento-layout { 
+    grid-template-columns: 1fr !important; 
+    padding: 20px 12px 120px !important; 
+  }
+  .bento-right-col { 
+    display: flex !important; 
+    position: static !important;
+    width: 100% !important;
+    height: auto !important;
+    margin-top: 60px !important;
+    padding-bottom: 40px !important;
+    border-top: 1px solid rgba(30, 45, 74, 0.08) !important;
+    padding-top: 40px !important;
+  }
   .dashboard-wrapper { padding-top: 76px; }
+  .phone-preview, .live-preview {
+    width: 320px !important;
+    height: 640px !important;
+    max-height: none !important;
+  }
 }
 
 /* Stat Cards */
@@ -1908,9 +1933,9 @@ textarea.bento-input { height: auto; padding: 10px 14px; }
 .phone-preview,
 .live-preview {
   position: relative !important;
-  width: 340px !important;
-  height: 640px !important;
-  max-height: calc(100vh - 180px) !important;
+  width: 380px !important;
+  height: 760px !important;
+  max-height: calc(100vh - 160px) !important;
   border-radius: 38px !important;
   background: #fff !important;
   border: 1px solid rgba(30, 45, 74, 0.15) !important;

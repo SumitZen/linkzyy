@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import type { ChangeEvent } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import Cropper from 'react-easy-crop';
@@ -36,6 +36,7 @@ export default function Dashboard() {
     const navigate = useNavigate();
     const [searchParams, setSearchParams] = useSearchParams();
     const { toasts, showToast, dismiss } = useToast();
+    const phoneRef = useRef<HTMLDivElement>(null);
     const [activeTab, setActiveTab] = useState<'links' | 'appearance' | 'settings'>('links');
 
     // ─── Content state ───
@@ -110,8 +111,19 @@ export default function Dashboard() {
     }, [cropImageSrc]);
 
     const handleCopyLink = (url: string) => {
-        navigator.clipboard.writeText(url);
-        showToast('Link copied to clipboard', 'success', '📋');
+        navigator.clipboard.writeText(url).then(() => {
+            showToast('Link copied to clipboard', 'success', '📋');
+        }).catch(() => {
+            showToast('Failed to copy', 'error');
+        });
+    };
+
+    const scrollToPreview = () => {
+        if (window.innerWidth <= 960) {
+            phoneRef.current?.scrollIntoView({ behavior: 'smooth' });
+        } else {
+            window.open(`/${user?.id}`, '_blank');
+        }
     };
 
     // ─── Auto-Apply Theme from URL ───
@@ -282,7 +294,7 @@ export default function Dashboard() {
                     </svg>
                     Copy Link
                 </button>
-                <button className="btn-preview" onClick={() => navigate(`/${user?.id}`)}>
+                <button className="btn-preview" onClick={scrollToPreview}>
                     <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.5">
                         <path d="M8 3c-4.418 0-8 5-8 5s3.582 5 8 5 8-5 8-5-3.582-5-8-5zm0 8a3 3 0 1 1 0-6 3 3 0 0 1 0 6z" strokeLinecap="round" strokeLinejoin="round"/>
                         <circle cx="8" cy="8" r="1" fill="currentColor" />
@@ -832,7 +844,7 @@ export default function Dashboard() {
                             )} {/* End Settings Tab */}
                         </main>
 
-                <aside className="bento-right-col">
+                <aside className="bento-right-col" ref={phoneRef}>
                     <div className="live-preview-label">Live Preview</div>
                     <div className="phone-preview">
                         <iframe
