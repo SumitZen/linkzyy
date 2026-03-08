@@ -98,6 +98,14 @@ export default function Dashboard() {
     const [promoCode, setPromoCode] = useState('');
     const [promoStatus, setPromoStatus] = useState<'idle' | 'ok' | 'invalid' | 'already_active' | 'loading'>('idle');
 
+    const [copiedId, setCopiedId] = useState<string | null>(null);
+
+    const handleCopyLink = (url: string, id: string) => {
+        navigator.clipboard.writeText(url);
+        setCopiedId(id);
+        setTimeout(() => setCopiedId(null), 2000);
+    };
+
     const theme = templatesList.find(t => t.id === selTheme) ?? templatesList[0];
     const previewBg = bgImage ? `url(${bgImage}) top center/cover no-repeat` : bgColor || theme.screenBg;
 
@@ -447,11 +455,39 @@ export default function Dashboard() {
                                                     <div className="link-item__icon">
                                                         <PlatformIcon id={link.icon} size={18} />
                                                     </div>
-                                                    <div className="link-item__text">
-                                                        <div className="link-item__title">{link.label}</div>
+                                                    <a
+                                                        href={link.url}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="link-item__text link-item__clickable"
+                                                        onClick={(e) => e.stopPropagation()}
+                                                    >
+                                                        <div className="link-item__title">
+                                                            {link.label}
+                                                            <svg className="link-item__external-icon" viewBox="0 0 16 16" fill="currentColor">
+                                                                <path d="M6.5 1H2a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1V8.5M9 1h5m0 0v5m0-5L7 9" 
+                                                                    stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round"/>
+                                                            </svg>
+                                                        </div>
                                                         <div className="link-item__url">{link.url}</div>
-                                                    </div>
+                                                    </a>
                                                     <div className="link-item__actions">
+                                                        <button
+                                                            className="link-item__copy"
+                                                            onClick={() => handleCopyLink(link.url, link.id)}
+                                                            title="Copy URL"
+                                                        >
+                                                            {copiedId === link.id ? (
+                                                                <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2">
+                                                                    <path d="M2 8l4 4 8-8" strokeLinecap="round"/>
+                                                                </svg>
+                                                            ) : (
+                                                                <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.5">
+                                                                    <rect x="5" y="5" width="9" height="9" rx="1.5"/>
+                                                                    <path d="M3 11V3a1 1 0 0 1 1-1h8" strokeLinecap="round"/>
+                                                                </svg>
+                                                            )}
+                                                        </button>
                                                         <label className="bento-toggle">
                                                             <input type="checkbox" checked={link.enabled} onChange={() => toggleLink(link.id)} />
                                                             <span className="bento-toggle-track" />
@@ -796,6 +832,11 @@ export default function Dashboard() {
                         </div>
                     </div>
                 </aside>
+
+                {/* Copy Notification (Toast) */}
+                <div className={`copy-toast ${copiedId ? 'copy-toast--visible' : ''}`}>
+                    Link copied to clipboard
+                </div>
             </div>
         </div>
     );
