@@ -1,5 +1,152 @@
 /* ═══ STEP 9: DASHBOARD (ALL 3 TABS) ═══ */
 
+/* ═══ CROP MODAL (Premium Styles - Priority) ═══ */
+.bento-crop-overlay {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  background: rgba(30, 45, 74, 0.75) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  z-index: 9999 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 24px !important;
+}
+
+.bento-crop-modal {
+  background: #ffffff !important;
+  width: 100% !important;
+  max-width: 520px !important;
+  border-radius: 28px !important;
+  overflow: hidden !important;
+  box-shadow: 
+    0 32px 80px rgba(30, 45, 74, 0.40),
+    0 12px 32px rgba(30, 45, 74, 0.15) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  border: 1px solid rgba(255, 255, 255, 0.20) !important;
+  animation: bento-modal-in 0.3s ease-out;
+}
+
+@keyframes bento-modal-in {
+  from { opacity: 0; transform: scale(0.98) translateY(10px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.bento-crop-modal__header {
+  padding: 24px !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  border-bottom: 1px solid rgba(30, 45, 74, 0.08) !important;
+  background: #fff !important;
+}
+
+.bento-crop-modal__title {
+  font-family: var(--font-display) !important;
+  font-size: 1.35rem !important;
+  font-weight: 700 !important;
+  color: #1e2d4a !important;
+  margin-bottom: 4px !important;
+}
+
+.bento-crop-modal__hint {
+  font-size: 0.8rem !important;
+  color: #8a8aaa !important;
+  font-weight: 400 !important;
+}
+
+.bento-crop-modal__close {
+  width: 36px !important;
+  height: 36px !important;
+  border-radius: 12px !important;
+  border: 1px solid rgba(30, 45, 74, 0.10) !important;
+  background: #fff !important;
+  color: #8a8aaa !important;
+  font-size: 0.9rem !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: all 0.2s ease !important;
+}
+
+.bento-crop-modal__close:hover {
+  background: #f7f6ff !important;
+  color: #1e2d4a !important;
+  transform: rotate(90deg) !important;
+}
+
+.bento-crop-modal__canvas {
+  position: relative !important;
+  width: 100% !important;
+  height: 420px !important;
+  background: #0a0a0f !important;
+}
+
+.bento-crop-modal__footer {
+  padding: 28px 24px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 24px !important;
+  background: #fdf8f2 !important;
+}
+
+.bento-crop-modal__zoom {
+  display: flex !important;
+  align-items: center !important;
+  gap: 16px !important;
+}
+
+.bento-crop-modal__zoom-label {
+  font-size: 0.85rem !important;
+  font-weight: 600 !important;
+  color: #4a4a6a !important;
+}
+
+.bento-crop-modal__zoom-slider {
+  flex: 1 !important;
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  height: 6px !important;
+  border-radius: 3px !important;
+  background: rgba(30, 45, 74, 0.12) !important;
+  outline: none !important;
+}
+
+.bento-crop-modal__zoom-slider::-webkit-slider-thumb {
+  -webkit-appearance: none !important;
+  width: 22px !important;
+  height: 22px !important;
+  border-radius: 50% !important;
+  background: #1e2d4a !important;
+  cursor: pointer !important;
+  border: 2px solid #fff !important;
+}
+
+.bento-crop-modal__zoom-val {
+  font-size: 0.8rem !important;
+  font-weight: 700 !important;
+  color: #1e2d4a !important;
+  width: 44px !important;
+  text-align: right !important;
+}
+
+.bento-crop-modal__actions {
+  display: flex !important;
+  gap: 12px !important;
+}
+
+.bento-crop-modal__actions button {
+  flex: 1 !important;
+  height: 48px !important;
+  font-size: 0.95rem !important;
+}
+
 /* Layout */
 .dashboard-wrapper {
   background-color: var(--bg-base) !important;
@@ -1874,152 +2021,6 @@ textarea.bento-input { height: auto; padding: 10px 14px; }
   color: #1e2d4a !important;
   border-bottom-color: #b5637a !important;
   font-weight: 600 !important;
-}
-
-/* ═══ CROP MODAL (Premium Styles) ═══ */
-
-.crop-overlay {
-  position: fixed !important;
-  top: 0 !important;
-  left: 0 !important;
-  right: 0 !important;
-  bottom: 0 !important;
-  background: rgba(30, 45, 74, 0.75) !important;
-  backdrop-filter: blur(16px) !important;
-  -webkit-backdrop-filter: blur(16px) !important;
-  z-index: 9999 !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  padding: 24px !important;
-  animation: bento-fade-in 0.3s ease-out;
-}
-
-.crop-modal {
-  background: #ffffff !important;
-  width: 100% !important;
-  max-width: 520px !important;
-  border-radius: 28px !important;
-  overflow: hidden !important;
-  box-shadow: 
-    0 32px 80px rgba(30, 45, 74, 0.40),
-    0 12px 32px rgba(30, 45, 74, 0.15) !important;
-  display: flex !important;
-  flex-direction: column !important;
-  border: 1px solid rgba(255, 255, 255, 0.20) !important;
-}
-
-.crop-modal__header {
-  padding: 24px !important;
-  display: flex !important;
-  justify-content: space-between !important;
-  align-items: center !important;
-  border-bottom: 1px solid rgba(30, 45, 74, 0.08) !important;
-  background: #fff !important;
-}
-
-.crop-modal__title {
-  font-family: var(--font-display) !important;
-  font-size: 1.35rem !important;
-  font-weight: 700 !important;
-  color: #1e2d4a !important;
-  margin-bottom: 4px !important;
-}
-
-.crop-modal__hint {
-  font-size: 0.8rem !important;
-  color: #8a8aaa !important;
-  font-weight: 400 !important;
-}
-
-.crop-modal__close {
-  width: 36px !important;
-  height: 36px !important;
-  border-radius: 12px !important;
-  border: 1px solid rgba(30, 45, 74, 0.10) !important;
-  background: #fff !important;
-  color: #8a8aaa !important;
-  font-size: 0.9rem !important;
-  cursor: pointer !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  transition: all 0.2s ease !important;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05) !important;
-}
-
-.crop-modal__close:hover {
-  background: #f7f6ff !important;
-  color: #1e2d4a !important;
-  transform: rotate(90deg) !important;
-}
-
-.crop-modal__canvas {
-  position: relative !important;
-  width: 100% !important;
-  height: 420px !important;
-  background: #0a0a0f !important;
-}
-
-.crop-modal__footer {
-  padding: 28px 24px !important;
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 24px !important;
-  background: #fdf8f2 !important;
-}
-
-.crop-modal__zoom {
-  display: flex !important;
-  align-items: center !important;
-  gap: 16px !important;
-}
-
-.crop-modal__zoom-label {
-  font-size: 0.85rem !important;
-  font-weight: 600 !important;
-  color: #4a4a6a !important;
-  letter-spacing: 0.01em !important;
-}
-
-.crop-modal__zoom-slider {
-  flex: 1 !important;
-  -webkit-appearance: none !important;
-  appearance: none !important;
-  height: 6px !important;
-  border-radius: 3px !important;
-  background: rgba(30, 45, 74, 0.12) !important;
-  outline: none !important;
-}
-
-.crop-modal__zoom-slider::-webkit-slider-thumb {
-  -webkit-appearance: none !important;
-  width: 22px !important;
-  height: 22px !important;
-  border-radius: 50% !important;
-  background: #1e2d4a !important;
-  cursor: pointer !important;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.20) !important;
-  border: 2px solid #fff !important;
-}
-
-.crop-modal__zoom-val {
-  font-size: 0.8rem !important;
-  font-weight: 700 !important;
-  color: #1e2d4a !important;
-  width: 44px !important;
-  text-align: right !important;
-}
-
-.crop-modal__actions {
-  display: flex !important;
-  gap: 12px !important;
-}
-
-.crop-modal__actions button {
-  flex: 1 !important;
-  height: 48px !important;
-  font-size: 0.95rem !important;
 }
 
 @keyframes bento-fade-in {

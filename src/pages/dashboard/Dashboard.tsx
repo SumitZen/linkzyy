@@ -298,42 +298,42 @@ export default function Dashboard() {
 
             {/* ── CROP MODAL (Global) ── */}
             {cropImageSrc && (
-                <div className="crop-overlay">
-                    <div className="crop-modal">
-                        <div className="crop-modal__header">
+                <div className="bento-crop-overlay">
+                    <div className="bento-crop-modal">
+                        <div className="bento-crop-modal__header">
                             <div>
-                                <div className="crop-modal__title">
+                                <div className="bento-crop-modal__title">
                                     {cropType === 'avatar' ? 'Crop Profile Photo' : cropType === 'banner' ? 'Crop Banner Image' : 'Select Background Area'}
                                 </div>
-                                <div className="crop-modal__hint">
+                                <div className="bento-crop-modal__hint">
                                     {cropType === 'avatar' 
                                         ? 'Drag to reposition · Scroll or use slider to zoom' 
                                         : cropType === 'banner'
                                             ? 'Drag to reposition · Fixed 3:1 banner ratio'
-                                            : 'Free crop · Drag corners to resize area'
+                                            : 'Mobile screen ratio (9:19) · Drag area to align'
                                     }
                                 </div>
                             </div>
-                            <button className="crop-modal__close" onClick={() => setCropImageSrc(null)} aria-label="Close">✕</button>
+                            <button className="bento-crop-modal__close" onClick={() => setCropImageSrc(null)} aria-label="Close">✕</button>
                         </div>
 
-                        <div className="crop-modal__canvas">
+                        <div className="bento-crop-modal__canvas">
                             <Cropper
                                 image={cropImageSrc}
                                 crop={crop}
                                 zoom={zoom}
-                                aspect={cropType === 'avatar' ? 1 : cropType === 'banner' ? 3 / 1 : undefined}
+                                aspect={cropType === 'avatar' ? 1 : cropType === 'banner' ? 3 / 1 : 9 / 19}
                                 cropShape={cropType === 'avatar' ? 'round' : 'rect'}
                                 onCropChange={setCrop}
                                 onZoomChange={setZoom}
                                 onCropComplete={onCropComplete}
-                                showGrid={cropType !== 'avatar'}
+                                showGrid={true}
                             />
                         </div>
 
-                        <div className="crop-modal__footer">
-                            <div className="crop-modal__zoom">
-                                <span className="crop-modal__zoom-label">Zoom</span>
+                        <div className="bento-crop-modal__footer">
+                            <div className="bento-crop-modal__zoom">
+                                <span className="bento-crop-modal__zoom-label">Zoom</span>
                                 <input
                                     type="range"
                                     min={1}
@@ -341,11 +341,11 @@ export default function Dashboard() {
                                     step={0.05}
                                     value={zoom}
                                     onChange={e => setZoom(Number(e.target.value))}
-                                    className="crop-modal__zoom-slider"
+                                    className="bento-crop-modal__zoom-slider"
                                 />
-                                <span className="crop-modal__zoom-val">{Math.round(zoom * 100)}%</span>
+                                <span className="bento-crop-modal__zoom-val">{Math.round(zoom * 100)}%</span>
                             </div>
-                            <div className="crop-modal__actions">
+                            <div className="bento-crop-modal__actions">
                                 <button className="bento-ghost" onClick={() => setCropImageSrc(null)} disabled={isUploading}>Cancel</button>
                                 <button className="bento-save" onClick={uploadCroppedImage} disabled={isUploading}>
                                     {isUploading ? 'Saving…' : 'Crop & Save'}
