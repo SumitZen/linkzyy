@@ -115,10 +115,6 @@ export default function PublicProfile() {
             position: 'relative',
             overflowX: 'hidden'
         }}>
-            {/* Banner */}
-            {profile.bannerUrl && (
-                <div style={{ width: '100%', height: 240, backgroundImage: `url(${profile.bannerUrl})`, backgroundSize: 'cover', backgroundPosition: 'center', flexShrink: 0 }} />
-            )}
 
             <div style={{
                 width: '100%',
@@ -127,7 +123,7 @@ export default function PublicProfile() {
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
-                marginTop: profile.bannerUrl ? -52 : 64,
+                marginTop: 64,
                 position: 'relative',
                 zIndex: 10,
                 flex: 1

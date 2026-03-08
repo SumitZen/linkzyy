@@ -50,7 +50,6 @@ export default function Dashboard() {
             setName(user.name ?? '');
             setBio(user.bio ?? '');
             setAvatarUrl(user.avatarUrl ?? '');
-            setBannerUrl(user.bannerUrl ?? '');
             setBgColor(user.bgColor ?? '');
             setBgImage(user.bgImage ?? '');
             setSelTheme(user.theme ?? 'editorial-light');
@@ -79,7 +78,6 @@ export default function Dashboard() {
     const [name, setName] = useState(user?.name ?? '');
     const [bio, setBio] = useState(user?.bio ?? '');
     const [avatarUrl, setAvatarUrl] = useState(user?.avatarUrl ?? '');
-    const [bannerUrl, setBannerUrl] = useState(user?.bannerUrl ?? '');
     const [bgColor, setBgColor] = useState(user?.bgColor ?? '');
     const [bgImage, setBgImage] = useState(user?.bgImage ?? '');
     const [selTheme, setSelTheme] = useState(user?.theme ?? 'editorial-light');
@@ -91,7 +89,7 @@ export default function Dashboard() {
     const [zoom, setZoom] = useState(1);
     const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
     const [isUploading, setIsUploading] = useState(false);
-    const [cropType, setCropType] = useState<'avatar' | 'banner' | 'background'>('background');
+    const [cropType, setCropType] = useState<'avatar' | 'background'>('background');
 
     // ─── Icon Picker State ───
     const [isIconPickerOpen, setIsIconPickerOpen] = useState(false);
@@ -194,12 +192,12 @@ export default function Dashboard() {
     };
 
     const saveAppearance = () => { 
-        updateUser({ name, bio, avatarUrl, bannerUrl, bgColor, bgImage, theme: selTheme, textColor: manualTextColor }); 
+        updateUser({ name, bio, avatarUrl, bgColor, bgImage, theme: selTheme, textColor: manualTextColor }); 
         showToast('Appearance updated', 'success', '🎨');
     };
 
     // ─── Cropping & Upload Logic ───
-    const onFileChange = async (e: ChangeEvent<HTMLInputElement>, type: 'avatar' | 'banner' | 'background') => {
+    const onFileChange = async (e: ChangeEvent<HTMLInputElement>, type: 'avatar' | 'background') => {
         if (e.target.files && e.target.files.length > 0) {
             const file = e.target.files[0];
             const reader = new FileReader();
@@ -241,10 +239,6 @@ export default function Dashboard() {
                 setAvatarUrl(publicUrl);
                 updateUser({ avatarUrl: publicUrl });
                 showToast('Profile photo updated', 'success', '📸');
-            } else if (cropType === 'banner') {
-                setBannerUrl(publicUrl);
-                updateUser({ bannerUrl: publicUrl });
-                showToast('Banner photo updated', 'success', '🖼️');
             } else {
                 setBgImage(publicUrl);
                 updateUser({ bgImage: publicUrl });
@@ -320,14 +314,12 @@ export default function Dashboard() {
                         <div className="bento-crop-modal__header">
                             <div>
                                 <div className="bento-crop-modal__title">
-                                    {cropType === 'avatar' ? 'Crop Profile Photo' : cropType === 'banner' ? 'Crop Banner Image' : 'Select Background Area'}
+                                    {cropType === 'avatar' ? 'Crop Profile Photo' : 'Select Background Area'}
                                 </div>
                                 <div className="bento-crop-modal__hint">
                                     {cropType === 'avatar' 
                                         ? 'Drag to reposition · Scroll or use slider to zoom' 
-                                        : cropType === 'banner'
-                                            ? 'Drag to reposition · Fixed 3:1 banner ratio'
-                                            : 'Mobile screen ratio (9:19) · Drag area to align'
+                                        : 'Mobile screen ratio (9:19) · Drag area to align'
                                     }
                                 </div>
                             </div>
@@ -339,7 +331,7 @@ export default function Dashboard() {
                                 image={cropImageSrc}
                                 crop={crop}
                                 zoom={zoom}
-                                aspect={cropType === 'avatar' ? 1 : cropType === 'banner' ? 3 / 1 : 9 / 19}
+                                aspect={cropType === 'avatar' ? 1 : 9 / 19}
                                 cropShape={cropType === 'avatar' ? 'round' : 'rect'}
                                 onCropChange={setCrop}
                                 onZoomChange={setZoom}
@@ -635,19 +627,6 @@ export default function Dashboard() {
                                                     <input type="file" accept="image/*" style={{ display: 'none' }} onChange={e => onFileChange(e, 'avatar')} />
                                                 </label>
                                                 {avatarUrl && <button className="bento-ghost" onClick={() => setAvatarUrl('')}>Clear</button>}
-                                            </div>
-                                        </div>
-
-                                        {/* Banner */}
-                                        <div className="field-group">
-                                            <label className="field-label">Banner Image</label>
-                                            {bannerUrl && <div style={{ width: '100%', height: 120, borderRadius: 12, backgroundImage: `url(${bannerUrl})`, backgroundSize: 'cover', backgroundPosition: 'center', marginBottom: 12, border: '1px solid rgba(30,45,74,0.1)' }} />}
-                                            <div style={{ display: 'flex', gap: 8 }}>
-                                                <label className="btn-upload">
-                                                    Upload Banner
-                                                    <input type="file" accept="image/*" style={{ display: 'none' }} onChange={e => onFileChange(e, 'banner')} />
-                                                </label>
-                                                {bannerUrl && <button className="bento-ghost" onClick={() => setBannerUrl('')}>Clear</button>}
                                             </div>
                                         </div>
 

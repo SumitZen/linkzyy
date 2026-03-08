@@ -29,7 +29,6 @@ export interface User {
     username?: string;
     bio?: string;
     avatarUrl?: string;
-    bannerUrl?: string;
     bgColor?: string;
     bgImage?: string;
     links: LinkItem[];
@@ -76,7 +75,6 @@ function buildUserFromAppwrite(awUser: import('appwrite').Models.User<import('ap
         username: email.split('@')[0].replace(/[^a-z0-9]/gi, '').toLowerCase(),
         bio: '',
         avatarUrl: '',
-        bannerUrl: '',
         bgColor: '',
         bgImage: '',
         links: getDefaultLinks(),
@@ -99,7 +97,6 @@ async function syncProfileToAppwrite(updated: User): Promise<void> {
         theme: updated.textColor ? `${updated.theme}|${updated.textColor}` : (updated.theme || 'editorial-light'),
         bgColor: sanitize(updated.bgColor),
         avatarUrl: sanitize(updated.avatarUrl),
-        bannerUrl: sanitize(updated.bannerUrl),
         bgImage: sanitize(updated.bgImage),
         links: JSON.stringify(updated.links || []),
         blocks: JSON.stringify(updated.blocks || []),
@@ -205,7 +202,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                             name: doc.displayName || undefined,
                             bio: doc.bio || '',
                             avatarUrl: doc.avatarUrl || '',
-                            bannerUrl: doc.bannerUrl || '',
                             bgColor: doc.bgColor || '',
                             bgImage: doc.bgImage || '',
                             theme: themeId,
@@ -301,7 +297,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                 id: crypto.randomUUID(), name, email: key, plan: 'free',
                 username: key.split('@')[0].replace(/[^a-z0-9]/gi, '').toLowerCase(),
                 bio: 'Hey there! I use Linkzy.',
-                avatarUrl: '', bannerUrl: '', bgColor: '', bgImage: '',
+                avatarUrl: '', bgColor: '', bgImage: '',
                 links: getDefaultLinks(), blocks: [], theme: 'editorial-light',
             };
             users[key] = { password, user: newUser };
