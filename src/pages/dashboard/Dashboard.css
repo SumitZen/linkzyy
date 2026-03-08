@@ -10,19 +10,183 @@
   padding-top: 88px !important;
 }
 
-.bento-subnav {
-  position: sticky;
+/* =============================================
+   SUBNAV — full container
+   ============================================= */
+
+.bento-subnav,
+[class*="subnav"],
+[class*="dashboardNav"],
+[class*="tabBar"] {
+  position: sticky !important;
   top: 80px !important;
   z-index: 50 !important;
-  display: flex;
-  align-items: center;
-  padding: 0 40px;
-  background: rgba(253, 248, 242, 0.92);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border);
-  overflow-x: auto;
-  scrollbar-width: none;
+
+  display: flex !important;
+  flex-direction: column !important;   /* STACK rows vertically */
+  align-items: stretch !important;
+  gap: 0 !important;
+
+  background: rgba(253, 248, 242, 0.96) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border-bottom: 1px solid rgba(30, 45, 74, 0.10) !important;
+  padding: 0 !important;
+}
+
+/* =============================================
+   ROW 1 — Tab buttons (Links / Appearance / Settings)
+   ============================================= */
+
+.bento-subnav__tabs,
+[class*="tabList"],
+[class*="tabs-row"],
+.subnav-tabs {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 0 !important;
+  padding: 0 40px !important;
+  border-bottom: 1px solid rgba(30, 45, 74, 0.07) !important;
+  overflow-x: auto !important;
+  scrollbar-width: none !important;
+}
+
+/* Tab button */
+.bento-subnav__tab,
+[class*="tabBtn"],
+[class*="tab-btn"],
+.subnav-tab {
+  padding: 15px 20px !important;
+  font-size: 0.875rem !important;
+  font-weight: 400 !important;
+  color: #8a8aaa !important;
+  cursor: pointer !important;
+  border: none !important;
+  border-bottom: 2px solid transparent !important;
+  background: none !important;
+  font-family: inherit !important;
+  transition: color 0.18s ease, border-color 0.18s ease !important;
+  white-space: nowrap !important;
+  min-height: 52px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 7px !important;
+  text-decoration: none !important;
+}
+
+.bento-subnav__tab:hover,
+.subnav-tab:hover {
+  color: #4a4a6a !important;
+}
+
+.bento-subnav__tab--active,
+[class*="tab--active"],
+[class*="tabActive"],
+.subnav-tab--active {
+  color: #1e2d4a !important;
+  border-bottom-color: #b5637a !important;
+  font-weight: 600 !important;
+}
+
+/* =============================================
+   ROW 2 — URL bar (linkzy URL + Copy + Preview)
+   ============================================= */
+
+.bento-subnav__url-row,
+.quick-actions-bar,
+.profile-url-bar,
+[class*="urlBar"],
+[class*="url-bar"] {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 10px !important;
+  padding: 10px 40px !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  margin: 0 !important;
+}
+
+/* URL text */
+.quick-actions-bar__url,
+[class*="urlText"],
+[class*="url-text"],
+.profile-url-text {
+  flex: 1 !important;
+  font-size: 0.78rem !important;
+  color: #8a8aaa !important;
+  font-family: 'Courier New', monospace !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  min-width: 0 !important;
+}
+
+/* Copy Link button */
+.btn-copy-link,
+[class*="copyBtn"],
+[class*="copy-btn"] {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  padding: 7px 16px !important;
+  background: #1e2d4a !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 8px !important;
+  font-size: 0.8rem !important;
+  font-weight: 500 !important;
+  font-family: inherit !important;
+  cursor: pointer !important;
+  white-space: nowrap !important;
+  min-height: 34px !important;
+  text-decoration: none !important;
+  transition: opacity 0.18s ease !important;
+  flex-shrink: 0 !important;
+}
+
+.btn-copy-link:hover { opacity: 0.85 !important; }
+
+/* Preview button */
+.btn-preview,
+[class*="previewBtn"],
+[class*="preview-btn"] {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  padding: 6px 14px !important;
+  background: transparent !important;
+  color: #4a4a6a !important;
+  border: 1px solid rgba(30, 45, 74, 0.18) !important;
+  border-radius: 8px !important;
+  font-size: 0.8rem !important;
+  font-weight: 400 !important;
+  font-family: inherit !important;
+  cursor: pointer !important;
+  white-space: nowrap !important;
+  min-height: 34px !important;
+  text-decoration: none !important;
+  transition: background 0.18s ease, color 0.18s ease !important;
+  flex-shrink: 0 !important;
+}
+
+.btn-preview:hover {
+  background: rgba(30, 45, 74, 0.06) !important;
+  color: #1e2d4a !important;
+}
+
+/* =============================================
+   If the URL bar is NOT inside .bento-subnav
+   (i.e. it's a sibling below it), just give it
+   proper padding and hide the old inline text
+   ============================================= */
+
+/* Hide the inline "Copy" raw text if it exists as a span/link */
+.bento-subnav a[href*="copy"]:not(.btn-copy-link),
+.bento-subnav span.copy-text {
+  display: none !important;
 }
 
 .bento-subnav::-webkit-scrollbar {
@@ -58,7 +222,7 @@
   gap: 40px;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 40px 40px 80px;
+  padding: 32px 40px 80px !important;
   align-items: start;
 }
 
@@ -73,6 +237,9 @@
   .bento-right-col { display: none !important; }
   .bento-subnav { display: none; }
   .dashboard-wrapper { padding-top: 76px; }
+  .bento-subnav__tabs { padding: 0 16px !important; }
+  .bento-subnav__url-row,
+  .quick-actions-bar { padding: 8px 16px !important; }
 }
 
 /* Stat Cards */

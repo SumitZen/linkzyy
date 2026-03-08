@@ -220,21 +220,36 @@ export default function Dashboard() {
 
             {/* ── SECTION 2 / 7 — TOP SUB-NAVIGATION & MOBILE BOTTOM NAV ── */}
             <nav className="bento-subnav">
-                <button className={`bento-subnav__tab${activeTab === 'links' ? ' bento-subnav__tab--active' : ''}`} onClick={() => setActiveTab('links')}>
-                    🔗 Links
-                </button>
-                <button className={`bento-subnav__tab${activeTab === 'appearance' ? ' bento-subnav__tab--active' : ''}`} onClick={() => setActiveTab('appearance')}>
-                    🎨 Appearance
-                </button>
-                <button className={`bento-subnav__tab${activeTab === 'settings' ? ' bento-subnav__tab--active' : ''}`} onClick={() => setActiveTab('settings')}>
-                    ⚙️ Settings
-                </button>
+                {/* Row 1: Tabs */}
+                <div className="bento-subnav__tabs">
+                    <button className={`bento-subnav__tab${activeTab === 'links' ? ' bento-subnav__tab--active' : ''}`} onClick={() => setActiveTab('links')}>
+                        🔗 Links
+                    </button>
+                    <button className={`bento-subnav__tab${activeTab === 'appearance' ? ' bento-subnav__tab--active' : ''}`} onClick={() => setActiveTab('appearance')}>
+                        🎨 Appearance
+                    </button>
+                    <button className={`bento-subnav__tab${activeTab === 'settings' ? ' bento-subnav__tab--active' : ''}`} onClick={() => setActiveTab('settings')}>
+                        ⚙️ Settings
+                    </button>
+                </div>
 
-                <div className="bento-subnav__right">
-                    <div className="bento-url-copy" onClick={() => navigator.clipboard?.writeText?.(`${window.location.origin}/${user?.id}`)}>
-                        <span>{window.location.host}/{user?.id}</span>
-                        <small>Copy</small>
-                    </div>
+                {/* Row 2: URL bar & Actions */}
+                <div className="bento-subnav__url-row">
+                    <div className="quick-actions-bar__url">{window.location.host}/{user?.id}</div>
+                    <button className="btn-copy-link" onClick={() => handleCopyLink(`${window.location.origin}/${user?.id}`, 'dashboard-url')}>
+                        <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.5">
+                            <rect x="5" y="5" width="9" height="9" rx="1.5"/>
+                            <path d="M3 11V3a1 1 0 0 1 1-1h8" strokeLinecap="round"/>
+                        </svg>
+                        Copy Link
+                    </button>
+                    <button className="btn-preview" onClick={() => navigate(`/${user?.id}`)}>
+                        <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.5">
+                            <path d="M8 3c-4.418 0-8 5-8 5s3.582 5 8 5 8-5 8-5-3.582-5-8-5zm0 8a3 3 0 1 1 0-6 3 3 0 0 1 0 6z" strokeLinecap="round" strokeLinejoin="round"/>
+                            <circle cx="8" cy="8" r="1" fill="currentColor" />
+                        </svg>
+                        Preview
+                    </button>
                 </div>
             </nav>
 
@@ -325,24 +340,7 @@ export default function Dashboard() {
                                         <p>Manage the content on your Linkzy profile.</p>
                                     </header>
 
-                                    {/* SECTION 9 — Quick Actions Bar */}
-                                    <div className="quick-actions-bar">
-                                        <div className="quick-actions-bar__url">{window.location.host}/{user?.id}</div>
-                                        <button className="btn-copy-link" onClick={() => handleCopyLink(`${window.location.origin}/${user?.id}`, 'dashboard-url')}>
-                                            <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.5">
-                                                <rect x="5" y="5" width="9" height="9" rx="1.5"/>
-                                                <path d="M3 11V3a1 1 0 0 1 1-1h8" strokeLinecap="round"/>
-                                            </svg>
-                                            Copy Link
-                                        </button>
-                                        <button className="btn-preview" onClick={() => navigate(`/${user?.id}`)}>
-                                            <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.5">
-                                                <path d="M8 3c-4.418 0-8 5-8 5s3.582 5 8 5 8-5 8-5-3.582-5-8-5zm0 8a3 3 0 1 1 0-6 3 3 0 0 1 0 6z" strokeLinecap="round" strokeLinejoin="round"/>
-                                                <circle cx="8" cy="8" r="1" fill="currentColor" />
-                                            </svg>
-                                            Preview
-                                        </button>
-                                    </div>
+
 
                                     <div className="stats-grid">
                                         <div className="stat-card">
