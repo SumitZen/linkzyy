@@ -68,7 +68,10 @@ export default function Dashboard() {
     const [advType, setAdvType] = useState<'music' | 'photo' | 'product'>('music');
     const [mt, setMt] = useState(''); const [ma, setMa] = useState('');
     const [me, setMe] = useState(''); const [mc, setMc] = useState('');
-    const [pImg, setPImg] = useState(''); const [pCap, setPCap] = useState('');
+    // Photo block: uploaded image URLs
+    const [pImgs, setPImgs] = useState<string[]>([]);
+    const [pCap, setPCap] = useState('');
+    const [isUploadingPhotos, setIsUploadingPhotos] = useState(false);
     const [prName, setPrName] = useState(''); const [prPrice, setPrPrice] = useState('');
     const [prBuy, setPrBuy] = useState(''); const [prImg, setPrImg] = useState('');
 
@@ -138,10 +141,9 @@ export default function Dashboard() {
             setMt(''); setMa(''); setMe(''); setMc('');
             showToast('Music block added', 'success', '🎵');
         } else if (advType === 'photo') {
-            const imgs = pImg.split(',').map(s => s.trim()).filter(Boolean);
-            if (!imgs.length) return;
-            saveBlocks([...blocks, { id, type: 'photo', images: imgs, caption: pCap, enabled: true } as PhotoBlock]);
-            setPImg(''); setPCap('');
+            if (!pImgs.length) return;
+            saveBlocks([...blocks, { id, type: 'photo', images: pImgs, caption: pCap, enabled: true } as PhotoBlock]);
+            setPImgs([]); setPCap('');
             showToast('Photo block added', 'success', '📷');
         } else if (advType === 'product' && prName && prBuy) {
             saveBlocks([...blocks, { id, type: 'product', name: prName, price: prPrice, imageUrl: prImg, buyUrl: prBuy, enabled: true } as ProductBlock]);
@@ -149,6 +151,29 @@ export default function Dashboard() {
             showToast('Product block added', 'success', '🛍️');
         }
         setShowAdvanced(false);
+    };
+
+    // Upload multiple photos directly to Appwrite Storage
+    const uploadPhotos = async (e: ChangeEvent<HTMLInputElement>) => {
+        if (!e.target.files || !e.target.files.length || !APPWRITE_READY) return;
+        setIsUploadingPhotos(true);
+        const files = Array.from(e.target.files);
+        try {
+            const urls = await Promise.all(
+                files.map(async (file) => {
+                    const fileId = ID.unique();
+                    await storage.createFile(APPWRITE_CONFIG.storageBucketId, fileId, file);
+                    return storage.getFileView(APPWRITE_CONFIG.storageBucketId, fileId) as unknown as string;
+                })
+            );
+            setPImgs(prev => [...prev, ...urls]);
+            showToast(`${files.length} photo${files.length > 1 ? 's' : ''} uploaded`, 'success', '📷');
+        } catch (err: unknown) {
+            showToast('Photo upload failed', 'error');
+        } finally {
+            setIsUploadingPhotos(false);
+            e.target.value = '';
+        }
     };
 
     const saveAppearance = () => { 
@@ -427,8 +452,47 @@ export default function Dashboard() {
                                                 {advType === 'photo' && (
                                                     <div className="bento-adv-fields">
                                                         <input className="bento-input" placeholder="Caption (optional)" value={pCap} onChange={e => setPCap(e.target.value)} />
-                                                        <textarea className="bento-input" placeholder="Paste image URLs, separated by commas *" value={pImg} onChange={e => setPImg(e.target.value)} rows={2} style={{ resize: 'none' }} />
-                                                        <button className="bento-save" onClick={addBlock}>Add Photo Block</button>
+
+                                                        {/* File upload drop zone */}
+                                                        <label className="photo-upload-zone">
+                                                            <span className="photo-upload-zone__icon">📸</span>
+                                                            <span className="photo-upload-zone__text">
+                                                                {isUploadingPhotos ? 'Uploading…' : 'Click to upload photos'}
+                                                            </span>
+                                                            <span className="photo-upload-zone__sub">JPG, PNG, WEBP — multiple allowed</span>
+                                                            <input
+                                                                type="file"
+                                                                accept="image/*"
+                                                                multiple
+                                                                style={{ display: 'none' }}
+                                                                onChange={uploadPhotos}
+                                                                disabled={isUploadingPhotos}
+                                                            />
+                                                        </label>
+
+                                                        {/* Thumbnail previews */}
+                                                        {pImgs.length > 0 && (
+                                                            <div className="photo-thumbs">
+                                                                {pImgs.map((url, i) => (
+                                                                    <div key={i} className="photo-thumb">
+                                                                        <img src={url} alt={`Photo ${i + 1}`} />
+                                                                        <button
+                                                                            className="photo-thumb__remove"
+                                                                            onClick={() => setPImgs(prev => prev.filter((_, idx) => idx !== i))}
+                                                                            aria-label="Remove"
+                                                                        >✕</button>
+                                                                    </div>
+                                                                ))}
+                                                            </div>
+                                                        )}
+
+                                                        <button
+                                                            className="bento-save"
+                                                            onClick={addBlock}
+                                                            disabled={pImgs.length === 0 || isUploadingPhotos}
+                                                        >
+                                                            {isUploadingPhotos ? 'Uploading…' : `Add Photo Block${pImgs.length > 0 ? ` (${pImgs.length})` : ''}`}
+                                                        </button>
                                                     </div>
                                                 )}
                                                 {advType === 'product' && (

@@ -141,13 +141,13 @@
   gap: 40px;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 40px 80px !important;
+  padding: 24px 40px 80px !important;
   align-items: start;
 }
 
 .bento-right-col {
   position: sticky;
-  top: 144px;
+  top: 164px;
   height: fit-content;
 }
 
@@ -334,7 +334,86 @@ textarea.bento-input { height: auto; padding: 10px 14px; }
   color: #1e2d4a;
 }
 
-/* ── Advanced block toggle ── */
+/* ── Photo upload drop zone (advanced panel) ── */
+.photo-upload-zone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 20px;
+  border: 2px dashed rgba(30, 45, 74, 0.20);
+  border-radius: 12px;
+  background: rgba(30, 45, 74, 0.025);
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+  text-align: center;
+}
+
+.photo-upload-zone:hover {
+  border-color: rgba(30, 45, 74, 0.40);
+  background: rgba(30, 45, 74, 0.06);
+}
+
+.photo-upload-zone__icon {
+  font-size: 1.8rem;
+  line-height: 1;
+}
+
+.photo-upload-zone__text {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #4a4a6a;
+}
+
+.photo-upload-zone__sub {
+  font-size: 0.75rem;
+  color: #8a8aaa;
+}
+
+/* Uploaded photo thumbnails preview strip */
+.photo-thumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.photo-thumb {
+  position: relative;
+  width: 56px;
+  height: 56px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(30, 45, 74, 0.12);
+}
+
+.photo-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.photo-thumb__remove {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 16px;
+  height: 16px;
+  background: rgba(0,0,0,0.65);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  font-size: 0.6rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  padding: 0;
+}
+
 .bento-adv-toggle {
   display: block;
   width: 100%;
@@ -1596,20 +1675,50 @@ textarea.bento-input { height: auto; padding: 10px 14px; }
   text-align: center !important;
 }
 
+/* ── Phone shell wrapper ── */
 .phone-preview,
 .live-preview {
-  width: 260px !important;
-  height: 540px !important;
-  border-radius: 38px !important;
-  overflow: hidden !important;
-  border: 2px solid rgba(30, 45, 74, 0.15) !important;
-  box-shadow:
-    0 24px 60px rgba(30, 45, 74, 0.15),
-    0 8px 20px rgba(30, 45, 74, 0.08),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.60) !important;
-  background: #fdf8f2 !important;
   position: relative !important;
+  width: 270px !important;
+  height: 560px !important;
+  border-radius: 44px !important;
+  background: #1a1a2e !important;
+  box-shadow:
+    0 0 0 2px rgba(255,255,255,0.08),
+    0 0 0 10px #111,
+    0 32px 64px rgba(0,0,0,0.45),
+    0 8px 24px rgba(0,0,0,0.25) !important;
+  overflow: hidden !important;
   flex-shrink: 0 !important;
+  margin: 0 auto !important;
+}
+
+/* Dynamic island notch */
+.phone-preview::before,
+.live-preview::before {
+  content: '';
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90px;
+  height: 28px;
+  background: #000;
+  border-radius: 20px;
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* Side button details */
+.phone-preview::after,
+.live-preview::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  border-radius: 44px;
+  border: 1.5px solid rgba(255,255,255,0.10);
+  pointer-events: none;
+  z-index: 9;
 }
 
 .phone-preview > *,
@@ -1621,6 +1730,7 @@ textarea.bento-input { height: auto; padding: 10px 14px; }
   border: none !important;
   overflow-y: auto !important;
   overflow-x: hidden !important;
+  border-radius: 44px !important;
 }
 
 
