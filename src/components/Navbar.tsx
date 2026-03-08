@@ -4,9 +4,21 @@ import { useAuth } from '../context/AuthContext';
 import '../pages/LandingPage.css';
 
 export default function Navbar() {
+    const [isDarkMode, setIsDarkMode] = useState(() => {
+        const theme = localStorage.getItem('theme');
+        return theme === 'dark';
+    });
     const [menuOpen, setMenuOpen] = useState(false);
     const { user, logout } = useAuth();
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (isDarkMode) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+        } else {
+            document.documentElement.removeAttribute('data-theme');
+        }
+    }, [isDarkMode]);
 
     // Close menu on outside click
     useEffect(() => {
@@ -16,8 +28,17 @@ export default function Navbar() {
         return () => document.removeEventListener('click', close);
     }, [menuOpen]);
 
-
-
+    const toggleTheme = () => {
+        const newMode = !isDarkMode;
+        setIsDarkMode(newMode);
+        if (newMode) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            localStorage.setItem('theme', 'dark');
+        } else {
+            document.documentElement.removeAttribute('data-theme');
+            localStorage.setItem('theme', 'light');
+        }
+    };
     const handleLogout = () => {
         logout();
         navigate('/');
@@ -37,6 +58,9 @@ export default function Navbar() {
 
             {/* Desktop right actions */}
             <div className="nav-end nav-end--desktop">
+                <button className="btn-theme-toggle" onClick={toggleTheme} aria-label="Toggle Dark Mode">
+                    {isDarkMode ? '☀️' : '🌙'}
+                </button>
                 {user ? (
                     <>
                         <Link to="/dashboard">
@@ -64,6 +88,9 @@ export default function Navbar() {
 
             {/* Mobile: theme toggle + hamburger */}
             <div className="nav-mobile-right">
+                <button className="btn-theme-toggle" onClick={toggleTheme} aria-label="Toggle Dark Mode">
+                    {isDarkMode ? '☀️' : '🌙'}
+                </button>
                 <button
                     className={`nav-hamburger${menuOpen ? ' open' : ''}`}
                     onClick={e => { e.stopPropagation(); setMenuOpen(o => !o); }}
