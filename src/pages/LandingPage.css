@@ -1,9 +1,7 @@
 /* ═══ GLOBAL RESET & SPATIAL DEFAULTS ═══ */
 
 body {
-    background-color: var(--bg-color);
-    color: var(--text-dark);
-    font-family: var(--font-sans);
+    /* Rely on the globally defined Sequoia Liquid Glass dark theme from index.css */
     line-height: 1.6;
     overflow-x: hidden;
 }

@@ -1,12 +1,11 @@
 /* ── Dashboard — Sequoia Liquid Glass Edition — Final Polish ── */
 
 .dashboard-wrapper {
-  background-color: #07070f !important;
+  background-color: #05050f !important;
   background-image:
-    radial-gradient(ellipse 75% 55% at 15% 20%,
-      rgba(124, 58, 237, 0.20) 0%, transparent 60%),
-    radial-gradient(ellipse 55% 70% at 85% 80%,
-      rgba(59, 130, 246, 0.12) 0%, transparent 60%) !important;
+    radial-gradient(ellipse 70% 60% at 15% 20%, rgba(124, 58, 237, 0.35) 0%, transparent 65%),
+    radial-gradient(ellipse 65% 70% at 85% 80%, rgba(59, 130, 246, 0.25) 0%, transparent 65%),
+    radial-gradient(ellipse 50% 50% at 50% 40%, rgba(236, 72, 153, 0.15) 0%, transparent 60%) !important;
   min-height: 100vh;
   overflow-x: hidden;
   padding-top: 80px !important; /* Fix 1: navbar 56px + 16px top offset + 8px gap */
@@ -493,16 +492,16 @@
 .bento-toggle input:checked + .bento-toggle-track:before { transform: translateX(20px); }
 .bento-toggle input { opacity: 0; width: 0; height: 0; }
 
-/* ════ DASHBOARD FORM REFINEMENT/* Standardized Glass Card (Fix 2) */
+/* Standardized Glass Card (Fix 2) */
 .bento-card, .promo-card, .dashboard-section-card, .links-card, .stat-card, .appearance-form-card, .settings-form-card {
-  background: rgba(255, 255, 255, 0.06) !important;
+  background: rgba(255, 255, 255, 0.08) !important;
   backdrop-filter: blur(24px) !important;
   -webkit-backdrop-filter: blur(24px) !important;
-  border: 1px solid rgba(255, 255, 255, 0.10) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
   border-radius: 20px !important;
   padding: 32px;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.30),
-              inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 4px 32px rgba(0, 0, 0, 0.40),
+              inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
   margin-bottom: 24px;
 }
 
@@ -824,10 +823,10 @@
 /* Fix 4: Appearance Tab Card (Opaque grey fix) */
 .appearance-tab,
 .bento-card-appearance {
-  background: rgba(255, 255, 255, 0.06) !important;
+  background: rgba(255, 255, 255, 0.08) !important;
   backdrop-filter: blur(24px) !important;
   -webkit-backdrop-filter: blur(24px) !important;
-  border: 1px solid rgba(255, 255, 255, 0.10) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
 }
 
 /* Link Item Interactions (Fix 5) */

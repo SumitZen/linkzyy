@@ -65,24 +65,24 @@
   --radius-pill: 9999px;
 
   /* Legacy Compat (keep for now) */
-  --bg-color: #F9F9F9;
-  --surface-1: #FFFFFF;
-  --surface-2: #F5F5F5;
-  --text-dark: #0A0A0A;
-  --text-muted: #6B7280;
-  --text-light: #F9F9F9;
+  --bg-color: #05050f;
+  --surface-1: rgba(255, 255, 255, 0.04);
+  --surface-2: rgba(255, 255, 255, 0.08);
+  --text-dark: rgba(255, 255, 255, 0.95);
+  --text-muted: rgba(255, 255, 255, 0.60);
+  --text-light: #000000;
 }
 
-/* Dark mode */
+/* Dark mode overrides (ensure they match the base now) */
 [data-theme='dark'] {
   color-scheme: dark;
-  --bg-color: #0D1117;
-  --surface-1: #161B22;
-  --surface-2: #21262D;
+  --bg-color: #05050f;
+  --surface-1: rgba(255, 255, 255, 0.04);
+  --surface-2: rgba(255, 255, 255, 0.08);
 
-  --text-dark: #F0F6FC;
-  --text-muted: #8B949E;
-  --text-light: #0D1117;
+  --text-dark: rgba(255, 255, 255, 0.95);
+  --text-muted: rgba(255, 255, 255, 0.60);
+  --text-light: #000000;
 
   --accent: #a78bfa;
   --accent-hover: #7c3aed;
@@ -119,7 +119,10 @@ html {
 
 body {
   font-family: var(--font-sans);
-  background: var(--bg-color);
+  background-color: var(--bg-color);
+  background-image:
+    radial-gradient(ellipse 80% 60% at 20% 0%, rgba(124, 58, 237, 0.20) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 80% at 80% 100%, rgba(59, 130, 246, 0.15) 0%, transparent 60%);
   color: var(--text-dark);
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
