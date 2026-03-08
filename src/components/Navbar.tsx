@@ -1,12 +1,23 @@
 import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import '../pages/LandingPage.css';
+import styles from './Navbar.module.css';
 
 export default function Navbar() {
     const [menuOpen, setMenuOpen] = useState(false);
+    const [scrolled, setScrolled] = useState(false);
     const { user, logout } = useAuth();
     const navigate = useNavigate();
+    const location = useLocation();
+
+    // Scroll detection for transparent -> opaque transition
+    useEffect(() => {
+        const handleScroll = () => {
+            setScrolled(window.scrollY > 80);
+        };
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
 
     // Close menu on outside click
     useEffect(() => {
@@ -16,78 +27,83 @@ export default function Navbar() {
         return () => document.removeEventListener('click', close);
     }, [menuOpen]);
 
-
     const handleLogout = () => {
         logout();
         navigate('/');
         setMenuOpen(false);
     };
 
+    const isHome = location.pathname === '/';
+
     return (
-        <nav className="nav-brutal">
-            <Link to="/" className="nav-logo" style={{ textDecoration: 'none' }}>Linkzy</Link>
+        <nav className={`${styles.navbar} ${scrolled ? styles['navbar--scrolled'] : ''}`}>
+            <Link to="/" className={styles.logo}>Linkzy</Link>
 
             {/* Desktop links */}
-            <ul className="nav-links nav-links--desktop">
-                <li><Link to="/templates">Templates</Link></li>
-                <li><Link to="/pricing">Pricing</Link></li>
-                <li><Link to="/blog">Blog</Link></li>
-            </ul>
+            <div className={styles.navLinks}>
+                <Link to="/" className={`${styles.navLink} ${isHome ? styles.navLinkActive : ''}`}>Home</Link>
+                <Link to="/templates" className={styles.navLink}>Templates</Link>
+                <Link to="/pricing" className={styles.navLink}>Pricing</Link>
+                <Link to="/blog" className={styles.navLink}>Blog</Link>
+            </div>
 
             {/* Desktop right actions */}
-            <div className="nav-end nav-end--desktop">
+            <div className={styles.navRight}>
                 {user ? (
                     <>
-                        <Link to="/dashboard">
-                            <button className="btn-login" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                <span style={{
-                                    width: '22px', height: '22px', borderRadius: '50%',
-                                    background: 'var(--text-dark)', color: 'var(--surface-1)',
-                                    display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                                    fontSize: '0.75rem', fontWeight: 700, flexShrink: 0
-                                }}>
-                                    {user.name.charAt(0).toUpperCase()}
-                                </span>
-                                Dashboard
-                            </button>
+                        <Link to="/dashboard" className={styles.dashboardBtn}>
+                            <span style={{
+                                width: '22px', height: '22px', borderRadius: '50%',
+                                background: scrolled ? 'var(--text-dark)' : 'rgba(255,255,255,0.2)', 
+                                color: scrolled ? 'var(--surface-1)' : '#fff',
+                                display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                                fontSize: '0.7rem', fontWeight: 700, flexShrink: 0, marginRight: '8px'
+                            }}>
+                                {user.name.charAt(0).toUpperCase()}
+                            </span>
+                            Dashboard
                         </Link>
-                        <button className="btn-login" onClick={handleLogout}>Log out</button>
+                        <button className={styles.logoutBtn} onClick={handleLogout}>Log out</button>
                     </>
                 ) : (
                     <>
-                        <Link to="/login"><button className="btn-login">Log in</button></Link>
-                        <Link to="/signup"><button className="btn-signup">Sign up free</button></Link>
+                        <Link to="/login" className={styles.navLink}>Log in</Link>
+                        <Link to="/signup" className={styles.ctaBtn}>Sign up free</Link>
                     </>
                 )}
             </div>
 
             {/* Mobile: hamburger */}
-            <div className="nav-mobile-right">
-                <button
-                    className={`nav-hamburger${menuOpen ? ' open' : ''}`}
-                    onClick={e => { e.stopPropagation(); setMenuOpen(o => !o); }}
-                    aria-label="Open menu"
-                >
-                    <span /><span /><span />
-                </button>
-            </div>
+            <button
+                className={styles.hamburger}
+                onClick={e => { e.stopPropagation(); setMenuOpen(o => !o); }}
+                aria-label="Open menu"
+            >
+                <span /><span /><span />
+            </button>
 
-            {/* Mobile dropdown */}
+            {/* Mobile dropdown - simplistic for now, can be improved */}
             {menuOpen && (
-                <div className="nav-mobile-menu" onClick={e => e.stopPropagation()}>
-                    <Link to="/templates" onClick={() => setMenuOpen(false)}>Templates</Link>
-                    <Link to="/pricing" onClick={() => setMenuOpen(false)}>Pricing</Link>
-                    <Link to="/blog" onClick={() => setMenuOpen(false)}>Blog</Link>
-                    <hr style={{ border: 'none', borderTop: '1px solid #eee', margin: '4px 0' }} />
+                <div style={{
+                    position: 'absolute', top: '70px', left: '12px', right: '12px',
+                    background: 'rgba(253, 248, 242, 0.98)', borderRadius: '24px',
+                    padding: '24px', display: 'flex', flexDirection: 'column', gap: '16px',
+                    boxShadow: '0 10px 30px rgba(0,0,0,0.1)', border: '1px solid rgba(30,45,74,0.08)'
+                }}>
+                    <Link to="/" onClick={() => setMenuOpen(false)} style={{ textDecoration: 'none', color: '#1e2d4a', fontWeight: 500 }}>Home</Link>
+                    <Link to="/templates" onClick={() => setMenuOpen(false)} style={{ textDecoration: 'none', color: '#1e2d4a', fontWeight: 500 }}>Templates</Link>
+                    <Link to="/pricing" onClick={() => setMenuOpen(false)} style={{ textDecoration: 'none', color: '#1e2d4a', fontWeight: 500 }}>Pricing</Link>
+                    <Link to="/blog" onClick={() => setMenuOpen(false)} style={{ textDecoration: 'none', color: '#1e2d4a', fontWeight: 500 }}>Blog</Link>
+                    <hr style={{ border: 'none', borderTop: '1px solid rgba(0,0,0,0.05)', margin: 0 }} />
                     {user ? (
                         <>
-                            <Link to="/dashboard" onClick={() => setMenuOpen(false)}>Dashboard</Link>
-                            <button onClick={handleLogout} style={{ textAlign: 'left', background: 'none', border: 'none', color: '#dc2626', fontFamily: 'inherit', fontSize: '0.95rem', cursor: 'pointer', padding: '10px 0', width: '100%' }}>Log out</button>
+                            <Link to="/dashboard" onClick={() => setMenuOpen(false)} style={{ textDecoration: 'none', color: '#1e2d4a', fontWeight: 500 }}>Dashboard</Link>
+                            <button onClick={handleLogout} style={{ textAlign: 'left', background: 'none', border: 'none', color: '#dc2626', fontWeight: 500, cursor: 'pointer', padding: 0 }}>Log out</button>
                         </>
                     ) : (
                         <>
-                            <Link to="/login" onClick={() => setMenuOpen(false)}>Log in</Link>
-                            <Link to="/signup" onClick={() => setMenuOpen(false)} style={{ fontWeight: 700 }}>Sign up free →</Link>
+                            <Link to="/login" onClick={() => setMenuOpen(false)} style={{ textDecoration: 'none', color: '#1e2d4a', fontWeight: 500 }}>Log in</Link>
+                            <Link to="/signup" onClick={() => setMenuOpen(false)} style={{ textDecoration: 'none', color: '#1e2d4a', fontWeight: 700 }}>Sign up free</Link>
                         </>
                     )}
                 </div>

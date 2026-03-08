@@ -1,0 +1,234 @@
+.navbar {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 500;
+  width: calc(100% - 48px);
+  max-width: 1200px;
+
+  /* SkyTrace style: visible border, very subtle glass — no opaque background */
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px) saturate(150%);
+  -webkit-backdrop-filter: blur(20px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+  box-shadow:
+    0 4px 24px rgba(0, 0, 0, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+
+  height: 60px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 8px 0 24px;
+  gap: 0;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+}
+
+/* When page is scrolled BELOW the hero, switch to warm opaque pill */
+.navbar--scrolled {
+  background: rgba(253, 248, 242, 0.94);
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  border-color: rgba(30, 45, 74, 0.12);
+  box-shadow:
+    0 4px 24px rgba(30, 45, 74, 0.10),
+    inset 0 1px 0 rgba(255, 255, 255, 0.90);
+}
+
+/* Logo — white when over hero, dark when scrolled */
+.logo {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #ffffff;
+  text-decoration: none;
+  letter-spacing: -0.02em;
+  flex-shrink: 0;
+  white-space: nowrap;
+  transition: color 0.25s ease;
+}
+
+.navbar--scrolled .logo {
+  color: #1e2d4a;
+}
+
+/* Nav links group */
+.navLinks {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 2px;
+  margin-left: auto;
+  padding: 0 6px;
+}
+
+/* Individual link */
+.navLink {
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.80);
+  text-decoration: none;
+  padding: 7px 16px;
+  border-radius: 999px;
+  white-space: nowrap;
+  transition: color 0.18s ease, background 0.18s ease;
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+}
+
+.navLink:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.10);
+}
+
+/* ACTIVE link — solid white pill (the SkyTrace effect) */
+.navLink--active,
+.navLinkActive {
+  background: #ffffff !important;
+  color: #1e2d4a !important;
+  font-weight: 500 !important;
+}
+
+/* When scrolled: links go dark */
+.navbar--scrolled .navLink {
+  color: #4a4a6a;
+}
+
+.navbar--scrolled .navLink:hover {
+  color: #1e2d4a;
+  background: rgba(30, 45, 74, 0.06);
+}
+
+.navbar--scrolled .navLink--active,
+.navbar--scrolled .navLinkActive {
+  background: #1e2d4a !important;
+  color: #ffffff !important;
+}
+
+/* Right side CTA */
+.navRight {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  margin-left: 8px;
+}
+
+.ctaBtn {
+  padding: 9px 20px;
+  background: #ffffff;
+  color: #1e2d4a;
+  border: none;
+  border-radius: 999px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  transition: opacity 0.18s ease;
+}
+
+.ctaBtn:hover {
+  opacity: 0.88;
+}
+
+.navbar--scrolled .ctaBtn {
+  background: #1e2d4a;
+  color: #ffffff;
+  box-shadow: 0 2px 12px rgba(30, 45, 74, 0.22);
+}
+
+/* Dashboard / logged-in state */
+.dashboardBtn {
+  padding: 9px 20px;
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  transition: background 0.18s ease;
+}
+
+.dashboardBtn:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.navbar--scrolled .dashboardBtn {
+  background: #1e2d4a;
+  color: #ffffff;
+  border-color: transparent;
+  box-shadow: 0 2px 12px rgba(30, 45, 74, 0.22);
+}
+
+.logoutBtn {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.65);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 999px;
+  transition: color 0.18s ease;
+}
+
+.logoutBtn:hover {
+  color: #ffffff;
+}
+
+.navbar--scrolled .logoutBtn {
+  color: #4a4a6a;
+}
+
+.navbar--scrolled .logoutBtn:hover {
+  color: #1e2d4a;
+}
+
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 24px;
+  height: 24px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: 1001;
+}
+
+.hamburger span {
+  width: 24px;
+  height: 2px;
+  background: #ffffff;
+  border-radius: 10px;
+  transition: all 0.3s linear;
+}
+
+.navbar--scrolled .hamburger span {
+  background: #1e2d4a;
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    width: calc(100% - 24px);
+    top: 12px;
+    padding: 0 6px 0 20px;
+    height: 54px;
+  }
+  .navLinks { display: none; }
+  .hamburger { display: flex; }
+}
