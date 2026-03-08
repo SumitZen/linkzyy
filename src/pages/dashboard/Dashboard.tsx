@@ -101,6 +101,16 @@ export default function Dashboard() {
     const [promoCode, setPromoCode] = useState('');
     const [promoStatus, setPromoStatus] = useState<'idle' | 'ok' | 'invalid' | 'already_active' | 'loading'>('idle');
 
+    // ─── Lock Scroll on Crop ───
+    useEffect(() => {
+        if (cropImageSrc) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
+        return () => { document.body.style.overflow = ''; };
+    }, [cropImageSrc]);
+
     const handleCopyLink = (url: string) => {
         navigator.clipboard.writeText(url);
         showToast('Link copied to clipboard', 'success', '📋');
