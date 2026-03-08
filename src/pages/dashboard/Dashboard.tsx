@@ -9,12 +9,13 @@ import { PLATFORM_ICONS, PLATFORM_COLORS } from '../../lib/platformIcons';
 import { templatesList } from '../../lib/themes';
 import { storage, APPWRITE_READY, APPWRITE_CONFIG } from '../../lib/appwrite';
 import { ID } from 'appwrite';
-
-// ... other imports remain unchanged (keep them outside this replace block by targeting just the function)
+import { useToast } from '../../hooks/useToast';
+import { ToastContainer } from '../../components/Toast';
 
 import getCroppedImg from '../../lib/cropImage';
 import Navbar from '../../components/Navbar';
 import './Dashboard.css';
+import styles from './Dashboard.module.css';
 
 // Icon helper — renders real SVG from a platform id (falls back to a generic link icon)
 function PlatformIcon({ id, size = 18 }: { id: string; size?: number }) {
@@ -34,7 +35,7 @@ export default function Dashboard() {
     const { user, logout, updateUser, redeemPromoCode } = useAuth();
     const navigate = useNavigate();
     const [searchParams, setSearchParams] = useSearchParams();
-    const [savedMsg, setSavedMsg] = useState('');
+    const { toasts, showToast, dismiss } = useToast();
     const [activeTab, setActiveTab] = useState<'links' | 'appearance' | 'settings'>('links');
 
     // ─── Content state ───
@@ -97,15 +98,10 @@ export default function Dashboard() {
     const [promoCode, setPromoCode] = useState('');
     const [promoStatus, setPromoStatus] = useState<'idle' | 'ok' | 'invalid' | 'already_active' | 'loading'>('idle');
 
-    const [copiedId, setCopiedId] = useState<string | null>(null);
-
-    const handleCopyLink = (url: string, id: string) => {
+    const handleCopyLink = (url: string) => {
         navigator.clipboard.writeText(url);
-        setCopiedId(id);
-        setTimeout(() => setCopiedId(null), 2000);
+        showToast('Link copied to clipboard', 'success', '📋');
     };
-
-    const flash = () => { setSavedMsg('Saved!'); setTimeout(() => setSavedMsg(''), 1800); };
 
     // ─── Auto-Apply Theme from URL ───
     useEffect(() => {
@@ -127,6 +123,7 @@ export default function Dashboard() {
         const url = newUrl.startsWith('http') ? newUrl : `https://${newUrl}`;
         saveLinks([...links, { id: crypto.randomUUID(), type: 'link', label: newLabel.trim(), url, icon: newIcon, enabled: true }]);
         setNewLabel(''); setNewUrl('');
+        showToast('Link added', 'success', '🔗');
     };
 
     const removeLink = (id: string) => saveLinks(links.filter(l => l.id !== id));
@@ -139,19 +136,25 @@ export default function Dashboard() {
         if (advType === 'music' && mt && me) {
             saveBlocks([...blocks, { id, type: 'music', title: mt, artist: ma, embedUrl: me, coverUrl: mc, enabled: true } as MusicBlock]);
             setMt(''); setMa(''); setMe(''); setMc('');
+            showToast('Music block added', 'success', '🎵');
         } else if (advType === 'photo') {
             const imgs = pImg.split(',').map(s => s.trim()).filter(Boolean);
             if (!imgs.length) return;
             saveBlocks([...blocks, { id, type: 'photo', images: imgs, caption: pCap, enabled: true } as PhotoBlock]);
             setPImg(''); setPCap('');
+            showToast('Photo block added', 'success', '📷');
         } else if (advType === 'product' && prName && prBuy) {
             saveBlocks([...blocks, { id, type: 'product', name: prName, price: prPrice, imageUrl: prImg, buyUrl: prBuy, enabled: true } as ProductBlock]);
             setPrName(''); setPrPrice(''); setPrBuy(''); setPrImg('');
+            showToast('Product block added', 'success', '🛍️');
         }
         setShowAdvanced(false);
     };
 
-    const saveAppearance = () => { updateUser({ name, bio, avatarUrl, bannerUrl, bgColor, bgImage, theme: selTheme, textColor: manualTextColor }); flash(); };
+    const saveAppearance = () => { 
+        updateUser({ name, bio, avatarUrl, bannerUrl, bgColor, bgImage, theme: selTheme, textColor: manualTextColor }); 
+        showToast('Appearance updated', 'success', '🎨');
+    };
 
     // ─── Cropping & Upload Logic ───
     const onFileChange = async (e: ChangeEvent<HTMLInputElement>, type: 'avatar' | 'banner' | 'background') => {
@@ -176,7 +179,7 @@ export default function Dashboard() {
 
     const uploadCroppedImage = async () => {
         if (!cropImageSrc || !croppedAreaPixels || !user || !APPWRITE_READY) {
-            if (!APPWRITE_READY) alert('Appwrite is not configured yet. Add VITE_APPWRITE_ keys.');
+            if (!APPWRITE_READY) showToast('Appwrite not configured', 'error');
             return;
         }
         setIsUploading(true);
@@ -195,20 +198,22 @@ export default function Dashboard() {
             if (cropType === 'avatar') {
                 setAvatarUrl(publicUrl);
                 updateUser({ avatarUrl: publicUrl });
+                showToast('Profile photo updated', 'success', '📸');
             } else if (cropType === 'banner') {
                 setBannerUrl(publicUrl);
                 updateUser({ bannerUrl: publicUrl });
+                showToast('Banner photo updated', 'success', '🖼️');
             } else {
                 setBgImage(publicUrl);
                 updateUser({ bgImage: publicUrl });
+                showToast('Background updated', 'success', '✨');
             }
 
             setCropImageSrc(null); // Close modal
-            flash();
         } catch (err: unknown) {
             const error = err as Error;
             console.error('Upload failed:', error);
-            alert(`Upload failed: ${error.message || error.toString()}`);
+            showToast(`Upload failed: ${error.message}`, 'error');
         } finally {
             setIsUploading(false);
         }
@@ -219,39 +224,36 @@ export default function Dashboard() {
             <Navbar />
 
             {/* ── SECTION 2 / 7 — TOP SUB-NAVIGATION & MOBILE BOTTOM NAV ── */}
-            <nav className="bento-subnav">
-                {/* Row 1: Tabs */}
-                <div className="bento-subnav__tabs">
-                    <button className={`bento-subnav__tab${activeTab === 'links' ? ' bento-subnav__tab--active' : ''}`} onClick={() => setActiveTab('links')}>
-                        🔗 Links
-                    </button>
-                    <button className={`bento-subnav__tab${activeTab === 'appearance' ? ' bento-subnav__tab--active' : ''}`} onClick={() => setActiveTab('appearance')}>
-                        🎨 Appearance
-                    </button>
-                    <button className={`bento-subnav__tab${activeTab === 'settings' ? ' bento-subnav__tab--active' : ''}`} onClick={() => setActiveTab('settings')}>
-                        ⚙️ Settings
-                    </button>
-                </div>
-
-                {/* Row 2: URL bar & Actions */}
-                <div className="bento-subnav__url-row">
-                    <div className="quick-actions-bar__url">{window.location.host}/{user?.id}</div>
-                    <button className="btn-copy-link" onClick={() => handleCopyLink(`${window.location.origin}/${user?.id}`, 'dashboard-url')}>
-                        <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.5">
-                            <rect x="5" y="5" width="9" height="9" rx="1.5"/>
-                            <path d="M3 11V3a1 1 0 0 1 1-1h8" strokeLinecap="round"/>
-                        </svg>
-                        Copy Link
-                    </button>
-                    <button className="btn-preview" onClick={() => navigate(`/${user?.id}`)}>
-                        <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.5">
-                            <path d="M8 3c-4.418 0-8 5-8 5s3.582 5 8 5 8-5 8-5-3.582-5-8-5zm0 8a3 3 0 1 1 0-6 3 3 0 0 1 0 6z" strokeLinecap="round" strokeLinejoin="round"/>
-                            <circle cx="8" cy="8" r="1" fill="currentColor" />
-                        </svg>
-                        Preview
-                    </button>
-                </div>
+            <nav className={styles.subnav}>
+                <button className={`${styles.tab}${activeTab === 'links' ? ` ${styles.tabActive}` : ''}`} onClick={() => setActiveTab('links')}>
+                    🔗 Links
+                </button>
+                <button className={`${styles.tab}${activeTab === 'appearance' ? ` ${styles.tabActive}` : ''}`} onClick={() => setActiveTab('appearance')}>
+                    🎨 Appearance
+                </button>
+                <button className={`${styles.tab}${activeTab === 'settings' ? ` ${styles.tabActive}` : ''}`} onClick={() => setActiveTab('settings')}>
+                    ⚙️ Settings
+                </button>
             </nav>
+
+            {/* URL bar stays OUTSIDE the subnav pill, below it */}
+            <div className="quick-actions-bar">
+                <div className="quick-actions-bar__url">{window.location.host}/{user?.id}</div>
+                <button className="btn-copy-link" onClick={() => handleCopyLink(`${window.location.origin}/${user?.id}`)}>
+                    <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.5">
+                        <rect x="5" y="5" width="9" height="9" rx="1.5"/>
+                        <path d="M3 11V3a1 1 0 0 1 1-1h8" strokeLinecap="round"/>
+                    </svg>
+                    Copy Link
+                </button>
+                <button className="btn-preview" onClick={() => navigate(`/${user?.id}`)}>
+                    <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.5">
+                        <path d="M8 3c-4.418 0-8 5-8 5s3.582 5 8 5 8-5 8-5-3.582-5-8-5zm0 8a3 3 0 1 1 0-6 3 3 0 0 1 0 6z" strokeLinecap="round" strokeLinejoin="round"/>
+                        <circle cx="8" cy="8" r="1" fill="currentColor" />
+                    </svg>
+                    Preview
+                </button>
+            </div>
 
             {/* Mobile Bottom Nav */}
             <nav className="bento-mobile-nav">
@@ -326,12 +328,6 @@ export default function Dashboard() {
 
             <div className="bento-layout">
                 <main className="bento-left-col">
-
-
-                            <div className={`copy-toast ${copiedId === 'dashboard-url' ? 'copy-toast--visible' : ''}`}>
-                                Link copied to clipboard
-                            </div>
-
                             {/* ── LINKS TAB (Includes Stats) ── */}
                             {activeTab === 'links' && (
                                 <div className="bento-fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
@@ -339,8 +335,6 @@ export default function Dashboard() {
                                         <h1>Links & Blocks</h1>
                                         <p>Manage the content on your Linkzy profile.</p>
                                     </header>
-
-
 
                                     <div className="stats-grid">
                                         <div className="stat-card">
@@ -478,24 +472,23 @@ export default function Dashboard() {
                                                     <div className="link-item__actions">
                                                         <button
                                                             className="link-item__copy"
-                                                            onClick={() => handleCopyLink(link.url, link.id)}
+                                                            onClick={() => handleCopyLink(link.url)}
                                                             title="Copy URL"
                                                         >
-                                                            {copiedId === link.id ? (
-                                                                <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2">
-                                                                    <path d="M2 8l4 4 8-8" strokeLinecap="round"/>
-                                                                </svg>
-                                                            ) : (
-                                                                <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.5">
-                                                                    <rect x="5" y="5" width="9" height="9" rx="1.5"/>
-                                                                    <path d="M3 11V3a1 1 0 0 1 1-1h8" strokeLinecap="round"/>
-                                                                </svg>
-                                                            )}
+                                                            <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.5">
+                                                                <rect x="5" y="5" width="9" height="9" rx="1.5"/>
+                                                                <path d="M3 11V3a1 1 0 0 1 1-1h8" strokeLinecap="round"/>
+                                                            </svg>
                                                         </button>
-                                                        <label className="bento-toggle">
-                                                            <input type="checkbox" checked={link.enabled} onChange={() => toggleLink(link.id)} />
-                                                            <span className="bento-toggle-track" />
-                                                        </label>
+                                                        <button 
+                                                            className={`link-item__toggle${link.enabled ? ' link-item__toggle--active' : ''}`}
+                                                            onClick={() => toggleLink(link.id)}
+                                                            title={link.enabled ? "Disable link" : "Enable link"}
+                                                        >
+                                                            <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2">
+                                                                <path d="M2 8l4 4 8-8" strokeLinecap="round" strokeLinejoin="round"/>
+                                                            </svg>
+                                                        </button>
                                                         <button className="link-item__delete" title="Remove" onClick={() => removeLink(link.id)}>✕</button>
                                                     </div>
                                                 </div>
@@ -514,10 +507,15 @@ export default function Dashboard() {
                                                         <div className="link-item__url">{block.type} block</div>
                                                     </div>
                                                     <div className="link-item__actions">
-                                                        <label className="bento-toggle">
-                                                            <input type="checkbox" checked={block.enabled} onChange={() => toggleBlock(block.id)} />
-                                                            <span className="bento-toggle-track" />
-                                                        </label>
+                                                        <button 
+                                                            className={`link-item__toggle${block.enabled ? ' link-item__toggle--active' : ''}`}
+                                                            onClick={() => toggleBlock(block.id)}
+                                                            title={block.enabled ? "Disable block" : "Enable block"}
+                                                        >
+                                                            <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2">
+                                                                <path d="M2 8l4 4 8-8" strokeLinecap="round" strokeLinejoin="round"/>
+                                                            </svg>
+                                                        </button>
                                                         <button className="link-item__delete" title="Remove" onClick={() => removeBlock(block.id)}>✕</button>
                                                     </div>
                                                 </div>
@@ -660,7 +658,7 @@ export default function Dashboard() {
                                         </div>
                                     </div>
 
-                                    <button className="btn-primary" onClick={saveAppearance} style={{ alignSelf: 'flex-start' }}>{savedMsg || 'Save Changes'}</button>
+                                    <button className="btn-primary" onClick={saveAppearance} style={{ alignSelf: 'flex-start' }}>Save Changes</button>
                                 </div>
                             )} {/* End Appearance Tab */}
 
@@ -687,7 +685,7 @@ export default function Dashboard() {
                                         </div>
                                     </div>
                                     <div className="settings-actions">
-                                        <button className="btn-save" onClick={() => { updateUser({ name: settingsName }); flash(); }}>{savedMsg || 'Save'}</button>
+                                        <button className="btn-save" onClick={() => { updateUser({ name: settingsName }); showToast('Settings saved', 'success'); }}>Save</button>
                                         <button className="btn-logout" onClick={() => { logout(); navigate('/'); }}>Log out</button>
                                     </div>
 
@@ -717,7 +715,14 @@ export default function Dashboard() {
                                                                 setPromoStatus('loading');
                                                                 const result = await redeemPromoCode(promoCode);
                                                                 setPromoStatus(result);
-                                                                if (result === 'ok') setPromoCode('');
+                                                                if (result === 'ok') {
+                                                                    setPromoCode('');
+                                                                    showToast('🎉 Code activated! Your plan has been upgraded.', 'success');
+                                                                } else if (result === 'invalid') {
+                                                                    showToast('✗ Invalid code. Double-check and try again.', 'error');
+                                                                } else if (result === 'already_active') {
+                                                                    showToast('✓ You already have this plan active.', 'info');
+                                                                }
                                                             }
                                                         }}
                                                         style={{ flex: 1, maxWidth: '100%' }}
@@ -729,21 +734,19 @@ export default function Dashboard() {
                                                             setPromoStatus('loading');
                                                             const result = await redeemPromoCode(promoCode);
                                                             setPromoStatus(result);
-                                                            if (result === 'ok') setPromoCode('');
+                                                            if (result === 'ok') {
+                                                                setPromoCode('');
+                                                                showToast('🎉 Code activated! Your plan has been upgraded.', 'success');
+                                                            } else if (result === 'invalid') {
+                                                                showToast('✗ Invalid code. Double-check and try again.', 'error');
+                                                            } else if (result === 'already_active') {
+                                                                showToast('✓ You already have this plan active.', 'info');
+                                                            }
                                                         }}
                                                     >
                                                         {promoStatus === 'loading' ? 'Checking…' : 'Redeem'}
                                                     </button>
                                                 </div>
-                                                {promoStatus === 'ok' && (
-                                                    <div className="promo-feedback promo-feedback--ok">🎉 Code activated! Your plan has been upgraded.</div>
-                                                )}
-                                                {promoStatus === 'invalid' && (
-                                                    <div className="promo-feedback promo-feedback--error">✗ Invalid code. Double-check and try again.</div>
-                                                )}
-                                                {promoStatus === 'already_active' && (
-                                                    <div className="promo-feedback promo-feedback--warn">✓ You already have this plan active.</div>
-                                                )}
                                             </div>
                                         )}
                                     </div>
@@ -760,12 +763,9 @@ export default function Dashboard() {
                         />
                     </div>
                 </aside>
-
-                {/* Copy Notification (Toast) */}
-                <div className={`copy-toast ${copiedId ? 'copy-toast--visible' : ''}`}>
-                    Link copied to clipboard
-                </div>
             </div>
+
+            <ToastContainer toasts={toasts} onDismiss={dismiss} />
         </div>
     );
 }

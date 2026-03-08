@@ -1,0 +1,70 @@
+.subnav {
+  position: sticky;
+  top: 84px;
+  z-index: 50;
+
+  /* Island pill */
+  width: fit-content;
+  max-width: 440px;
+  margin: 0 auto 28px;
+
+  background: rgba(253, 248, 242, 0.96);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(30, 45, 74, 0.12);
+  border-radius: 999px;
+  box-shadow:
+    0 4px 20px rgba(30, 45, 74, 0.09),
+    0 1px 4px rgba(30, 45, 74, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.90);
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 5px;
+  gap: 2px;
+
+  /* Kill anything that makes it full-width */
+  width: fit-content !important;
+  border-bottom: none;
+  border-radius: 999px;
+}
+
+.tab {
+  padding: 9px 22px;
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: #8a8aaa;
+  cursor: pointer;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  font-family: inherit;
+  transition: color 0.18s ease, background 0.18s ease;
+  white-space: nowrap;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+  border-bottom: none !important;  /* kill the underline */
+}
+
+.tab:hover {
+  color: #1e2d4a;
+  background: rgba(30, 45, 74, 0.06);
+}
+
+/* Active tab — filled navy pill */
+.tabActive {
+  background: #1e2d4a;
+  color: #ffffff;
+  font-weight: 500;
+  border-bottom: none !important;
+  box-shadow: 0 2px 8px rgba(30, 45, 74, 0.20);
+}
+
+.tabActive:hover {
+  background: #1e2d4a;
+  color: #ffffff;
+}

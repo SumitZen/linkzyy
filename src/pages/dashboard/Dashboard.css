@@ -10,103 +10,22 @@
   padding-top: 88px !important;
 }
 
-/* =============================================
-   SUBNAV — full container
-   ============================================= */
+/* Subnav wrappers handled by module or deleted */
 
-.bento-subnav,
-[class*="subnav"],
-[class*="dashboardNav"],
-[class*="tabBar"] {
-  position: sticky !important;
-  top: 80px !important;
-  z-index: 50 !important;
-
-  display: flex !important;
-  flex-direction: column !important;   /* STACK rows vertically */
-  align-items: stretch !important;
-  gap: 0 !important;
-
-  background: rgba(253, 248, 242, 0.96) !important;
-  backdrop-filter: blur(20px) !important;
-  -webkit-backdrop-filter: blur(20px) !important;
-  border-bottom: 1px solid rgba(30, 45, 74, 0.10) !important;
-  padding: 0 !important;
-}
-
-/* =============================================
-   ROW 1 — Tab buttons (Links / Appearance / Settings)
-   ============================================= */
-
-.bento-subnav__tabs,
-[class*="tabList"],
-[class*="tabs-row"],
-.subnav-tabs {
-  display: flex !important;
-  flex-direction: row !important;
-  align-items: center !important;
-  gap: 0 !important;
-  padding: 0 40px !important;
-  border-bottom: 1px solid rgba(30, 45, 74, 0.07) !important;
-  overflow-x: auto !important;
-  scrollbar-width: none !important;
-}
-
-/* Tab button */
-.bento-subnav__tab,
-[class*="tabBtn"],
-[class*="tab-btn"],
-.subnav-tab {
-  padding: 15px 20px !important;
-  font-size: 0.875rem !important;
-  font-weight: 400 !important;
-  color: #8a8aaa !important;
-  cursor: pointer !important;
-  border: none !important;
-  border-bottom: 2px solid transparent !important;
-  background: none !important;
-  font-family: inherit !important;
-  transition: color 0.18s ease, border-color 0.18s ease !important;
-  white-space: nowrap !important;
-  min-height: 52px !important;
-  display: flex !important;
-  align-items: center !important;
-  gap: 7px !important;
-  text-decoration: none !important;
-}
-
-.bento-subnav__tab:hover,
-.subnav-tab:hover {
-  color: #4a4a6a !important;
-}
-
-.bento-subnav__tab--active,
-[class*="tab--active"],
-[class*="tabActive"],
-.subnav-tab--active {
-  color: #1e2d4a !important;
-  border-bottom-color: #b5637a !important;
-  font-weight: 600 !important;
-}
-
-/* =============================================
-   ROW 2 — URL bar (linkzy URL + Copy + Preview)
-   ============================================= */
-
-.bento-subnav__url-row,
+/* URL bar stays OUTSIDE the subnav pill, below it */
 .quick-actions-bar,
 .profile-url-bar,
-[class*="urlBar"],
-[class*="url-bar"] {
+[class*="urlBar"] {
   display: flex !important;
-  flex-direction: row !important;
   align-items: center !important;
   gap: 10px !important;
-  padding: 10px 40px !important;
-  background: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-  margin: 0 !important;
+  padding: 10px 16px !important;
+  background: #ffffff !important;
+  border: 1px solid rgba(30, 45, 74, 0.10) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 1px 4px rgba(30, 45, 74, 0.07) !important;
+  margin: 0 auto 28px !important;
+  max-width: 680px !important;
 }
 
 /* URL text */
@@ -222,7 +141,7 @@
   gap: 40px;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 32px 40px 80px !important;
+  padding: 0 40px 80px !important;
   align-items: start;
 }
 
@@ -235,11 +154,8 @@
 @media (max-width: 960px) {
   .bento-layout { grid-template-columns: 1fr !important; padding: 24px 16px 100px; }
   .bento-right-col { display: none !important; }
-  .bento-subnav { display: none; }
+  [class*="subnav"] { display: none !important; }
   .dashboard-wrapper { padding-top: 76px; }
-  .bento-subnav__tabs { padding: 0 16px !important; }
-  .bento-subnav__url-row,
-  .quick-actions-bar { padding: 8px 16px !important; }
 }
 
 /* Stat Cards */
@@ -290,6 +206,271 @@
   box-shadow: var(--shadow-sm);
 }
 
+.links-card__title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 16px;
+}
+
+/* ── Add Link Row ── */
+.links-add-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  flex-wrap: nowrap;
+}
+
+.links-add-row input {
+  flex: 1;
+  min-width: 0;
+  height: 42px;
+  padding: 0 14px;
+  font-size: 0.875rem;
+  font-family: inherit;
+  color: #1e2d4a;
+  background: #fff;
+  border: 1px solid rgba(30, 45, 74, 0.16);
+  border-radius: 10px;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.links-add-row input::placeholder { color: #b0b0c8; }
+
+.links-add-row input:focus {
+  border-color: rgba(30, 45, 74, 0.45);
+  box-shadow: 0 0 0 3px rgba(30, 45, 74, 0.07);
+}
+
+.btn-add-link {
+  flex-shrink: 0;
+  height: 42px;
+  padding: 0 20px;
+  background: #1e2d4a;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: opacity 0.15s ease, transform 0.12s ease;
+}
+
+.btn-add-link:hover  { opacity: 0.88; }
+.btn-add-link:active { transform: scale(0.97); }
+
+/* ── Shared bento-input (advanced blocks & elsewhere) ── */
+.bento-input {
+  width: 100%;
+  height: 42px;
+  padding: 0 14px;
+  font-size: 0.875rem;
+  font-family: inherit;
+  color: #1e2d4a;
+  background: #fff;
+  border: 1px solid rgba(30, 45, 74, 0.16);
+  border-radius: 10px;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  box-sizing: border-box;
+  display: block;
+}
+
+textarea.bento-input { height: auto; padding: 10px 14px; }
+
+.bento-input::placeholder { color: #b0b0c8; }
+
+.bento-input:focus {
+  border-color: rgba(30, 45, 74, 0.45);
+  box-shadow: 0 0 0 3px rgba(30, 45, 74, 0.07);
+}
+
+/* ── Save / primary action button ── */
+.bento-save {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 42px;
+  padding: 0 24px;
+  background: #1e2d4a;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: opacity 0.15s ease, transform 0.12s ease;
+}
+
+.bento-save:hover  { opacity: 0.88; }
+.bento-save:active { transform: scale(0.97); }
+
+/* ── Ghost button (Cancel / secondary) ── */
+.bento-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 42px;
+  padding: 0 18px;
+  background: transparent;
+  color: #6b7280;
+  border: 1px solid rgba(30, 45, 74, 0.16);
+  border-radius: 10px;
+  font-size: 0.875rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.bento-ghost:hover {
+  background: rgba(30, 45, 74, 0.06);
+  border-color: rgba(30, 45, 74, 0.28);
+  color: #1e2d4a;
+}
+
+/* ── Advanced block toggle ── */
+.bento-adv-toggle {
+  display: block;
+  width: 100%;
+  padding: 11px 16px;
+  margin-bottom: 12px;
+  background: rgba(30, 45, 74, 0.04);
+  color: #4a4a6a;
+  border: 1px dashed rgba(30, 45, 74, 0.20);
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.bento-adv-toggle:hover {
+  background: rgba(30, 45, 74, 0.08);
+  border-color: rgba(30, 45, 74, 0.35);
+  color: #1e2d4a;
+}
+
+/* ── Advanced block panel ── */
+.bento-adv-panel {
+  background: rgba(30, 45, 74, 0.03);
+  border: 1px solid rgba(30, 45, 74, 0.10);
+  border-radius: 14px;
+  padding: 18px;
+  margin-bottom: 16px;
+}
+
+.bento-adv-tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.bento-adv-tab {
+  flex: 1;
+  padding: 8px 12px;
+  background: transparent;
+  color: #8a8aaa;
+  border: 1px solid rgba(30, 45, 74, 0.14);
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.bento-adv-tab:hover {
+  background: rgba(30, 45, 74, 0.06);
+  color: #1e2d4a;
+}
+
+.bento-adv-tab.active {
+  background: #1e2d4a;
+  color: #fff;
+  border-color: #1e2d4a;
+}
+
+.bento-adv-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ── Theme swatch grid ── */
+.bento-theme-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(88px, 1fr));
+  gap: 10px;
+}
+
+.bento-theme-btn {
+  position: relative;
+  height: 72px;
+  border-radius: 12px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  overflow: hidden;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+  padding: 0;
+  outline: none;
+}
+
+.bento-theme-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(30, 45, 74, 0.18);
+}
+
+.bento-theme-btn.sel {
+  border-color: #b5637a;
+  box-shadow: 0 0 0 3px rgba(181, 99, 122, 0.22), 0 4px 16px rgba(30, 45, 74, 0.15);
+}
+
+/* Tick badge on selected theme */
+.bento-theme-btn.sel::after {
+  content: '✓';
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  width: 20px;
+  height: 20px;
+  background: #b5637a;
+  color: #fff;
+  border-radius: 50%;
+  font-size: 0.65rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 20px;
+  text-align: center;
+}
+
+.bento-theme-name {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 5px 6px;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(4px);
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: #fff;
+  text-align: center;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .link-item {
   display: flex;
   align-items: center;
@@ -307,23 +488,72 @@
 .link-item__title { font-size: 0.938rem; font-weight: 600; color: var(--text-primary) !important; }
 .link-item__url { font-size: 0.8rem; color: var(--text-tertiary) !important; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-/* Link item action buttons */
-.link-item__actions { display: flex; align-items: center; gap: 8px; }
-.link-item__btn {
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  color: var(--text-tertiary);
-  padding: 6px;
-  border-radius: var(--radius-md);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all var(--transition);
+/* Action buttons row */
+.link-item__actions {
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  flex-shrink: 0 !important;
+  margin-left: auto !important;
 }
 
-.link-item__copy:hover, .link-item__btn:hover { background: var(--navy-pale); color: var(--navy); }
-.link-item__delete:hover { background: rgba(160,64,96,0.08); color: #a04060; }
+/* All 3 icon buttons — copy, toggle, delete */
+.link-item__actions button,
+.link-item__copy,
+.link-item__toggle,
+.link-item__delete {
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 8px !important;
+  border: 1px solid rgba(30, 45, 74, 0.12) !important;
+  background: transparent !important;
+  color: #8a8aaa !important;
+  cursor: pointer !important;
+  font-size: 0.875rem !important;
+  transition: all 0.15s ease !important;
+  flex-shrink: 0 !important;
+  padding: 0 !important;
+}
+
+/* Copy button — neutral ghost */
+.link-item__copy:hover {
+  background: rgba(30, 45, 74, 0.08) !important;
+  color: #1e2d4a !important;
+  border-color: rgba(30, 45, 74, 0.25) !important;
+}
+
+/* Toggle/check button — rose when active */
+.link-item__toggle:hover {
+  background: rgba(181, 99, 122, 0.08) !important;
+  color: #b5637a !important;
+  border-color: rgba(181, 99, 122, 0.25) !important;
+}
+
+/* Toggle active state (when link is enabled) */
+.link-item__toggle--active {
+  background: rgba(181, 99, 122, 0.10) !important;
+  color: #b5637a !important;
+  border-color: rgba(181, 99, 122, 0.30) !important;
+}
+
+/* Delete button — red on hover */
+.link-item__delete:hover {
+  background: rgba(160, 64, 96, 0.08) !important;
+  color: #a04060 !important;
+  border-color: rgba(160, 64, 96, 0.28) !important;
+}
+
+/* SVG icons inside buttons — constrain size */
+.link-item__actions button svg {
+  width: 14px !important;
+  height: 14px !important;
+  display: block !important;
+  flex-shrink: 0 !important;
+}
 
 
 /* Appearance Tab */
@@ -522,39 +752,413 @@
   margin-bottom: 16px;
 }
 
-.copy-toast {
-    position: fixed;
-    bottom: 30px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: var(--navy);
-    color: #fff;
-    padding: 10px 20px;
-    border-radius: var(--radius-md);
-    font-size: 0.9rem;
-    font-weight: 500;
-    box-shadow: var(--shadow-md);
-    z-index: 1000;
-    animation: toast-in 0.3s ease forwards;
+/* =============================================
+   TOAST NOTIFICATION SYSTEM
+   ============================================= */
+
+/* Toast container — fixed bottom center */
+.toast-container {
+  position: fixed !important;
+  bottom: 32px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  z-index: 9999 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 10px !important;
+  pointer-events: none !important;
 }
 
+/* Individual toast */
+.toast {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  padding: 12px 20px !important;
+  border-radius: 999px !important;
+  font-size: 0.875rem !important;
+  font-weight: 500 !important;
+  font-family: inherit !important;
+  color: #ffffff !important;
+  white-space: nowrap !important;
+  pointer-events: auto !important;
+  cursor: default !important;
+  min-width: 200px !important;
+  max-width: 400px !important;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.18),
+    0 2px 8px rgba(0, 0, 0, 0.10) !important;
+
+  /* Animation */
+  animation: toast-in 0.28s cubic-bezier(0.34, 1.56, 0.64, 1) forwards !important;
+}
+
+.toast--leaving {
+  animation: toast-out 0.22s ease forwards !important;
+}
+
+/* Default (success/neutral) — navy */
+.toast--success,
+.toast--default {
+  background: #1e2d4a !important;
+}
+
+/* Warning / info — champagne */
+.toast--info {
+  background: #c49a5a !important;
+  color: #1a1a2e !important;
+}
+
+/* Error — rose-red */
+.toast--error {
+  background: #a04060 !important;
+}
+
+/* Toast icon */
+.toast__icon {
+  font-size: 1rem !important;
+  line-height: 1 !important;
+  flex-shrink: 0 !important;
+}
+
+/* Toast message */
+.toast__msg {
+  flex: 1 !important;
+  line-height: 1.3 !important;
+}
+
+/* Toast dismiss X */
+.toast__close {
+  background: none !important;
+  border: none !important;
+  color: rgba(255, 255, 255, 0.55) !important;
+  cursor: pointer !important;
+  font-size: 1rem !important;
+  line-height: 1 !important;
+  padding: 0 !important;
+  margin-left: 4px !important;
+  flex-shrink: 0 !important;
+  transition: color 0.15s ease !important;
+}
+
+.toast__close:hover {
+  color: rgba(255, 255, 255, 0.90) !important;
+}
+
+.toast--info .toast__close {
+  color: rgba(26, 26, 46, 0.45) !important;
+}
+
+/* Keyframes */
 @keyframes toast-in {
-    from { opacity: 0; transform: translate(-50%, 20px); }
-    to { opacity: 1; transform: translate(-50%, 0); }
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
-.bento-icon-picker-modal {
-    position: absolute;
-    top: 50px;
-    left: 0;
-    width: 300px;
-    background: var(--bg-surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    box-shadow: var(--shadow-lg);
-    z-index: 100;
-    padding: 16px;
+@keyframes toast-out {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(8px) scale(0.95);
+  }
 }
+
+/* On mobile: stays above bottom nav */
+@media (max-width: 960px) {
+  .toast-container {
+    bottom: 84px !important; /* above mobile bottom nav */
+  }
+}
+
+/* ── Icon picker button (trigger) ── */
+.bento-icon-picker-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 4px !important;
+  width: 46px !important;
+  height: 42px !important;
+  min-width: 46px !important;
+  background: #fff !important;
+  border: 1px solid rgba(30, 45, 74, 0.16) !important;
+  border-radius: 10px !important;
+  cursor: pointer !important;
+  flex-shrink: 0 !important;
+  transition: border-color 0.15s ease, background 0.15s ease !important;
+  padding: 0 8px !important;
+}
+
+.bento-icon-picker-btn:hover {
+  border-color: rgba(30, 45, 74, 0.40) !important;
+  background: rgba(30, 45, 74, 0.04) !important;
+}
+
+.bento-icon-caret {
+  font-size: 0.6rem !important;
+  color: #8a8aaa !important;
+  line-height: 1 !important;
+  flex-shrink: 0 !important;
+}
+
+/* ── Icon picker modal ── */
+.bento-icon-picker-modal {
+  position: absolute;
+  top: 50px;
+  left: 0;
+  width: 320px;
+  background: #fff;
+  border: 1px solid rgba(30, 45, 74, 0.12);
+  border-radius: 14px;
+  box-shadow: 0 12px 40px rgba(30, 45, 74, 0.18), 0 2px 8px rgba(30, 45, 74, 0.08);
+  z-index: 200;
+  padding: 16px;
+  overflow: hidden;
+}
+
+.bento-icon-picker-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #4a4a6a;
+  margin-bottom: 12px;
+}
+
+.bento-icon-picker-header button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #8a8aaa;
+  font-size: 1rem;
+  line-height: 1;
+  padding: 2px 4px;
+  transition: color 0.15s ease;
+}
+
+.bento-icon-picker-header button:hover { color: #1e2d4a; }
+
+/* ── Icon grid inside modal ── */
+.bento-icon-grid-large {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  max-height: 280px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.bento-icon-grid-large::-webkit-scrollbar { width: 4px; }
+.bento-icon-grid-large::-webkit-scrollbar-track { background: transparent; }
+.bento-icon-grid-large::-webkit-scrollbar-thumb { background: rgba(30,45,74,0.15); border-radius: 4px; }
+
+.bento-icon-opt-lg {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 8px 4px;
+  background: rgba(30, 45, 74, 0.03);
+  border: 1px solid transparent;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.bento-icon-opt-lg:hover {
+  background: rgba(30, 45, 74, 0.08);
+  border-color: rgba(30, 45, 74, 0.18);
+}
+
+.bento-icon-opt-lg.sel {
+  background: rgba(30, 45, 74, 0.10);
+  border-color: #1e2d4a;
+}
+
+.bento-icon-label {
+  font-size: 0.62rem;
+  color: #8a8aaa;
+  text-align: center;
+  line-height: 1.2;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100%;
+}
+
+/* ── General primary button (used in appearance form) ── */
+.btn-primary {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  height: 44px !important;
+  padding: 0 28px !important;
+  background: #1e2d4a !important;
+  color: #fff !important;
+  border: none !important;
+  border-radius: 10px !important;
+  font-size: 0.875rem !important;
+  font-weight: 600 !important;
+  font-family: inherit !important;
+  cursor: pointer !important;
+  transition: opacity 0.15s ease, transform 0.12s ease !important;
+}
+
+.btn-primary:hover  { opacity: 0.88 !important; }
+.btn-primary:active { transform: scale(0.97) !important; }
+
+/* ── bento-btn (used for Upload Photo label / nav buttons) ── */
+.bento-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  height: 40px !important;
+  padding: 0 18px !important;
+  background: rgba(30, 45, 74, 0.07) !important;
+  color: #1e2d4a !important;
+  border: 1px solid rgba(30, 45, 74, 0.15) !important;
+  border-radius: 9px !important;
+  font-size: 0.85rem !important;
+  font-weight: 500 !important;
+  font-family: inherit !important;
+  cursor: pointer !important;
+  transition: background 0.15s ease, border-color 0.15s ease !important;
+}
+
+.bento-btn:hover {
+  background: rgba(30, 45, 74, 0.12) !important;
+  border-color: rgba(30, 45, 74, 0.28) !important;
+}
+
+/* ── bento-field-avatar-sq (square avatar placeholder) ── */
+.bento-field-avatar-sq {
+  width: 64px;
+  height: 64px;
+  min-width: 64px;
+  border-radius: 50%;
+  background: rgba(30, 45, 74, 0.10);
+  border: 2px solid rgba(30, 45, 74, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #4a4a6a;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+/* ── bento-hint (small helper text) ── */
+.bento-hint {
+  font-size: 0.78rem;
+  font-weight: 400;
+  color: #8a8aaa;
+  margin-left: 4px;
+}
+
+/* ── bento-empty (empty state message) ── */
+.bento-empty {
+  text-align: center;
+  padding: 32px 16px;
+  color: #b0b0c8;
+  font-size: 0.875rem;
+}
+
+/* ── promo row inside settings ── */
+.promo-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.promo-card__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.promo-card__title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #1e2d4a;
+}
+
+.promo-card__sub {
+  font-size: 0.8rem;
+  color: #8a8aaa;
+  margin-top: 2px;
+}
+
+.promo-card__redeem {
+  padding-top: 16px;
+  border-top: 1px solid rgba(30, 45, 74, 0.08);
+}
+
+/* ── settings actions row ── */
+.settings-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.btn-save {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 42px;
+  padding: 0 24px;
+  background: #1e2d4a;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+
+.btn-save:hover { opacity: 0.88; }
+
+.btn-logout {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 42px;
+  padding: 0 20px;
+  background: transparent;
+  color: #a04060;
+  border: 1px solid rgba(160, 64, 96, 0.25);
+  border-radius: 10px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.btn-logout:hover {
+  background: rgba(160, 64, 96, 0.07);
+  border-color: rgba(160, 64, 96, 0.45);
+}
+
+
 
 /* ═══ POST-LIGHT-THEME FIXES ═══ */
 
@@ -678,7 +1282,6 @@
   margin: 24px 0 !important;
 }
 
-.appearance-form button:not(.btn-primary),
 .btn-upload {
   display: inline-flex !important;
   align-items: center !important;
@@ -1092,47 +1695,7 @@
   font-family: monospace !important;
 }
 
-.link-item__actions {
-  display: flex !important;
-  align-items: center !important;
-  gap: 8px !important;
-  flex-shrink: 0 !important;
-}
-
-.link-item__copy,
-.link-item__delete {
-  width: 32px !important;
-  height: 32px !important;
-  min-width: 32px !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  background: transparent !important;
-  border: 1px solid rgba(30, 45, 74, 0.12) !important;
-  border-radius: 8px !important;
-  cursor: pointer !important;
-  color: #8a8aaa !important;
-  transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease !important;
-  flex-shrink: 0 !important;
-}
-
-.link-item__copy svg,
-.link-item__delete svg {
-  width: 14px !important;
-  height: 14px !important;
-}
-
-.link-item__copy:hover {
-  background: rgba(30, 45, 74, 0.08) !important;
-  border-color: #1e2d4a !important;
-  color: #1e2d4a !important;
-}
-
-.link-item__delete:hover {
-  background: rgba(160, 64, 96, 0.08) !important;
-  border-color: rgba(160, 64, 96, 0.30) !important;
-  color: #a04060 !important;
-}
+/* Handled above or deleted */
 
 
 /* STEP 6 — Add Color Depth */
