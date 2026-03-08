@@ -1,16 +1,17 @@
 /* ═══ STEP 3: FLOATING NAVBAR ═══ */
 
+.nav-brutal,
 .navbar,
 nav.main-nav,
 header.site-header {
-  position: fixed;
-  top: 16px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 500;
-  width: calc(100% - 48px);
-  max-width: 1200px;
-  height: 60px;
+  position: fixed !important;
+  top: 16px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  z-index: 500 !important;
+  width: calc(100% - 48px) !important;
+  max-width: 1200px !important;
+  height: 60px !important;
 
   /* Richer background — warm white with stronger blur */
   background: rgba(253, 248, 242, 0.92) !important;
@@ -25,10 +26,14 @@ header.site-header {
     0 1px 4px rgba(30, 45, 74, 0.07),
     inset 0 1px 0 rgba(255, 255, 255, 0.90) !important;
 
-  display: flex;
-  align-items: center;
-  padding: 0 8px 0 28px;
-  gap: 0;
+  display: flex !important;
+  align-items: center !important;
+  padding: 0 8px 0 28px !important;
+  gap: 0 !important;
+  margin: 0 !important;
+  
+  right: auto !important;
+  bottom: auto !important;
 }
 
 /* Logo — larger, display font */
@@ -55,7 +60,8 @@ header.site-header {
 }
 
 .navbar .nav-links a,
-.nav-links a {
+.nav-links a,
+.btn-login {
   font-size: 0.875rem !important;
   font-weight: 400 !important;
   color: #4a4a6a !important;
@@ -64,37 +70,42 @@ header.site-header {
   border-radius: 999px !important;
   transition: color 0.18s ease, background 0.18s ease !important;
   white-space: nowrap;
+  background: transparent !important;
+  border: none !important;
+  font-family: inherit !important;
+  cursor: pointer !important;
 }
 
 .navbar .nav-links a:hover,
-.nav-links a:hover {
+.nav-links a:hover,
+.btn-login:hover {
   color: #1e2d4a !important;
   background: rgba(30, 45, 74, 0.06) !important;
 }
 
 /* CTA button — navy pill, stands out from links */
 .btn-nav-cta,
-.navbar .btn-primary,
-.navbar a.btn-primary {
+.btn-signup,
+.nav-brutal .btn-primary,
+.nav-brutal a.btn-primary {
   padding: 10px 22px !important;
   background: #1e2d4a !important;
-  color: #ffffff !important;
+  color: #fff !important;
   border: none !important;
   border-radius: 999px !important;
   font-size: 0.875rem !important;
   font-weight: 500 !important;
-  font-family: var(--font-body) !important;
-  text-decoration: none !important;
-  white-space: nowrap !important;
   cursor: pointer !important;
-  flex-shrink: 0;
+  white-space: nowrap !important;
   box-shadow: 0 2px 12px rgba(30, 45, 74, 0.25) !important;
-  transition: opacity 0.18s ease, box-shadow 0.18s ease !important;
+  transition: opacity 0.18s ease !important;
+  text-decoration: none !important;
+  display: inline-flex !important;
+  align-items: center !important;
 }
 
-.btn-nav-cta:hover {
+.btn-nav-cta:hover, .btn-signup:hover {
   opacity: 0.87 !important;
-  box-shadow: 0 4px 20px rgba(30, 45, 74, 0.32) !important;
 }
 
 /* Dashboard label + user avatar area */
@@ -122,21 +133,28 @@ header.site-header {
 
 /* Page offset */
 .page-content,
-.page-wrapper,
+.dashboard-wrapper,
 main,
-.landingRoot {
-  padding-top: 88px;
+.page-wrapper {
+  padding-top: 88px !important; /* 60px nav + 16px top offset + 12px gap */
+}
+
+/* Subnav sticks just below floating navbar */
+.bento-subnav {
+  position: sticky !important;
+  top: 88px !important;
+  z-index: 50 !important;
 }
 
 @media (max-width: 768px) {
-  .navbar, nav.main-nav, header.site-header, .nav-brutal {
-    width: calc(100% - 24px);
-    top: 12px;
-    padding: 0 18px;
-    height: 52px;
+  .nav-brutal, .navbar, nav.main-nav, header.site-header {
+    width: calc(100% - 24px) !important;
+    top: 12px !important;
+    padding: 0 18px !important;
+    height: 52px !important;
   }
-  .page-content, .page-wrapper, main, .landingRoot { padding-top: 76px; }
-  .nav-links { display: none; }
+  .page-content, .dashboard-wrapper, main, .page-wrapper { padding-top: 76px !important; }
+  .nav-links { display: none !important; }
 }
 
 
