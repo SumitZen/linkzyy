@@ -619,7 +619,7 @@ export default function Dashboard() {
                                         {/* Banner */}
                                         <div className="field-group">
                                             <label className="field-label">Banner Image</label>
-                                            {bannerUrl && <div style={{ width: '100%', height: 72, borderRadius: 10, backgroundImage: `url(${bannerUrl})`, backgroundSize: 'cover', backgroundPosition: 'center', marginBottom: 10, border: '1.5px solid #e9ecef' }} />}
+                                            {bannerUrl && <div style={{ width: '100%', height: 120, borderRadius: 12, backgroundImage: `url(${bannerUrl})`, backgroundSize: 'cover', backgroundPosition: 'center', marginBottom: 12, border: '1px solid rgba(30,45,74,0.1)' }} />}
                                             <div style={{ display: 'flex', gap: 8 }}>
                                                 <label className="btn-upload">
                                                     Upload Banner
@@ -646,7 +646,7 @@ export default function Dashboard() {
                                         {/* Background image */}
                                         <div className="field-group">
                                             <label className="field-label">Background Photo <span className="bento-hint">(fills entire profile background)</span></label>
-                                            {bgImage && <div style={{ width: '100%', height: 88, borderRadius: 10, backgroundImage: `url(${bgImage})`, backgroundSize: 'cover', backgroundPosition: 'center', marginBottom: 10, border: '1.5px solid #e9ecef' }} />}
+                                            {bgImage && <div style={{ width: '100%', height: 160, borderRadius: 12, backgroundImage: `url(${bgImage})`, backgroundSize: 'cover', backgroundPosition: 'center', marginBottom: 12, border: '1px solid rgba(30,45,74,0.1)' }} />}
                                             <div style={{ display: 'flex', gap: 8 }}>
                                                 <label className="btn-upload">
                                                     Upload Background
