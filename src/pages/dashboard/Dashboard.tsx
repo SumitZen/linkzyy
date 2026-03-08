@@ -303,10 +303,15 @@ export default function Dashboard() {
                         <div className="crop-modal__header">
                             <div>
                                 <div className="crop-modal__title">
-                                    {cropType === 'avatar' ? 'Crop Profile Photo' : cropType === 'banner' ? 'Crop Banner Image' : 'Crop Background'}
+                                    {cropType === 'avatar' ? 'Crop Profile Photo' : cropType === 'banner' ? 'Crop Banner Image' : 'Select Background Area'}
                                 </div>
                                 <div className="crop-modal__hint">
-                                    {cropType === 'avatar' ? 'Drag to reposition · Scroll or use slider to zoom' : 'Drag to reposition · Use slider to zoom'}
+                                    {cropType === 'avatar' 
+                                        ? 'Drag to reposition · Scroll or use slider to zoom' 
+                                        : cropType === 'banner'
+                                            ? 'Drag to reposition · Fixed 3:1 banner ratio'
+                                            : 'Free crop · Drag corners to resize area'
+                                    }
                                 </div>
                             </div>
                             <button className="crop-modal__close" onClick={() => setCropImageSrc(null)} aria-label="Close">✕</button>
@@ -317,12 +322,12 @@ export default function Dashboard() {
                                 image={cropImageSrc}
                                 crop={crop}
                                 zoom={zoom}
-                                aspect={cropType === 'avatar' ? 1 : cropType === 'banner' ? 3 / 1 : 9 / 16}
+                                aspect={cropType === 'avatar' ? 1 : cropType === 'banner' ? 3 / 1 : undefined}
                                 cropShape={cropType === 'avatar' ? 'round' : 'rect'}
                                 onCropChange={setCrop}
                                 onZoomChange={setZoom}
                                 onCropComplete={onCropComplete}
-                                showGrid={false}
+                                showGrid={cropType !== 'avatar'}
                             />
                         </div>
 
