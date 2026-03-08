@@ -326,9 +326,9 @@
 
 .bento-layout {
   display: grid;
-  grid-template-columns: 1fr 350px;
+  grid-template-columns: 1fr 400px;
   gap: 40px;
-  max-width: 1200px;
+  max-width: 1240px;
   margin: 0 auto;
   padding: 24px 40px 80px !important;
   align-items: start;
@@ -336,8 +336,11 @@
 
 .bento-right-col {
   position: sticky !important;
-  top: 140px !important;
-  height: fit-content;
+  top: 100px !important;
+  height: calc(100vh - 140px) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-start !important;
   z-index: 10;
 }
 
@@ -1874,21 +1877,22 @@ textarea.bento-input { height: auto; padding: 10px 14px; }
   text-align: center !important;
 }
 
-/* ── Phone shell wrapper (Slightly Bigger & Sticky Lock) ── */
+/* ── Phone shell wrapper (Wider & Fixed Viewport Fit) ── */
 .phone-preview,
 .live-preview {
   position: relative !important;
-  width: 310px !important;
+  width: 340px !important;
   height: 640px !important;
-  border-radius: 36px !important;
+  max-height: calc(100vh - 180px) !important;
+  border-radius: 38px !important;
   background: #fff !important;
   border: 1px solid rgba(30, 45, 74, 0.15) !important;
   box-shadow: 
-    0 32px 64px rgba(30, 45, 74, 0.12),
-    0 8px 16px rgba(30, 45, 74, 0.06) !important;
+    0 40px 80px rgba(30, 45, 74, 0.14),
+    0 10px 24px rgba(30, 45, 74, 0.08) !important;
   overflow: hidden !important;
   flex-shrink: 0 !important;
-  margin: 0 auto !important;
+  margin: 12px auto 0 !important;
 }
 
 /* Remove notch */
@@ -1903,7 +1907,7 @@ textarea.bento-input { height: auto; padding: 10px 14px; }
   content: '';
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
-  border-radius: 36px;
+  border-radius: 38px;
   border: 1px solid rgba(30, 45, 74, 0.05);
   pointer-events: none;
   z-index: 9;
@@ -1918,7 +1922,7 @@ textarea.bento-input { height: auto; padding: 10px 14px; }
   border: none !important;
   overflow-y: auto !important;
   overflow-x: hidden !important;
-  border-radius: 36px !important;
+  border-radius: 38px !important;
 }
 
 
