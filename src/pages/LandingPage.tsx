@@ -138,89 +138,88 @@ export default function LandingPage() {
             </section>
 
             {/*  SHARE ANYWHERE  */}
-            <section className="sec-share">
-                <div className="section-inner">
-                    <div>
-                        <div className="sec-label">✦ Reach</div>
-                        <h2 className="sec-title">Share your Linkzy<br />everywhere.</h2>
-                        <p>Add your unique Linkzy URL to every platform where your audience lives. One link works everywhere — your bio, QR code on merch, business cards, anywhere.</p>
-                        <button className="btn-signup">Get your link →</button>
+            <section className="share-section">
+                <div className="share-section__text">
+                    <div className="sec-label">✦ Reach</div>
+                    <h2>Share your Linkzy<br />everywhere.</h2>
+                    <p>Add your unique Linkzy URL to every platform where your audience lives. One link works everywhere — your bio, QR code on merch, business cards, anywhere.</p>
+                    <button className="btn-signup">Get your link →</button>
+                </div>
+                <div className="platform-grid">
+                    <div className="platform-card">
+                        <div className="platform-card__icon">📸</div>
+                        <div className="platform-card__info">
+                            <div className="platform-card__name">Instagram</div>
+                            <div className="platform-card__action">Add to bio <span className="platform-card__url">linkzy.co/you</span></div>
+                        </div>
                     </div>
-                    <div className="platform-cards">
-                        <div className="plat-card">
-                            <div className="plat-icon pi-ig">📸</div>
-                            <div className="plat-info">
-                                <div className="plat-name">Instagram</div>
-                                <div className="plat-sub">Add to bio</div>
-                            </div><span className="plat-url">linkzy.co/you</span>
+                    <div className="platform-card">
+                        <div className="platform-card__icon">🎵</div>
+                        <div className="platform-card__info">
+                            <div className="platform-card__name">TikTok</div>
+                            <div className="platform-card__action">Add to bio <span className="platform-card__url">linkzy.co/you</span></div>
                         </div>
-                        <div className="plat-card">
-                            <div className="plat-icon pi-tt">🎵</div>
-                            <div className="plat-info">
-                                <div className="plat-name">TikTok</div>
-                                <div className="plat-sub">Add to bio</div>
-                            </div><span className="plat-url">linkzy.co/you</span>
+                    </div>
+                    <div className="platform-card">
+                        <div className="platform-card__icon">📺</div>
+                        <div className="platform-card__info">
+                            <div className="platform-card__name">YouTube</div>
+                            <div className="platform-card__action">Add to about <span className="platform-card__url">linkzy.co/you</span></div>
                         </div>
-                        <div className="plat-card">
-                            <div className="plat-icon pi-yt">📺</div>
-                            <div className="plat-info">
-                                <div className="plat-name">YouTube</div>
-                                <div className="plat-sub">Add to about</div>
-                            </div><span className="plat-url">linkzy.co/you</span>
+                    </div>
+                    <div className="platform-card">
+                        <div className="platform-card__icon">𝕏</div>
+                        <div className="platform-card__info">
+                            <div className="platform-card__name">Twitter / X</div>
+                            <div className="platform-card__action">Add to bio <span className="platform-card__url">linkzy.co/you</span></div>
                         </div>
-                        <div className="plat-card">
-                            <div className="plat-icon pi-tw">𝕏</div>
-                            <div className="plat-info">
-                                <div className="plat-name">Twitter / X</div>
-                                <div className="plat-sub">Add to bio</div>
-                            </div><span className="plat-url">linkzy.co/you</span>
+                    </div>
+                    <div className="platform-card">
+                        <div className="platform-card__icon">💼</div>
+                        <div className="platform-card__info">
+                            <div className="platform-card__name">LinkedIn</div>
+                            <div className="platform-card__action">Add to profile <span className="platform-card__url">linkzy.co/you</span></div>
                         </div>
-                        <div className="plat-card">
-                            <div className="plat-icon pi-li">💼</div>
-                            <div className="plat-info">
-                                <div className="plat-name">LinkedIn</div>
-                                <div className="plat-sub">Add to profile</div>
-                            </div><span className="plat-url">linkzy.co/you</span>
+                    </div>
+                    <div className="platform-card">
+                        <div className="platform-card__icon">📧</div>
+                        <div className="platform-card__info">
+                            <div className="platform-card__name">Email</div>
+                            <div className="platform-card__action">Add to signature <span className="platform-card__url">linkzy.co/you</span></div>
                         </div>
                     </div>
                 </div>
             </section>
 
             {/*  ANALYTICS  */}
-            <section className="sec-analytics">
-                <div className="section-inner">
-                    <div className="stat-cards">
-                        <div className="stat-card sc-olive">
-                            <span className="s-icon">📈</span>
-                            <div className="s-num">43,500</div>
-                            <div className="s-label">CLICKS</div>
-                            <div className="mini-chart">
-                                <div className="bar"></div><div className="bar"></div><div className="bar"></div>
-                                <div className="bar"></div><div className="bar"></div><div className="bar"></div>
-                            </div>
-                        </div>
-                        <div className="stat-card sc-purple">
-                            <span className="s-icon">🎧</span>
-                            <div className="s-num">643</div>
-                            <div className="s-label">TRACK PLAYS</div>
-                        </div>
-                        <div className="stat-card sc-pink">
-                            <span className="s-icon">💰</span>
-                            <div className="s-num">$2,362</div>
-                            <div className="s-label">SALES</div>
-                        </div>
-                        <div className="stat-card sc-dark">
-                            <span className="s-icon">🌍</span>
-                            <div className="s-num">960</div>
-                            <div className="s-label">CITY VISITS</div>
-                        </div>
+            <section className="analytics-section">
+                <div className="analytics-stats-grid">
+                    <div className="analytics-stat-card">
+                        <div className="analytics-stat-card__icon">📈</div>
+                        <div className="analytics-stat-card__value">43.5k</div>
+                        <div className="analytics-stat-card__label">Total Clicks</div>
                     </div>
-                    <div>
-                        <div className="sec-label">✦ Analytics</div>
-                        <h2 className="sec-title">Analyze your audience,<br />keep them engaged.</h2>
-                        <p>Track engagement over time, monitor revenue, and learn what's converting your audience. Make smarter updates — on the fly.</p>
-                        <button className="btn-login" style={{ marginTop: '16px' }}>See analytics demo →</button>
+                    <div className="analytics-stat-card">
+                        <div className="analytics-stat-card__icon">🎧</div>
+                        <div className="analytics-stat-card__value">643</div>
+                        <div className="analytics-stat-card__label">Track Plays</div>
                     </div>
+                    <div className="analytics-stat-card">
+                        <div className="analytics-stat-card__icon">💰</div>
+                        <div className="analytics-stat-card__value">$2.3k</div>
+                        <div className="analytics-stat-card__label">Revenue</div>
+                    </div>
+                    <div className="analytics-stat-card">
+                        <div className="analytics-stat-card__icon">🌍</div>
+                        <div className="analytics-stat-card__value">960</div>
+                        <div className="analytics-stat-card__label">City Visits</div>
+                    </div>
+                </div>
+                <div className="analytics-text">
+                    <div className="sec-label">✦ Analytics</div>
+                    <h2>Analyze your audience,<br />keep them engaged.</h2>
+                    <p>Track engagement over time, monitor revenue, and learn what's converting your audience. Make smarter updates — on the fly.</p>
+                    <a href="/login">See analytics demo →</a>
                 </div>
             </section>
 
