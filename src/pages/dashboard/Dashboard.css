@@ -345,9 +345,8 @@
 }
 
 @media (max-width: 960px) {
-  .bento-layout { grid-template-columns: 1fr !important; padding: 24px 16px 100px; }
+  .bento-layout { grid-template-columns: 1fr !important; padding: 24px 16px 100px !important; }
   .bento-right-col { display: none !important; }
-  [class*="subnav"] { display: none !important; }
   .dashboard-wrapper { padding-top: 76px; }
 }
 
@@ -397,6 +396,11 @@
   border-radius: var(--radius-lg);
   padding: 24px;
   box-shadow: var(--shadow-sm);
+}
+
+@media (max-width: 600px) {
+  .stats-grid { grid-template-columns: 1fr !important; }
+  .links-card { padding: 16px !important; }
 }
 
 .links-card__title {
@@ -1780,7 +1784,30 @@ textarea.bento-input { height: auto; padding: 10px 14px; }
   border-radius: 14px !important;
   box-shadow: 0 1px 4px rgba(30, 45, 74, 0.07) !important;
   margin-bottom: 24px !important;
-  flex-wrap: wrap;
+  flex-wrap: wrap !important;
+}
+
+@media (max-width: 600px) {
+  .links-add-row {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+    align-items: stretch !important;
+  }
+  
+  .links-add-row input {
+    width: 100% !important;
+  }
+  
+  .btn-add-link {
+    width: 100% !important;
+    min-height: 48px !important;
+  }
+
+  .bento-icon-picker-btn {
+    align-self: flex-start !important;
+    width: 60px !important;
+  }
 }
 
 .quick-actions-bar__url,
