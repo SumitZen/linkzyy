@@ -462,8 +462,8 @@ export default function Dashboard() {
                                                         className="link-item__text link-item__clickable"
                                                         onClick={(e) => e.stopPropagation()}
                                                     >
-                                                        <div className="link-item__title">
-                                                            {link.label}
+                                                        <div className="link-item__title-row">
+                                                            <span className="link-item__title">{link.label}</span>
                                                             <svg className="link-item__external-icon" viewBox="0 0 16 16" fill="currentColor">
                                                                 <path d="M6.5 1H2a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1V8.5M9 1h5m0 0v5m0-5L7 9" 
                                                                     stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round"/>
@@ -531,11 +531,11 @@ export default function Dashboard() {
                                         <p>Customise how your public profile looks.</p>
                                     </header>
 
-                                    <div className="bento-card" style={{ padding: '32px' }}>
+                                    <div className="appearance-form">
                                         {/* Avatar */}
-                                        <div className="bento-field-row">
-                                            <label className="bento-field-label">Profile Photo</label>
-                                            <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+                                        <div className="field-group">
+                                            <label className="field-label">Profile Photo</label>
+                                            <div className="profile-photo-row">
                                                 <div className="bento-field-avatar-sq">
                                                     {avatarUrl
                                                         ? <img src={avatarUrl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
@@ -551,11 +551,11 @@ export default function Dashboard() {
                                         </div>
 
                                         {/* Banner */}
-                                        <div className="bento-field-row">
-                                            <label className="bento-field-label">Banner Image</label>
+                                        <div className="field-group">
+                                            <label className="field-label">Banner Image</label>
                                             {bannerUrl && <div style={{ width: '100%', height: 72, borderRadius: 10, backgroundImage: `url(${bannerUrl})`, backgroundSize: 'cover', backgroundPosition: 'center', marginBottom: 10, border: '1.5px solid #e9ecef' }} />}
                                             <div style={{ display: 'flex', gap: 8 }}>
-                                                <label className="bento-btn" style={{ cursor: 'pointer' }}>
+                                                <label className="btn-upload">
                                                     Upload Banner
                                                     <input type="file" accept="image/*" style={{ display: 'none' }} onChange={e => onFileChange(e, 'banner')} />
                                                 </label>
@@ -564,25 +564,25 @@ export default function Dashboard() {
                                         </div>
 
                                         {/* Display name */}
-                                        <div className="bento-field-row">
-                                            <label className="bento-field-label">Display Name</label>
-                                            <input className="bento-input" style={{ width: '100%' }} value={name} onChange={e => setName(e.target.value)} />
+                                        <div className="field-group">
+                                            <label className="field-label">Display Name</label>
+                                            <input type="text" value={name} onChange={e => setName(e.target.value)} />
                                         </div>
 
                                         {/* Bio */}
-                                        <div className="bento-field-row">
-                                            <label className="bento-field-label">Bio</label>
-                                            <textarea className="bento-input" style={{ width: '100%', resize: 'vertical' }} rows={3} value={bio} onChange={e => setBio(e.target.value)} />
+                                        <div className="field-group">
+                                            <label className="field-label">Bio</label>
+                                            <textarea rows={3} value={bio} onChange={e => setBio(e.target.value)} />
                                         </div>
 
-                                        <hr className="bento-hr" />
+                                        <div className="appearance-section-divider"></div>
 
                                         {/* Background image */}
-                                        <div className="bento-field-row">
-                                            <label className="bento-field-label">Background Photo <span className="bento-hint">(fills entire profile background)</span></label>
+                                        <div className="field-group">
+                                            <label className="field-label">Background Photo <span className="bento-hint">(fills entire profile background)</span></label>
                                             {bgImage && <div style={{ width: '100%', height: 88, borderRadius: 10, backgroundImage: `url(${bgImage})`, backgroundSize: 'cover', backgroundPosition: 'center', marginBottom: 10, border: '1.5px solid #e9ecef' }} />}
                                             <div style={{ display: 'flex', gap: 8 }}>
-                                                <label className="bento-btn" style={{ cursor: 'pointer' }}>
+                                                <label className="btn-upload">
                                                     Upload Background
                                                     <input type="file" accept="image/*" style={{ display: 'none' }} onChange={e => onFileChange(e, 'background')} />
                                                 </label>
@@ -591,8 +591,8 @@ export default function Dashboard() {
                                         </div>
 
                                         {/* Solid color override */}
-                                        <div className="bento-field-row">
-                                            <label className="bento-field-label">Background Colour <span className="bento-hint">(overrides theme, used if no photo)</span></label>
+                                        <div className="field-group">
+                                            <label className="field-label">Background Colour <span className="bento-hint">(used if no photo)</span></label>
                                             <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
                                                 <input type="color" value={bgColor || '#7c3aed'} onChange={e => setBgColor(e.target.value)} style={{ width: 40, height: 36, border: '1.5px solid #e5e7eb', borderRadius: 8, padding: 2, cursor: 'pointer', flexShrink: 0 }} />
                                                 <input className="bento-input" style={{ flex: 1 }} placeholder="#hex or rgba()" value={bgColor} onChange={e => setBgColor(e.target.value)} />
@@ -601,8 +601,8 @@ export default function Dashboard() {
                                         </div>
 
                                         {/* Manual Text color override */}
-                                        <div className="bento-field-row">
-                                            <label className="bento-field-label">Font Colour <span className="bento-hint">(overrides theme & auto-contrast)</span></label>
+                                        <div className="field-group">
+                                            <label className="field-label">Font Colour</label>
                                             <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
                                                 <input type="color" value={manualTextColor || '#ffffff'} onChange={e => setManualTextColor(e.target.value)} style={{ width: 40, height: 36, border: '1.5px solid #e5e7eb', borderRadius: 8, padding: 2, cursor: 'pointer', flexShrink: 0 }} />
                                                 <input className="bento-input" style={{ flex: 1 }} placeholder="#hex or rgba()" value={manualTextColor} onChange={e => setManualTextColor(e.target.value)} />
@@ -611,8 +611,8 @@ export default function Dashboard() {
                                         </div>
 
                                         {/* Theme grid */}
-                                        <div className="bento-field-row">
-                                            <label className="bento-field-label">Theme Preset <span className="bento-hint">(base background gradient & UI style)</span></label>
+                                        <div className="field-group">
+                                            <label className="field-label">Theme Preset</label>
                                             {(() => {
                                                 const swatchGradients: Record<string, string> = {
                                                     '1-vision': 'linear-gradient(135deg, #0a1628, #1e3a5f)',
@@ -656,7 +656,7 @@ export default function Dashboard() {
                                         </div>
                                     </div>
 
-                                    <button className="bento-save" onClick={saveAppearance} style={{ alignSelf: 'flex-start' }}>{savedMsg || 'Save Changes'}</button>
+                                    <button className="btn-primary" onClick={saveAppearance} style={{ alignSelf: 'flex-start' }}>{savedMsg || 'Save Changes'}</button>
                                 </div>
                             )} {/* End Appearance Tab */}
 
@@ -668,30 +668,27 @@ export default function Dashboard() {
                                         <p>Manage your account details.</p>
                                     </header>
 
-                                    <div className="bento-card" style={{ padding: '32px' }}>
-                                        <div className="bento-field-row" style={{ paddingTop: 0 }}>
-                                            <label className="bento-field-label">Full Name</label>
-                                            <input className="bento-input" style={{ width: '100%', maxWidth: '480px' }} value={settingsName} onChange={e => setSettingsName(e.target.value)} />
+                                    <div className="settings-form">
+                                        <div className="field-group">
+                                            <label>Full Name</label>
+                                            <input type="text" value={settingsName} onChange={e => setSettingsName(e.target.value)} />
                                         </div>
-                                        <div className="bento-field-row">
-                                            <label className="bento-field-label">Email</label>
-                                            <input className="bento-input" style={{ width: '100%', maxWidth: '480px', opacity: 0.5 }} value={user?.email} disabled />
+                                        <div className="field-group">
+                                            <label>Email</label>
+                                            <input type="email" style={{ opacity: 0.5 }} value={user?.email} disabled />
                                         </div>
-                                        <div className="bento-field-row" style={{ borderBottom: 'none', paddingBottom: 0 }}>
-                                            <label className="bento-field-label">Your Linkzy URL</label>
-                                            <div className="bento-url-row" style={{ maxWidth: '480px' }}>
-                                                <span className="bento-url-pre">{window.location.host}/</span>
-                                                <span className="bento-url-val">{user?.id}</span>
-                                            </div>
+                                        <div className="field-group">
+                                            <label>Your Linkzy URL</label>
+                                            <input type="text" className="settings-url-input" value={`${window.location.host}/${user?.id}`} readOnly />
                                         </div>
                                     </div>
-                                    <div style={{ display: 'flex', gap: 12, marginTop: 4 }}>
-                                        <button className="bento-save" onClick={() => { updateUser({ name: settingsName }); flash(); }}>{savedMsg || 'Save'}</button>
-                                        <button style={{ padding: '10px 20px', background: 'transparent', color: '#dc2626', border: '1.5px solid #fecaca', borderRadius: 10, fontFamily: 'inherit', fontSize: '0.875rem', fontWeight: 600, cursor: 'pointer' }} onClick={() => { logout(); navigate('/'); }}>Log out</button>
+                                    <div className="settings-actions">
+                                        <button className="btn-save" onClick={() => { updateUser({ name: settingsName }); flash(); }}>{savedMsg || 'Save'}</button>
+                                        <button className="btn-logout" onClick={() => { logout(); navigate('/'); }}>Log out</button>
                                     </div>
 
                                     {/* Promo Code Card */}
-                                    <div className="bento-card promo-card">
+                                    <div className="plan-access-card">
                                         <div className="promo-card__header">
                                             <div>
                                                 <div className="promo-card__title">Plan &amp; Access</div>
@@ -705,7 +702,7 @@ export default function Dashboard() {
                                         {(user?.plan ?? 'free') !== 'business' && (
                                             <div className="promo-card__redeem">
                                                 <label className="bento-field-label" style={{ marginBottom: 8, display: 'block' }}>Redeem a promo code</label>
-                                                <div className="promo-card__input-row">
+                                                <div className="promo-row">
                                                     <input
                                                         className="bento-input"
                                                         placeholder="e.g. LINKZY_FRIENDS"
@@ -722,7 +719,7 @@ export default function Dashboard() {
                                                         style={{ flex: 1, maxWidth: '100%' }}
                                                     />
                                                     <button
-                                                        className="bento-save"
+                                                        className="btn-redeem"
                                                         disabled={promoStatus === 'loading' || promoCode.trim() === ''}
                                                         onClick={async () => {
                                                             setPromoStatus('loading');
