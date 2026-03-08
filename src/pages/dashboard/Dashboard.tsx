@@ -14,7 +14,6 @@ import { ID } from 'appwrite';
 
 import getCroppedImg from '../../lib/cropImage';
 import Navbar from '../../components/Navbar';
-import { getContrastingColor } from '../../lib/utils';
 import './Dashboard.css';
 
 // Icon helper — renders real SVG from a platform id (falls back to a generic link icon)
@@ -105,9 +104,6 @@ export default function Dashboard() {
         setCopiedId(id);
         setTimeout(() => setCopiedId(null), 2000);
     };
-
-    const theme = templatesList.find(t => t.id === selTheme) ?? templatesList[0];
-    const previewBg = bgImage ? `url(${bgImage}) top center/cover no-repeat` : bgColor || theme.screenBg;
 
     const flash = () => { setSavedMsg('Saved!'); setTimeout(() => setSavedMsg(''), 1800); };
 
@@ -317,7 +313,9 @@ export default function Dashboard() {
                 <main className="bento-left-col">
 
 
-                            {savedMsg && <div className="bento-toast">{savedMsg}</div>}
+                            <div className={`copy-toast ${copiedId === 'dashboard-url' ? 'copy-toast--visible' : ''}`}>
+                                Link copied to clipboard
+                            </div>
 
                             {/* ── LINKS TAB (Includes Stats) ── */}
                             {activeTab === 'links' && (
@@ -330,10 +328,18 @@ export default function Dashboard() {
                                     {/* SECTION 9 — Quick Actions Bar */}
                                     <div className="quick-actions-bar">
                                         <div className="quick-actions-bar__url">{window.location.host}/{user?.id}</div>
-                                        <button className="quick-actions-bar__btn quick-actions-bar__btn--copy" onClick={() => navigator.clipboard?.writeText?.(`${window.location.origin}/${user?.id}`)}>
+                                        <button className="btn-copy-link" onClick={() => handleCopyLink(`${window.location.origin}/${user?.id}`, 'dashboard-url')}>
+                                            <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.5">
+                                                <rect x="5" y="5" width="9" height="9" rx="1.5"/>
+                                                <path d="M3 11V3a1 1 0 0 1 1-1h8" strokeLinecap="round"/>
+                                            </svg>
                                             Copy Link
                                         </button>
-                                        <button className="quick-actions-bar__btn quick-actions-bar__btn--preview" onClick={() => navigate(`/${user?.id}`)}>
+                                        <button className="btn-preview" onClick={() => navigate(`/${user?.id}`)}>
+                                            <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.5">
+                                                <path d="M8 3c-4.418 0-8 5-8 5s3.582 5 8 5 8-5 8-5-3.582-5-8-5zm0 8a3 3 0 1 1 0-6 3 3 0 0 1 0 6z" strokeLinecap="round" strokeLinejoin="round"/>
+                                                <circle cx="8" cy="8" r="1" fill="currentColor" />
+                                            </svg>
                                             Preview
                                         </button>
                                     </div>
@@ -748,85 +754,12 @@ export default function Dashboard() {
                         </main>
 
                 <aside className="bento-right-col">
-                    <div className="bento-preview-label" style={{ alignSelf: 'center', margin: '4px 0 16px', letterSpacing: '0.15em', opacity: 0.6, fontSize: '0.65rem', fontWeight: 700 }}>LIVE PREVIEW</div>
-
-                    <div className="bento-phone-wrap">
-                        <div className="bento-phone">
-                            <div className="bento-phone-content" style={{ background: previewBg, display: 'flex', flexDirection: 'column' }}>
-                                {bannerUrl && (
-                                    <div style={{ width: '100%', height: 110, backgroundImage: `url(${bannerUrl})`, backgroundSize: 'cover', backgroundPosition: 'center', flexShrink: 0 }} />
-                                )}
-                                <div style={{
-                                    width: '100%',
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    alignItems: 'center',
-                                    marginTop: bannerUrl ? -40 : 40,
-                                    padding: '0 20px 40px',
-                                    position: 'relative',
-                                    zIndex: 10,
-                                    flex: 1
-                                }}>
-                                    <div className="bento-phone-avatar" style={{
-                                        width: 80, height: 80, borderRadius: '50%', marginBottom: 16, background: '#333',
-                                        display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', border: '3px solid rgba(255,255,255,0.15)', boxShadow: '0 8px 24px rgba(0,0,0,0.15)', flexShrink: 0
-                                    }}>
-                                        {avatarUrl
-                                            ? <img src={avatarUrl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                                            : <span style={{ fontSize: '1.5rem', fontWeight: 700, color: 'rgba(255,255,255,0.9)' }}>{(name || user?.name || 'U').charAt(0).toUpperCase()}</span>
-                                        }
-                                    </div>
-                                    <div style={{ 
-                                        fontSize: '1.1rem', 
-                                        fontWeight: 700, 
-                                        color: manualTextColor || (bgImage ? '#fff' : (bgColor ? getContrastingColor(bgColor) : theme.textColor)), 
-                                        textShadow: bgImage ? '0 2px 8px rgba(0,0,0,0.4)' : 'none',
-                                        textAlign: 'center', 
-                                        marginBottom: 4 
-                                    }}>{name || user?.name}</div>
-                                    <div style={{ 
-                                        fontSize: '0.85rem', 
-                                        color: manualTextColor || (bgImage ? '#fff' : (bgColor ? getContrastingColor(bgColor) : theme.textColor)), 
-                                        opacity: manualTextColor || bgImage ? 1 : 0.8,
-                                        textShadow: bgImage ? '0 1px 4px rgba(0,0,0,0.4)' : 'none',
-                                        textAlign: 'center', 
-                                        marginBottom: 24 
-                                    }}>{bio || user?.bio}</div>
-
-                                    <div style={{ display: 'flex', flexDirection: 'column', gap: 12, width: '100%', boxSizing: 'border-box' }}>
-                                        {links.filter(l => l.enabled).slice(0, 4).map(link => (
-                                            <div key={link.id} style={{
-                                                background: theme.btnBg,
-                                                color: theme.btnText,
-                                                borderRadius: theme.borderFormat === 'thick' ? 8 : 24,
-                                                padding: '12px 16px',
-                                                fontSize: '0.85rem',
-                                                fontWeight: 600,
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                gap: 10,
-                                                border: theme.btnBorder !== 'none' ? theme.btnBorder : undefined,
-                                                boxShadow: theme.btnShadow !== 'none' ? theme.btnShadow : undefined,
-                                                backdropFilter: theme.backdropBlur !== 'none' ? theme.backdropBlur : undefined,
-                                                WebkitBackdropFilter: theme.backdropBlur !== 'none' ? theme.backdropBlur : undefined,
-                                                fontFamily: theme.fontFamily
-                                            }}>
-                                                <PlatformIcon id={link.icon} size={18} /><span>{link.label}</span>
-                                            </div>
-                                        ))}
-                                    </div>
-                                    <div style={{ 
-                                        width: '100%',
-                                        padding: '40px 0 24px', 
-                                        fontSize: '0.7rem', 
-                                        color: bgImage || (bgColor && getContrastingColor(bgColor).includes('255')) ? 'rgba(255,255,255,0.4)' : 'rgba(0,0,0,0.4)', 
-                                        textAlign: 'center', 
-                                        fontWeight: 600,
-                                        flexShrink: 0
-                                    }}>Powered by Linkzy</div>
-                                </div>
-                            </div>
-                        </div>
+                    <div className="live-preview-label">Live Preview</div>
+                    <div className="phone-preview">
+                        <iframe
+                            src={`/${user?.id}?preview=true`}
+                            title="Live Preview"
+                        />
                     </div>
                 </aside>
 

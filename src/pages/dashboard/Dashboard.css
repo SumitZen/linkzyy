@@ -715,3 +715,332 @@
   .settings-actions .btn-save,
   .settings-actions .btn-logout { width: 100% !important; }
 }
+
+
+/* STEP 3 — URL Bar & Quick Actions */
+.quick-actions-bar,
+.profile-url-bar {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  padding: 10px 16px !important;
+  background: #ffffff !important;
+  border: 1px solid rgba(30, 45, 74, 0.12) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 1px 4px rgba(30, 45, 74, 0.07) !important;
+  margin-bottom: 24px !important;
+  flex-wrap: wrap;
+}
+
+.quick-actions-bar__url,
+.profile-url-text {
+  flex: 1 !important;
+  font-size: 0.8rem !important;
+  color: #8a8aaa !important;
+  font-family: monospace !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  min-width: 0 !important;
+}
+
+.btn-copy-link,
+.quick-actions-bar__btn--copy {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  padding: 8px 18px !important;
+  background: #1e2d4a !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 8px !important;
+  font-size: 0.813rem !important;
+  font-weight: 500 !important;
+  font-family: var(--font-body) !important;
+  cursor: pointer !important;
+  white-space: nowrap !important;
+  min-height: 36px !important;
+  text-decoration: none !important;
+  transition: opacity 0.18s ease !important;
+}
+
+.btn-copy-link:hover { opacity: 0.85 !important; }
+
+.btn-preview,
+.quick-actions-bar__btn--preview {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  padding: 7px 16px !important;
+  background: transparent !important;
+  color: #4a4a6a !important;
+  border: 1px solid rgba(30, 45, 74, 0.18) !important;
+  border-radius: 8px !important;
+  font-size: 0.813rem !important;
+  font-weight: 400 !important;
+  font-family: var(--font-body) !important;
+  cursor: pointer !important;
+  white-space: nowrap !important;
+  min-height: 36px !important;
+  text-decoration: none !important;
+  transition: background 0.18s ease, color 0.18s ease !important;
+}
+
+.btn-preview:hover {
+  background: rgba(30, 45, 74, 0.06) !important;
+  color: #1e2d4a !important;
+}
+
+.copy-toast {
+  position: fixed !important;
+  bottom: 28px !important;
+  left: 50% !important;
+  transform: translateX(-50%) translateY(8px) !important;
+  background: #1e2d4a !important;
+  color: #fff !important;
+  font-size: 0.813rem !important;
+  font-weight: 500 !important;
+  padding: 10px 22px !important;
+  border-radius: 999px !important;
+  box-shadow: 0 8px 24px rgba(30, 45, 74, 0.25) !important;
+  z-index: 999 !important;
+  pointer-events: none !important;
+  opacity: 0 !important;
+  transition: opacity 0.2s ease, transform 0.2s ease !important;
+  white-space: nowrap;
+}
+
+.copy-toast--visible {
+  opacity: 1 !important;
+  transform: translateX(-50%) translateY(0) !important;
+}
+
+
+/* STEP 4 — Phone Preview */
+.live-preview-label {
+  font-size: 0.68rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.12em !important;
+  text-transform: uppercase !important;
+  color: #8a8aaa !important;
+  text-align: center !important;
+}
+
+.phone-preview,
+.live-preview {
+  width: 260px !important;
+  height: 540px !important;
+  border-radius: 38px !important;
+  overflow: hidden !important;
+  border: 2px solid rgba(30, 45, 74, 0.15) !important;
+  box-shadow:
+    0 24px 60px rgba(30, 45, 74, 0.15),
+    0 8px 20px rgba(30, 45, 74, 0.08),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.60) !important;
+  background: #fdf8f2 !important;
+  position: relative !important;
+  flex-shrink: 0 !important;
+}
+
+.phone-preview > *,
+.phone-preview iframe {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 100% !important;
+  display: block !important;
+  border: none !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+}
+
+
+/* STEP 5 — Link Items */
+.links-card {
+  background: #ffffff !important;
+  border: 1px solid rgba(30, 45, 74, 0.10) !important;
+  border-radius: 18px !important;
+  padding: 24px !important;
+  box-shadow: 0 2px 8px rgba(30, 45, 74, 0.08) !important;
+}
+
+.links-card__title {
+  font-family: var(--font-display) !important;
+  font-size: 1.1rem !important;
+  font-weight: 600 !important;
+  color: #1a1a2e !important;
+  margin-bottom: 20px !important;
+}
+
+.link-item {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  padding: 13px 16px !important;
+  background: #fef5ec !important;
+  border: 1px solid rgba(30, 45, 74, 0.08) !important;
+  border-radius: 12px !important;
+  margin-bottom: 8px !important;
+  cursor: pointer !important;
+  transition: background 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease !important;
+  text-decoration: none !important;
+}
+
+.link-item:hover {
+  background: #f8f0e8 !important;
+  box-shadow: 0 2px 8px rgba(30, 45, 74, 0.08) !important;
+  border-color: rgba(30, 45, 74, 0.14) !important;
+}
+
+.link-item__icon {
+  width: 38px !important;
+  height: 38px !important;
+  border-radius: 10px !important;
+  background: rgba(30, 45, 74, 0.08) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0 !important;
+  overflow: hidden !important;
+}
+
+.link-item__title,
+.link-item h4 {
+  font-size: 0.938rem !important;
+  font-weight: 500 !important;
+  color: #1a1a2e !important;
+  display: block !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+.link-item__url,
+.link-item p {
+  font-size: 0.78rem !important;
+  color: #8a8aaa !important;
+  display: block !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  font-family: monospace !important;
+}
+
+.link-item__actions {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  flex-shrink: 0 !important;
+}
+
+.link-item__copy,
+.link-item__delete {
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: transparent !important;
+  border: 1px solid rgba(30, 45, 74, 0.12) !important;
+  border-radius: 8px !important;
+  cursor: pointer !important;
+  color: #8a8aaa !important;
+  transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease !important;
+  flex-shrink: 0 !important;
+}
+
+.link-item__copy svg,
+.link-item__delete svg {
+  width: 14px !important;
+  height: 14px !important;
+}
+
+.link-item__copy:hover {
+  background: rgba(30, 45, 74, 0.08) !important;
+  border-color: #1e2d4a !important;
+  color: #1e2d4a !important;
+}
+
+.link-item__delete:hover {
+  background: rgba(160, 64, 96, 0.08) !important;
+  border-color: rgba(160, 64, 96, 0.30) !important;
+  color: #a04060 !important;
+}
+
+
+/* STEP 6 — Add Color Depth */
+.dashboard-wrapper {
+  background-color: #fdf8f2 !important;
+  background-image:
+    radial-gradient(ellipse 60% 40% at 5% 10%,
+      rgba(196, 154, 90, 0.12) 0%, transparent 50%),
+    radial-gradient(ellipse 50% 50% at 95% 90%,
+      rgba(181, 99, 122, 0.10) 0%, transparent 50%) !important;
+}
+
+.stat-card {
+  background: #ffffff !important;
+  border: 1px solid rgba(30, 45, 74, 0.09) !important;
+  border-radius: 16px !important;
+  padding: 24px !important;
+  position: relative !important;
+  overflow: hidden !important;
+  box-shadow: 0 2px 8px rgba(30, 45, 74, 0.07) !important;
+  transition: box-shadow 0.18s ease, transform 0.18s ease !important;
+}
+
+.stat-card:first-child::before {
+  content: '' !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  height: 3px !important;
+  background: linear-gradient(90deg, #b5637a, #c49a5a) !important;
+  border-radius: 16px 16px 0 0 !important;
+}
+
+.stat-card:hover {
+  box-shadow: 0 4px 20px rgba(30, 45, 74, 0.11) !important;
+  transform: translateY(-2px) !important;
+}
+
+.stat-card__value {
+  font-family: var(--font-display) !important;
+  font-size: 2.5rem !important;
+  font-weight: 700 !important;
+  color: #1e2d4a !important;
+  line-height: 1 !important;
+}
+
+.stat-card__label {
+  font-size: 0.7rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  color: #8a8aaa !important;
+}
+
+.stat-card__icon {
+  color: #b5637a !important;
+}
+
+.bento-page-header h1 {
+  font-family: var(--font-display) !important;
+  font-size: 2rem !important;
+  font-weight: 700 !important;
+  color: #1a1a2e !important;
+  letter-spacing: -0.03em !important;
+  margin-bottom: 6px !important;
+}
+
+.bento-page-header p {
+  font-size: 0.9rem !important;
+  color: #8a8aaa !important;
+}
+
+.bento-subnav__tab--active {
+  color: #1e2d4a !important;
+  border-bottom-color: #b5637a !important;
+  font-weight: 600 !important;
+}

@@ -26,6 +26,8 @@
   --champagne-pale:    rgba(196, 154, 90, 0.12);
 
   /* Typography */
+  --font-display:      'Playfair Display', Georgia, serif;
+  --font-body:         'Inter', -apple-system, sans-serif;
   --text-primary:      #1a1a2e;
   --text-secondary:    #4a4a6a;
   --text-tertiary:     #8a8aaa;
@@ -58,8 +60,19 @@
 html, body {
   background-color: var(--bg-base) !important;
   color: var(--text-primary) !important;
+  font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
+}
+
+h1, h2, h3,
+.hero__heading,
+.bento-page-header h1,
+.section-heading,
+.pricing-card__name,
+.auth-card__heading {
+  font-family: var(--font-display) !important;
+  letter-spacing: -0.02em;
 }
 
 *,
