@@ -5,19 +5,34 @@ import styles from './Navbar.module.css';
 
 export default function Navbar() {
     const [menuOpen, setMenuOpen] = useState(false);
-    const [scrolled, setScrolled] = useState(false);
     const { user, logout } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
 
-    // Scroll detection for transparent -> opaque transition
+    const isLandingPage = location.pathname === '/' || location.pathname === '';
+    
+    // Start scrolled=true on all pages EXCEPT the landing page
+    const [scrolled, setScrolled] = useState(!isLandingPage);
+
+    // Scroll detection logic
     useEffect(() => {
+        // On non-landing pages: always warm pill, no need to listen
+        if (!isLandingPage) {
+            setScrolled(true);
+            return;
+        }
+
+        // On landing page: listen to scroll
         const handleScroll = () => {
             setScrolled(window.scrollY > 80);
         };
+
+        // Check immediately on mount/path change
+        handleScroll();
+
         window.addEventListener('scroll', handleScroll, { passive: true });
         return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
+    }, [isLandingPage]);
 
     // Close menu on outside click
     useEffect(() => {
@@ -55,7 +70,7 @@ export default function Navbar() {
                             <span style={{
                                 width: '22px', height: '22px', borderRadius: '50%',
                                 background: scrolled ? 'var(--text-dark)' : 'rgba(255,255,255,0.2)', 
-                                color: scrolled ? 'var(--surface-1)' : '#fff',
+                                color: scrolled ? '#fff' : '#fff',
                                 display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
                                 fontSize: '0.7rem', fontWeight: 700, flexShrink: 0, marginRight: '8px'
                             }}>
@@ -82,7 +97,7 @@ export default function Navbar() {
                 <span /><span /><span />
             </button>
 
-            {/* Mobile dropdown - simplistic for now, can be improved */}
+            {/* Mobile dropdown */}
             {menuOpen && (
                 <div style={{
                     position: 'absolute', top: '70px', left: '12px', right: '12px',

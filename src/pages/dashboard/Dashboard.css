@@ -7,13 +7,13 @@
     radial-gradient(ellipse 80% 50% at 10% 0%, rgba(196,154,90,0.10) 0%, transparent 55%),
     radial-gradient(ellipse 60% 60% at 90% 100%, rgba(181,99,122,0.09) 0%, transparent 55%) !important;
   min-height: 100vh;
-  padding-top: 88px;
+  padding-top: 88px !important;
 }
 
 .bento-subnav {
   position: sticky;
-  top: 72px;
-  z-index: 50;
+  top: 80px !important;
+  z-index: 50 !important;
   display: flex;
   align-items: center;
   padding: 0 40px;
