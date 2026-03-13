@@ -21,10 +21,20 @@ import styles from './Dashboard.module.css';
 function PlatformIcon({ id, size = 18 }: { id: string; size?: number }) {
     const found = PLATFORM_ICONS.find(p => p.id === id);
     const color = PLATFORM_COLORS[id] ?? '#6b7280';
-    const svg = found?.svg ?? PLATFORM_ICONS[0].svg;
+    const svg = (found?.svg ?? PLATFORM_ICONS[0].svg)
+        .replace('<svg ', `<svg style="width: 100%; height: 100%; display: block;" `);
+
     return (
         <span
-            style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: size, height: size, color, flexShrink: 0 }}
+            style={{ 
+                display: 'inline-flex', 
+                alignItems: 'center', 
+                justifyContent: 'center', 
+                width: size, 
+                height: size, 
+                color, 
+                flexShrink: 0 
+            }}
             dangerouslySetInnerHTML={{ __html: svg }}
             aria-label={found?.label ?? id}
         />

@@ -7,13 +7,22 @@ import { PLATFORM_ICONS, PLATFORM_COLORS } from '../lib/platformIcons';
 import type { LinkItem } from '../context/AuthContext';
 import { getContrastingColor } from '../lib/utils';
 
-function PlatformIcon({ id, size = 24 }: { id: string; size?: number }) {
+function PlatformIcon({ id, size = 24, color }: { id: string; size?: number; color?: string }) {
     const found = PLATFORM_ICONS.find(p => p.id === id);
-    const color = PLATFORM_COLORS[id] ?? '#6b7280';
-    const svg = found?.svg ?? PLATFORM_ICONS[0].svg;
+    const svg = (found?.svg ?? PLATFORM_ICONS[0].svg)
+        .replace('<svg ', `<svg style="width: 100%; height: 100%; display: block;" `);
+    
     return (
         <span
-            style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: size, height: size, color, flexShrink: 0 }}
+            style={{ 
+                display: 'inline-flex', 
+                alignItems: 'center', 
+                justifyContent: 'center', 
+                width: size, 
+                height: size, 
+                color: color || PLATFORM_COLORS[id] || '#6b7280', 
+                flexShrink: 0 
+            }}
             dangerouslySetInnerHTML={{ __html: svg }}
             aria-label={found?.label ?? id}
         />
@@ -187,7 +196,7 @@ export default function PublicProfile() {
                             transition: 'all 0.2s ease',
                             cursor: 'pointer'
                         }}>
-                            <PlatformIcon id={link.icon} size={24} /><span>{link.label}</span>
+                            <PlatformIcon id={link.icon} size={24} color={theme.btnText} /><span>{link.label}</span>
                         </a>
                     ))}
                 </div>
