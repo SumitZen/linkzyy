@@ -7,8 +7,8 @@ import { useAuth } from '../../context/AuthContext';
 import type { LinkItem, Block, MusicBlock, PhotoBlock, ProductBlock } from '../../context/AuthContext';
 import { PLATFORM_ICONS, PLATFORM_COLORS } from '../../lib/platformIcons';
 import { templatesList } from '../../lib/themes';
-import { storage, APPWRITE_READY, APPWRITE_CONFIG } from '../../lib/appwrite';
-import { ID } from 'appwrite';
+import { storage, APPWRITE_READY, APPWRITE_CONFIG, databases } from '../../lib/appwrite';
+import { ID, Query } from 'appwrite';
 import { useToast } from '../../hooks/useToast';
 import { ToastContainer } from '../../components/Toast';
 
@@ -99,7 +99,77 @@ export default function Dashboard() {
     const [crop, setCrop] = useState<Point>({ x: 0, y: 0 });
     const [zoom, setZoom] = useState(1);
     const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
-    const [isUploading, setIsUploading] = useState(false);
+    const [isSaving, setIsSaving] = useState(false);
+    const [isPurging, setIsPurging] = useState(false);
+
+    // ── Maintenance: Purge Duplicates ──
+    const purgeDuplicates = async () => {
+        if (!window.confirm('This will search for and delete duplicate profile entries for all users. Are you sure?')) return;
+        
+        setIsPurging(true);
+        showToast('Scanning for duplicates...', 'info', '🔍');
+        
+        try {
+            // 1. Fetch all profiles (up to 5000 for cleanup)
+            const res = await databases.listDocuments(
+                APPWRITE_CONFIG.databaseId,
+                APPWRITE_CONFIG.profilesCollectionId,
+                [Query.limit(5000)]
+            );
+
+            const profiles = res.documents;
+            const groups: Record<string, typeof profiles> = {};
+
+            // 2. Group by userId
+            profiles.forEach(p => {
+                const uid = p.userId;
+                if (!groups[uid]) groups[uid] = [];
+                groups[uid].push(p);
+            });
+
+            let deletedCount = 0;
+            const toDelete: string[] = [];
+
+            // 3. Identify duplicates
+            Object.values(groups).forEach(list => {
+                if (list.length <= 1) return;
+
+                // Sort: Most recently updated and most content first
+                list.sort((a, b) => {
+                    const aScore = (a.links?.length || 0) + (a.blocks?.length || 0);
+                    const bScore = (b.links?.length || 0) + (b.blocks?.length || 0);
+                    if (aScore !== bScore) return bScore - aScore;
+                    return new Date(b.$updatedAt).getTime() - new Date(a.$updatedAt).getTime();
+                });
+
+                // Keep the first (best), delete the rest
+                for (let i = 1; i < list.length; i++) {
+                    toDelete.push(list[i].$id);
+                }
+            });
+
+            // 4. Batch delete
+            if (toDelete.length === 0) {
+                showToast('No duplicates found!', 'success', '✨');
+            } else {
+                showToast(`Found ${toDelete.length} duplicates. Purging...`, 'info', '🗑️');
+                for (const id of toDelete) {
+                    await databases.deleteDocument(
+                        APPWRITE_CONFIG.databaseId, 
+                        APPWRITE_CONFIG.profilesCollectionId, 
+                        id
+                    );
+                    deletedCount++;
+                }
+                showToast(`Cleanup complete! Deleted ${deletedCount} entries.`, 'success', '✅');
+            }
+        } catch (err: any) {
+            console.error('Purge failed:', err);
+            showToast(`Purge failed: ${err.message}`, 'error', '❌');
+        } finally {
+            setIsPurging(false);
+        }
+    };
     const [cropType, setCropType] = useState<'avatar' | 'background'>('background');
 
     // ─── Icon Picker State ───
@@ -244,7 +314,7 @@ export default function Dashboard() {
             if (!APPWRITE_READY) showToast('Appwrite not configured', 'error');
             return;
         }
-        setIsUploading(true);
+        setIsSaving(true);
         try {
             const croppedFile = await getCroppedImg(cropImageSrc, croppedAreaPixels);
             if (!croppedFile) throw new Error('Failed to generate crop');
@@ -273,7 +343,7 @@ export default function Dashboard() {
             console.error('Upload failed:', error);
             showToast(`Upload failed: ${error.message}`, 'error');
         } finally {
-            setIsUploading(false);
+            setIsSaving(false);
         }
     };
 
@@ -377,9 +447,9 @@ export default function Dashboard() {
                                 <span className="bento-crop-modal__zoom-val">{Math.round(zoom * 100)}%</span>
                             </div>
                             <div className="bento-crop-modal__actions">
-                                <button className="bento-ghost" onClick={() => setCropImageSrc(null)} disabled={isUploading}>Cancel</button>
-                                <button className="bento-save" onClick={uploadCroppedImage} disabled={isUploading}>
-                                    {isUploading ? 'Saving…' : 'Crop & Save'}
+                                <button className="bento-ghost" onClick={() => setCropImageSrc(null)} disabled={isSaving}>Cancel</button>
+                                <button className="bento-save" onClick={uploadCroppedImage} disabled={isSaving}>
+                                    {isSaving ? 'Saving…' : 'Crop & Save'}
                                 </button>
                             </div>
                         </div>
@@ -780,6 +850,29 @@ export default function Dashboard() {
                                         <button className="btn-save" onClick={() => { updateUser({ name: settingsName }); showToast('Settings saved', 'success'); }}>Save</button>
                                         <button className="btn-logout" onClick={() => { logout(); navigate('/'); }}>Log out</button>
                                     </div>
+
+                                {/* Maintenance Card */}
+                                <div className="plan-access-card" style={{ marginTop: 20, borderColor: '#fee2e2' }}>
+                                    <div className="promo-card__header">
+                                        <div>
+                                            <div className="promo-card__title" style={{ color: '#991b1b' }}>Maintenance</div>
+                                            <div className="promo-card__sub">System cleanup tools</div>
+                                        </div>
+                                    </div>
+                                    <div style={{ padding: '0 20px 20px' }}>
+                                        <p style={{ fontSize: '0.85rem', color: '#666', marginBottom: 16 }}>
+                                            Found thousands of entries in your database? Run the purge tool to remove duplicates and keep only the latest version of each profile.
+                                        </p>
+                                        <button 
+                                            className="btn-primary" 
+                                            style={{ background: '#ef4444', border: 'none', width: '100%', opacity: isPurging ? 0.7 : 1 }}
+                                            onClick={purgeDuplicates}
+                                            disabled={isPurging}
+                                        >
+                                            {isPurging ? 'Purging Documents...' : 'Purge All Duplicate Profiles'}
+                                        </button>
+                                    </div>
+                                </div>
 
                                     {/* Promo Code Card */}
                                     <div className="plan-access-card">
