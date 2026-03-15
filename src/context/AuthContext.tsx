@@ -87,6 +87,8 @@ function buildUserFromAppwrite(awUser: import('appwrite').Models.User<import('ap
 // ── Standalone async DB sync — runs OUTSIDE React state ─────────────────────
 // Caches the Appwrite document ID per userId so we don't list on every save
 const docIdCache: Record<string, string> = {};
+// Debounce timer shared across the module
+let syncDebounceTimer: any = null;
 
 async function syncProfileToAppwrite(updated: User): Promise<void> {
     const sanitize = (val: string | undefined | null) => (!val || val.trim() === '') ? null : val;
@@ -102,21 +104,11 @@ async function syncProfileToAppwrite(updated: User): Promise<void> {
         blocks: JSON.stringify(updated.blocks || []),
     };
 
-    let docId = docIdCache[updated.id];
+    const userId = updated.id;
+    let docId = docIdCache[userId];
 
     try {
-        if (!docId) {
-            const res = await databases.listDocuments(
-                APPWRITE_CONFIG.databaseId,
-                APPWRITE_CONFIG.profilesCollectionId,
-                [Query.equal('userId', updated.id), Query.limit(1)]
-            );
-            if (res.documents.length > 0) {
-                docId = res.documents[0].$id;
-                docIdCache[updated.id] = docId;
-            }
-        }
-
+        // Pattern 1: If we have a cached ID, highly reliable update
         if (docId) {
             await databases.updateDocument(
                 APPWRITE_CONFIG.databaseId,
@@ -124,27 +116,58 @@ async function syncProfileToAppwrite(updated: User): Promise<void> {
                 docId,
                 dbPayload
             );
-            console.log('✅ Appwrite Sync: Update Success');
-        } else {
-            const created = await databases.createDocument(
-                APPWRITE_CONFIG.databaseId,
-                APPWRITE_CONFIG.profilesCollectionId,
-                ID.unique(),
-                { ...dbPayload, userId: updated.id }
-            );
-            docIdCache[updated.id] = created.$id;
-            console.log('✅ Appwrite Sync: Created Profile Success');
-        }
-    } catch (err: any) {
-        console.error('❌ Appwrite Sync Failed:', err.message, dbPayload);
-        
-        // Critical Fix: If 404 (document not found), clear the cache because it is invalid.
-        if (err.code === 404) {
-            delete docIdCache[updated.id];
-            console.warn('⚠️ Cleared corrupted docIdCache for user', updated.id);
+            console.log('✅ Appwrite Sync: Update Success (Cached)');
+            return;
         }
 
-        // Throw the error so updateUser can alert the dashboard UI
+        // Pattern 2: Attempt update using userId as the docId (the new standard)
+        try {
+            await databases.updateDocument(
+                APPWRITE_CONFIG.databaseId,
+                APPWRITE_CONFIG.profilesCollectionId,
+                userId,
+                dbPayload
+            );
+            docIdCache[userId] = userId;
+            console.log('✅ Appwrite Sync: Update Success (Standard)');
+        } catch (err: any) {
+            // If not found by userId, it might be a legacy doc or a truly new user
+            if (err.code === 404) {
+                const res = await databases.listDocuments(
+                    APPWRITE_CONFIG.databaseId,
+                    APPWRITE_CONFIG.profilesCollectionId,
+                    [Query.equal('userId', userId), Query.limit(1)]
+                );
+
+                if (res.documents.length > 0) {
+                    // Legacy document found
+                    const legacyDocId = res.documents[0].$id;
+                    docIdCache[userId] = legacyDocId;
+                    await databases.updateDocument(
+                        APPWRITE_CONFIG.databaseId,
+                        APPWRITE_CONFIG.profilesCollectionId,
+                        legacyDocId,
+                        dbPayload
+                    );
+                    console.log('✅ Appwrite Sync: Update Success (Legacy)');
+                } else {
+                    // Truly new user - Create using userId as the DocId to prevent future races
+                    const created = await databases.createDocument(
+                        APPWRITE_CONFIG.databaseId,
+                        APPWRITE_CONFIG.profilesCollectionId,
+                        userId, // Use userId as the documentId
+                        { ...dbPayload, userId: userId }
+                    );
+                    docIdCache[userId] = created.$id;
+                    console.log('✅ Appwrite Sync: Created Profile Success (Atomic)');
+                }
+            } else {
+                throw err;
+            }
+        }
+    } catch (err: any) {
+        console.error('❌ Appwrite Sync Failed:', err.message);
+        if (err.code === 404) delete docIdCache[userId];
         throw err;
     }
 }
@@ -330,16 +353,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         localStorage.setItem(`linkzy_profile_${prev.id}`, JSON.stringify(updated));
         localStorage.setItem(SESSION_KEY, JSON.stringify(updated));
 
-        // 3. Sync to Appwrite DB asynchronously — OUTSIDE setState
+        // 3. Sync to Appwrite DB asynchronously with DEBOUNCE
         if (APPWRITE_READY && prev.id) {
-            syncProfileToAppwrite(updated).catch(e => {
-                console.error('DB sync failed:', e);
-                // Rollback UI so it doesn't lie to the user about what is live
-                alert(`Failed to save changes: ${e.message}. Please check your connection or try again.`);
-                setUser(prev);
-                localStorage.setItem(`linkzy_profile_${prev.id}`, JSON.stringify(prev));
-                localStorage.setItem(SESSION_KEY, JSON.stringify(prev));
-            });
+            if (syncDebounceTimer) clearTimeout(syncDebounceTimer);
+            
+            syncDebounceTimer = setTimeout(() => {
+                syncProfileToAppwrite(updated).catch(e => {
+                    console.error('DB sync failed:', e);
+                    // Rollback UI so it doesn't lie to the user about what is live
+                    alert(`Failed to save changes: ${e.message}. Please check your connection or try again.`);
+                    setUser(prev);
+                    localStorage.setItem(`linkzy_profile_${prev.id}`, JSON.stringify(prev));
+                    localStorage.setItem(SESSION_KEY, JSON.stringify(prev));
+                });
+            }, 1000); // 1 second debounce to stop spamming creates/updates
         }
     };
 
