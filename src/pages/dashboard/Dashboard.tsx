@@ -231,8 +231,6 @@ export default function Dashboard() {
         }
     }, [user, navigate]);
 
-    if (!user || (!user.onboarded && window.location.pathname.includes('/dashboard'))) return null;
-
     // ─── Auto-Apply Plan from Pricing Page ───
     useEffect(() => {
         const selected = sessionStorage.getItem('selectedPlan');
@@ -242,6 +240,8 @@ export default function Dashboard() {
             showToast(`Welcome to ${selected.toUpperCase()}!`, 'success', '🎉');
         }
     }, [user, updateUser, showToast]);
+
+    if (!user || (!user.onboarded && window.location.pathname.includes('/dashboard'))) return null;
 
     // CRUD helpers
     const saveLinks = (u: LinkItem[]) => { setLinks(u); updateUser({ links: u }); };
