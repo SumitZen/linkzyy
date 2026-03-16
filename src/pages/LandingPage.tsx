@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import BrutalistHero from '../components/BrutalistHero';
 import TemplatesShowcase from '../components/TemplatesShowcase';
 import './LandingPage.css';
@@ -6,6 +7,7 @@ import './MissingLayouts.css';
 
 export default function LandingPage() {
     const phoneRef = useRef<HTMLDivElement>(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         // Ported 3D phone mouse follow
@@ -23,14 +25,8 @@ export default function LandingPage() {
         };
     }, []);
 
-    // We can add the GSAP interactions and Lenis back on top of this structure later.
-
     return (
         <div className="landingRoot">
-            {/* 3D Canvas Background Removed */}
-
-
-
             {/* HERO */}
             <BrutalistHero />
 
@@ -45,8 +41,8 @@ export default function LandingPage() {
                     justifyContent: 'center',
                     gap: '32px',
                     padding: '48px 24px',
-                    borderTop: 'var(--border-subtle)',
-                    borderBottom: 'var(--border-subtle)',
+                    borderTop: '1px solid rgba(30, 45, 74, 0.08)',
+                    borderBottom: '1px solid rgba(30, 45, 74, 0.08)',
                     flexWrap: 'wrap',
                     maxWidth: '1000px',
                     margin: '0 auto',
@@ -67,15 +63,15 @@ export default function LandingPage() {
                                     width: '44px', height: '44px',
                                     borderRadius: '50%',
                                     objectFit: 'cover',
-                                    border: '2px solid var(--surface-1)',
+                                    border: '2px solid #fff',
                                     marginLeft: i === 0 ? 0 : '-12px',
-                                    boxShadow: 'var(--shadow-layer-1)',
+                                    boxShadow: '0 4px 12px rgba(30, 45, 74, 0.12)',
                                 }}
                             />
                         ))}
                     </div>
-                    <div style={{ fontFamily: 'var(--font-sans)', color: 'var(--text-muted)', fontSize: '0.9rem' }}>
-                        <span style={{ fontWeight: 700, color: 'var(--text-dark)' }}>50,000+</span> creators already using Linkzy
+                    <div style={{ fontFamily: 'var(--font-body)', color: '#8a8aaa', fontSize: '0.9rem' }}>
+                        <span style={{ fontWeight: 700, color: '#1e2d4a' }}>50,000+</span> creators already using Linkzy
                     </div>
                 </div>
 
@@ -84,7 +80,7 @@ export default function LandingPage() {
                     <div className="section-inner">
                         <div className="cust-phone">
                             <div className="dark-iphone">
-                                <div className="dark-iphone-screen">
+                                <div className="dark-iphone-screen" style={{ overflow: 'hidden' }}>
                                     <div className="di-dark">
                                         <div className="di-sensor"></div>
                                         <div className="di-camera"></div>
@@ -136,13 +132,67 @@ export default function LandingPage() {
                     </div>
                 </section>
 
+                {/*  PRICING SECTION PREVIEW  */}
+                <section className="pricing-preview-sec" style={{ 
+                    padding: '100px 40px',
+                    textAlign: 'center',
+                    background: '#fdf8f2',
+                }}>
+                    <div className="sec-label">✦ Simple Pricing</div>
+                    <h2 className="sec-title">Free to start.<br />Easy to upgrade.</h2>
+                    <div className="pricing-preview-cards" style={{
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+                        gap: '24px',
+                        maxWidth: '1000px',
+                        margin: '60px auto 48px',
+                    }}>
+                        {[
+                            { name: 'Free', price: '$0', desc: 'The basics, forever.', btn: 'Get started' },
+                            { name: 'Pro', price: '$3', desc: 'Everything unlocked.', btn: 'Go Pro' },
+                            { name: 'Business', price: '$9', desc: 'For teams & scale.', btn: 'Contact' },
+                        ].map(p => (
+                            <div key={p.name} style={{
+                                background: '#fff',
+                                padding: '32px',
+                                borderRadius: '24px',
+                                border: '1px solid rgba(30, 45, 74, 0.08)',
+                                boxShadow: '0 4px 12px rgba(30, 45, 74, 0.05)',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center',
+                            }}>
+                                <div style={{ fontSize: '0.9rem', fontWeight: 700, color: '#8a8aaa', marginBottom: '8px' }}>{p.name}</div>
+                                <div style={{ fontSize: '2.5rem', fontWeight: 800, color: '#1e2d4a', marginBottom: '4px' }}>{p.price}</div>
+                                <div style={{ fontSize: '0.85rem', color: '#1e2d4a', opacity: 0.6, marginBottom: '20px' }}>{p.name === 'Free' ? 'Forever' : 'per month'}</div>
+                                <p style={{ fontSize: '0.9rem', color: '#4a4a6a', marginBottom: '32px' }}>{p.desc}</p>
+                                <button 
+                                    onClick={() => navigate('/pricing')}
+                                    style={{
+                                        width: '100%',
+                                        padding: '12px',
+                                        borderRadius: '12px',
+                                        border: 'none',
+                                        background: p.name === 'Pro' ? '#1e2d4a' : '#f0e6da',
+                                        color: p.name === 'Pro' ? '#fff' : '#1e2d4a',
+                                        fontWeight: 700,
+                                        cursor: 'pointer',
+                                    }}
+                                >
+                                    {p.btn}
+                                </button>
+                            </div>
+                        ))}
+                    </div>
+                </section>
+
                 {/*  SHARE ANYWHERE  */}
                 <section className="share-section">
                     <div className="share-section__text">
                         <div className="sec-label">✦ Reach</div>
                         <h2>Share your Linkzy<br />everywhere.</h2>
                         <p>Add your unique Linkzy URL to every platform where your audience lives. One link works everywhere — your bio, QR code on merch, business cards, anywhere.</p>
-                        <button className="btn-signup">Get your link →</button>
+                        <button className="btn-signup" onClick={() => navigate('/signup')}>Get your link →</button>
                     </div>
                     <div className="platform-grid">
                         <div className="platform-card">
@@ -222,7 +272,6 @@ export default function LandingPage() {
                     </div>
                 </section>
             </div>
-
         </div>
     );
 }

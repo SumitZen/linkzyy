@@ -14,7 +14,7 @@ const PLANS = [
         description: 'Perfect for getting started.',
         cta: 'Get started free',
         popular: false,
-        color: '#6b7280',
+        color: 'var(--text-secondary)',
         features: [
             { label: '5 links', included: true },
             { label: '3 themes', included: true },
@@ -34,7 +34,7 @@ const PLANS = [
         description: 'For creators who mean business.',
         cta: 'Start Pro free →',
         popular: true,
-        color: '#7c3aed',
+        color: '#fff',
         features: [
             { label: 'Unlimited links', included: true },
             { label: 'All 20+ themes', included: true },
@@ -54,7 +54,7 @@ const PLANS = [
         description: 'For teams and power users.',
         cta: 'Contact sales',
         popular: false,
-        color: '#0f172a',
+        color: 'var(--navy)',
         features: [
             { label: 'Unlimited links', included: true },
             { label: 'All 20+ themes', included: true },
@@ -79,7 +79,7 @@ const COMPARISON = {
 };
 
 export default function PricingPage() {
-    const [billing, setBilling] = useState<BillingCycle>('monthly');
+    const [billing, setBilling] = useState<BillingCycle>('annual');
     const { user } = useAuth();
     const navigate = useNavigate();
 
@@ -88,6 +88,10 @@ export default function PricingPage() {
             navigate('/dashboard?tab=settings');
             return;
         }
+
+        // Apply session storage for plan selection persistence
+        sessionStorage.setItem('selectedPlan', planId);
+
         if (user) {
             navigate('/dashboard');
         } else {
@@ -128,8 +132,8 @@ export default function PricingPage() {
                     const period = billing === 'monthly' ? '/mo' : '/yr';
 
                     return (
-                        <div key={plan.id} className={`pricing-card ${plan.popular ? 'popular' : ''} ${user?.plan === plan.id ? 'current-plan' : ''}`}>
-                            {plan.popular && user?.plan !== plan.id && (
+                        <div key={plan.id} className={`pricing-card ${plan.popular ? 'popular' : ''}`}>
+                            {plan.popular && (
                                 <div className="popular-badge">🔥 Most popular</div>
                             )}
                             {user?.plan === plan.id && (
@@ -152,9 +156,9 @@ export default function PricingPage() {
                             )}
                             <div className="plan-divider" />
                             <ul className="plan-features">
-                                {plan.features.filter(f => f.included).map(f => (
-                                    <li key={f.label} className="feature-item">
-                                        <span className="feature-check">✓</span>
+                                {plan.features.map(f => (
+                                    <li key={f.label} className="feature-item" style={{ opacity: f.included ? 1 : 0.4 }}>
+                                        <span className="feature-check">{f.included ? '✓' : '✗'}</span>
                                         {f.label}
                                     </li>
                                 ))}
@@ -174,7 +178,6 @@ export default function PricingPage() {
             <div className="comparison-section">
                 <h2 className="comparison-title">Full feature comparison</h2>
                 <div className="comparison-table">
-                    {/* Header row */}
                     <div className="comp-row comp-header">
                         <div className="comp-feature-col">Feature</div>
                         <div className="comp-plan-col">Free</div>
@@ -197,7 +200,7 @@ export default function PricingPage() {
                 {[
                     { q: 'Can I cancel anytime?', a: 'Yes, cancel from Settings with one click. No penalties.' },
                     { q: 'Is there a free trial?', a: 'Pro comes with a 14-day free trial — no card required.' },
-                    { q: 'What happens to my links if I downgrade?', a: 'Your links stay active. You\'ll be capped at 5 visible links on Free.' },
+                    { q: 'What happens if I downgrade?', a: 'Your links stay active. You\'ll be capped at 5 visible links on Free.' },
                 ].map(item => (
                     <div key={item.q} className="faq-item">
                         <div className="faq-q">{item.q}</div>

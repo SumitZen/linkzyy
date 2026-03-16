@@ -35,6 +35,7 @@ export interface User {
     blocks: Block[];
     theme: string;
     textColor?: string;
+    onboarded?: boolean;
 }
 
 // ── Context type ─────────────────────────────────────────────────────────────
@@ -43,7 +44,7 @@ interface AuthContextValue {
     isLoading: boolean;
     login: (email: string, password: string) => Promise<void>;
     loginWithGoogle: () => void;
-    signup: (name: string, email: string, password: string) => Promise<void>;
+    signup: (name: string, email: string, password: string, plan?: User['plan']) => Promise<void>;
     logout: () => void;
     updateUser: (updates: Partial<User>) => void;
     redeemPromoCode: (code: string) => Promise<'ok' | 'invalid' | 'already_active'>;
@@ -80,6 +81,7 @@ function buildUserFromAppwrite(awUser: import('appwrite').Models.User<import('ap
         links: getDefaultLinks(),
         blocks: [],
         theme: 'editorial-light',
+        onboarded: false,
         ...extra,
     };
 }
@@ -102,6 +104,8 @@ async function syncProfileToAppwrite(updated: User): Promise<void> {
         bgImage: sanitize(updated.bgImage),
         links: JSON.stringify(updated.links || []),
         blocks: JSON.stringify(updated.blocks || []),
+        plan: updated.plan,
+        onboarded: updated.onboarded,
     };
 
     const userId = updated.id;
@@ -232,6 +236,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                             links: parseField(doc.links) as LinkItem[],
                             blocks: parseField(doc.blocks) as Block[],
                             textColor: textColorFromTheme || doc.textColor || '',
+                            onboarded: !!doc.onboarded,
                         };
                     } else {
                         // No document yet — fall back to localStorage
@@ -298,16 +303,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
 
     // ── Signup ──
-    const signup = async (name: string, email: string, password: string) => {
+    const signup = async (name: string, email: string, password: string, plan: User['plan'] = 'free') => {
         if (APPWRITE_READY) {
             try {
                 await account.create(ID.unique(), email, password, name);
                 await account.createEmailPasswordSession(email, password);
                 const awUser = await account.get();
-                const u = buildUserFromAppwrite(awUser);
+                const u = buildUserFromAppwrite(awUser, { plan });
                 setUser(u);
                 localStorage.setItem(SESSION_KEY, JSON.stringify(u));
                 localStorage.setItem(`linkzy_profile_${u.id}`, JSON.stringify(u));
+                
+                // Immediately sync the plan choice to the database
+                syncProfileToAppwrite(u).catch(e => console.error('Initial plan sync failed:', e));
             } catch (err: unknown) {
                 const error = err as { code?: string; message?: string };
                 throw new Error(error.message || 'Signup failed.');

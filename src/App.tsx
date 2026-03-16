@@ -12,6 +12,7 @@ import PublicProfile from './pages/PublicProfile';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 import AuthCallback from './pages/AuthCallback';
+import OnboardingPage from './pages/OnboardingPage';
 import Dashboard from './pages/dashboard/Dashboard';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
@@ -35,6 +36,7 @@ export default function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/auth/callback" element={<AuthCallback />} />
+          <Route path="/onboarding" element={<ProtectedRoute><OnboardingPage /></ProtectedRoute>} />
 
           {/* Public routes with Navbar + Footer */}
           <Route element={<PublicLayout />}>

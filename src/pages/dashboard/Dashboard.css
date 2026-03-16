@@ -2133,3 +2133,104 @@ textarea.bento-input { height: auto; padding: 10px 14px; }
   from { opacity: 0; transform: scale(0.98); }
   to { opacity: 1; transform: scale(1); }
 }
+
+/* ── Plan Enforcement UI ── */
+.bento-upgrade-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  background: linear-gradient(135deg, #1e2d4a, #2a3d5f);
+  border-radius: 16px;
+  color: #fff;
+  gap: 16px;
+  box-shadow: 0 4px 12px rgba(30, 45, 74, 0.15);
+}
+
+.bento-upgrade-banner__text {
+  flex: 1;
+}
+
+.bento-upgrade-banner__text strong {
+  display: block;
+  font-size: 1rem;
+  margin-bottom: 2px;
+}
+
+.bento-upgrade-banner__text p {
+  font-size: 0.85rem;
+  opacity: 0.85;
+}
+
+.bento-upgrade-banner__btn {
+  background: #fff;
+  color: #1e2d4a;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: transform 0.15s ease;
+}
+
+.bento-upgrade-banner__btn:hover {
+  transform: scale(1.03);
+}
+
+.plan-badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 4px 8px;
+  border-radius: 6px;
+  letter-spacing: 0.05em;
+}
+
+.plan-badge--free {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+.plan-badge--pro {
+  background: #fef3c7;
+  color: #d97706;
+}
+
+.plan-badge--business {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.bento-theme-btn.locked {
+  position: relative;
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+
+.bento-theme-btn.locked::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.bento-theme-lock {
+  margin-left: 6px;
+  font-size: 0.75rem;
+}
+
+@media (max-width: 600px) {
+  .bento-upgrade-banner {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 18px;
+  }
+  
+  .bento-upgrade-banner__btn {
+    width: 100%;
+  }
+}

@@ -48,9 +48,8 @@ export default function SignupPage() {
         if (password.length < 6) { setError('Password must be at least 6 characters.'); return; }
         setIsLoading(true);
         try {
-            await signup(name, email, password);
-            const search = searchParams.toString();
-            navigate(`/dashboard${search ? `?${search}` : ''}`, { replace: true });
+            await signup(name, email, password, plan as any);
+            navigate('/onboarding', { replace: true });
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Signup failed.');
         } finally {

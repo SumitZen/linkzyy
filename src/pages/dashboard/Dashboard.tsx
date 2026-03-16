@@ -4,7 +4,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import Cropper from 'react-easy-crop';
 import type { Point, Area } from 'react-easy-crop';
 import { useAuth } from '../../context/AuthContext';
-import type { LinkItem, Block, MusicBlock, PhotoBlock, ProductBlock } from '../../context/AuthContext';
+import type { User, LinkItem, Block, MusicBlock, PhotoBlock, ProductBlock } from '../../context/AuthContext';
 import { PLATFORM_ICONS, PLATFORM_COLORS } from '../../lib/platformIcons';
 import { templatesList } from '../../lib/themes';
 import { storage, APPWRITE_READY, APPWRITE_CONFIG, databases } from '../../lib/appwrite';
@@ -26,6 +26,7 @@ function PlatformIcon({ id, size = 18 }: { id: string; size?: number }) {
 
     return (
         <span
+            className="bento-icon-wrapper"
             style={{ 
                 display: 'inline-flex', 
                 alignItems: 'center', 
@@ -40,6 +41,12 @@ function PlatformIcon({ id, size = 18 }: { id: string; size?: number }) {
         />
     );
 }
+
+const PLAN_LIMITS = {
+    free: { maxLinks: 5, label: 'Free' },
+    pro: { maxLinks: 50, label: 'Pro' },
+    business: { maxLinks: 200, label: 'Business' }
+} as const;
 
 export default function Dashboard() {
     const { user, logout, updateUser, redeemPromoCode } = useAuth();
@@ -217,12 +224,40 @@ export default function Dashboard() {
         }
     }, [searchParams, setSearchParams, updateUser]);
 
+    // ─── Force Onboarding ───
+    useEffect(() => {
+        if (user && !user.onboarded) {
+            navigate('/onboarding', { replace: true });
+        }
+    }, [user, navigate]);
+
+    if (!user || (!user.onboarded && window.location.pathname.includes('/dashboard'))) return null;
+
+    // ─── Auto-Apply Plan from Pricing Page ───
+    useEffect(() => {
+        const selected = sessionStorage.getItem('selectedPlan');
+        if (selected && user && user.plan !== selected) {
+            updateUser({ plan: selected as User['plan'] });
+            sessionStorage.removeItem('selectedPlan');
+            showToast(`Welcome to ${selected.toUpperCase()}!`, 'success', '🎉');
+        }
+    }, [user, updateUser, showToast]);
+
     // CRUD helpers
     const saveLinks = (u: LinkItem[]) => { setLinks(u); updateUser({ links: u }); };
     const saveBlocks = (u: Block[]) => { setBlocks(u); updateUser({ blocks: u }); };
 
     const addLink = () => {
         if (!newLabel.trim() || !newUrl.trim()) return;
+        
+        const currentCount = links.length + blocks.length;
+        const limit = PLAN_LIMITS[user?.plan || 'free'].maxLinks;
+        
+        if (currentCount >= limit) {
+            showToast(`Limit reached: ${user?.plan} plan allows ${limit} links.`, 'error', '🚫');
+            return;
+        }
+
         const url = newUrl.startsWith('http') ? newUrl : `https://${newUrl}`;
         saveLinks([...links, { id: crypto.randomUUID(), type: 'link', label: newLabel.trim(), url, icon: newIcon, enabled: true }]);
         setNewLabel(''); setNewUrl('');
@@ -236,6 +271,14 @@ export default function Dashboard() {
 
     const addBlock = () => {
         const id = crypto.randomUUID();
+        const currentCount = links.length + blocks.length;
+        const limit = PLAN_LIMITS[user?.plan || 'free'].maxLinks;
+        
+        if (currentCount >= limit) {
+            showToast(`Limit reached: ${user?.plan} plan allows ${limit} links.`, 'error', '🚫');
+            return;
+        }
+
         if (advType === 'music' && mt && me) {
             saveBlocks([...blocks, { id, type: 'music', title: mt, artist: ma, embedUrl: me, coverUrl: mc, enabled: true } as MusicBlock]);
             setMt(''); setMa(''); setMe(''); setMc('');
@@ -277,6 +320,12 @@ export default function Dashboard() {
     };
 
     const handleThemeSelect = (themeId: string) => {
+        const theme = templatesList.find(t => t.id === themeId);
+        if (user?.plan === 'free' && theme?.isPremium) {
+            showToast('This theme is a Pro feature', 'error', '💎');
+            navigate('/pricing');
+            return;
+        }
         setSelTheme(themeId);
         updateUser({ theme: themeId });
         const name = themeId.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
@@ -462,8 +511,23 @@ export default function Dashboard() {
                             {/* ── LINKS TAB (Includes Stats) ── */}
                             {activeTab === 'links' && (
                                 <div className="bento-fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                                    {user?.plan === 'free' && (
+                                        <div className="bento-upgrade-banner">
+                                            <div className="bento-upgrade-banner__text">
+                                                <strong>Upgrade to Pro</strong>
+                                                <p>Get unlimited links, premium themes, and remove Linkzy branding.</p>
+                                            </div>
+                                            <button className="bento-upgrade-banner__btn" onClick={() => navigate('/pricing')}>Learn More</button>
+                                        </div>
+                                    )}
+
                                     <header className="bento-page-header">
-                                        <h1>Links & Blocks</h1>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                            <h1>Links & Blocks</h1>
+                                            <span className={`plan-badge plan-badge--${user?.plan || 'free'}`}>
+                                                {PLAN_LIMITS[user?.plan || 'free'].label}
+                                            </span>
+                                        </div>
                                         <p>Manage the content on your Linkzy profile.</p>
                                     </header>
 
@@ -799,21 +863,35 @@ export default function Dashboard() {
                                                             </div>
                                                         )}
 
-                                                        {templatesList.map(t => (
-                                                            <button 
-                                                                key={t.id} 
-                                                                className={['bento-theme-btn', (selTheme === t.id && !bgImage && !bgColor) ? 'sel' : ''].filter(Boolean).join(' ')} 
-                                                                style={{ background: swatchGradients[t.id] || t.bg }}
-                                                                onClick={() => {
-                                                                    setBgImage('');
-                                                                    setBgColor('');
-                                                                    setManualTextColor('');
-                                                                    handleThemeSelect(t.id);
-                                                                }}
-                                                            >
-                                                                <div className="bento-theme-name">{t.name}</div>
-                                                            </button>
-                                                        ))}
+                                                        {templatesList.map(t => {
+                                                            const isLocked = user?.plan === 'free' && t.isPremium;
+                                                            return (
+                                                                <button 
+                                                                    key={t.id} 
+                                                                    className={[
+                                                                        'bento-theme-btn', 
+                                                                        (selTheme === t.id && !bgImage && !bgColor) ? 'sel' : '',
+                                                                        isLocked ? 'locked' : ''
+                                                                    ].filter(Boolean).join(' ')} 
+                                                                    style={{ background: swatchGradients[t.id] || t.bg }}
+                                                                    onClick={() => {
+                                                                        if (isLocked) {
+                                                                            handleThemeSelect(t.id); // Triggers toast & redirect
+                                                                            return;
+                                                                        }
+                                                                        setBgImage('');
+                                                                        setBgColor('');
+                                                                        setManualTextColor('');
+                                                                        handleThemeSelect(t.id);
+                                                                    }}
+                                                                >
+                                                                    <div className="bento-theme-name">
+                                                                        {t.name}
+                                                                        {isLocked && <span className="bento-theme-lock">💎</span>}
+                                                                    </div>
+                                                                </button>
+                                                            );
+                                                        })}
                                                     </div>
                                                 );
                                             })()}

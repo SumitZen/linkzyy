@@ -109,6 +109,10 @@ export default function PublicProfile() {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let blocks: any[] = forceParseJSON(profile?.blocks);
 
+    const userPlan = profile.plan || 'free';
+    const totalContent = [...links.map(l => ({ ...l, itemType: 'link' })), ...blocks.map(b => ({ ...b, itemType: 'block' }))];
+    const visibleContent = userPlan === 'free' ? totalContent.slice(0, 5) : totalContent;
+
     return (
         <div style={{
             minHeight: '100vh',
@@ -174,96 +178,102 @@ export default function PublicProfile() {
                     {profile.bio}
                 </p>
 
-                {/* Links */}
+                {/* Content (Links & Blocks combined for proper limit enforcement) */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 16, width: '100%' }}>
-                    {links.filter(l => l.enabled !== false).map(link => (
-                        <a key={link.id} href={link.url} target="_blank" rel="noopener noreferrer" className="bento-public-link" style={{
-                            background: theme.btnBg,
-                            color: theme.btnText,
-                            borderRadius: theme.borderFormat === 'thick' ? 12 : 32,
-                            padding: '16px 24px',
-                            fontSize: '1rem',
-                            fontWeight: 600,
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: 12,
-                            border: theme.btnBorder !== 'none' ? theme.btnBorder : undefined,
-                            boxShadow: theme.btnShadow !== 'none' ? theme.btnShadow : undefined,
-                            backdropFilter: theme.backdropBlur !== 'none' ? theme.backdropBlur : undefined,
-                            WebkitBackdropFilter: theme.backdropBlur !== 'none' ? theme.backdropBlur : undefined,
-                            fontFamily: theme.fontFamily,
-                            textDecoration: 'none',
-                            transition: 'all 0.2s ease',
-                            cursor: 'pointer'
-                        }}>
-                            <PlatformIcon id={link.icon} size={24} color={theme.btnText} /><span>{link.label}</span>
-                        </a>
-                    ))}
-                </div>
+                    {visibleContent.filter(item => item.enabled !== false).map((item: any) => {
+                        if (item.itemType === 'link') {
+                            return (
+                                <a key={item.id} href={item.url} target="_blank" rel="noopener noreferrer" className="bento-public-link" style={{
+                                    background: theme.btnBg,
+                                    color: theme.btnText,
+                                    borderRadius: theme.borderFormat === 'thick' ? 12 : 32,
+                                    padding: '16px 24px',
+                                    fontSize: '1rem',
+                                    fontWeight: 600,
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: 12,
+                                    border: theme.btnBorder !== 'none' ? theme.btnBorder : undefined,
+                                    boxShadow: theme.btnShadow !== 'none' ? theme.btnShadow : undefined,
+                                    backdropFilter: theme.backdropBlur !== 'none' ? theme.backdropBlur : undefined,
+                                    WebkitBackdropFilter: theme.backdropBlur !== 'none' ? theme.backdropBlur : undefined,
+                                    fontFamily: theme.fontFamily,
+                                    textDecoration: 'none',
+                                    transition: 'all 0.2s ease',
+                                    cursor: 'pointer'
+                                }}>
+                                    <PlatformIcon id={item.icon} size={24} color={theme.btnText} />
+                                    <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.label}</span>
+                                </a>
+                            );
+                        } else {
+                            // Block rendering
+                            return (
+                                <div key={item.id} style={{
+                                    width: '100%',
+                                    background: theme.btnBg, color: theme.btnText,
+                                    padding: 24,
+                                    borderRadius: theme.borderFormat === 'thick' ? 12 : 32,
+                                    border: theme.btnBorder !== 'none' ? theme.btnBorder : undefined,
+                                    boxShadow: theme.btnShadow !== 'none' ? theme.btnShadow : undefined,
+                                    backdropFilter: theme.backdropBlur !== 'none' ? theme.backdropBlur : undefined,
+                                    WebkitBackdropFilter: theme.backdropBlur !== 'none' ? theme.backdropBlur : undefined,
+                                    fontFamily: theme.fontFamily
+                                }}>
+                                    {item.type === 'music' && (
+                                        <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
+                                            {item.coverUrl && <img src={item.coverUrl} alt="Cover" style={{ width: 64, height: 64, objectFit: 'cover', borderRadius: 8 }} />}
+                                            <div style={{ flex: 1, overflow: 'hidden' }}>
+                                                <div style={{ fontWeight: 700, fontSize: '1.1rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.title}</div>
+                                                <div style={{ fontSize: '0.9rem', opacity: 0.8, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.artist}</div>
+                                            </div>
+                                            <a href={item.embedUrl} target="_blank" rel="noreferrer" style={{ padding: '8px 16px', background: theme.textColor, color: theme.bg, textDecoration: 'none', fontWeight: 600, borderRadius: 8, whiteSpace: 'nowrap' }}>Play</a>
+                                        </div>
+                                    )}
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 16, width: '100%', marginTop: 32 }}>
-                    {blocks.filter(b => b.enabled !== false).map(block => (
-                        <div key={block.id} style={{
-                            width: '100%', marginBottom: 16,
-                            background: theme.btnBg, color: theme.btnText,
-                            padding: 24, paddingBottom: 24,
-                            borderRadius: theme.borderFormat === 'thick' ? 12 : 32,
-                            border: theme.btnBorder !== 'none' ? theme.btnBorder : undefined,
-                            boxShadow: theme.btnShadow !== 'none' ? theme.btnShadow : undefined,
-                            backdropFilter: theme.backdropBlur !== 'none' ? theme.backdropBlur : undefined,
-                            WebkitBackdropFilter: theme.backdropBlur !== 'none' ? theme.backdropBlur : undefined,
-                            fontFamily: theme.fontFamily
-                        }}>
-                            {block.type === 'music' && (
-                                <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
-                                    {block.coverUrl && <img src={block.coverUrl} alt="Cover" style={{ width: 64, height: 64, objectFit: 'cover', borderRadius: 8 }} />}
-                                    <div style={{ flex: 1 }}>
-                                        <div style={{ fontWeight: 700, fontSize: '1.1rem' }}>{block.title}</div>
-                                        <div style={{ fontSize: '0.9rem', opacity: 0.8 }}>{block.artist}</div>
-                                    </div>
-                                    <a href={block.embedUrl} target="_blank" rel="noreferrer" style={{ padding: '8px 16px', background: theme.textColor, color: theme.bg, textDecoration: 'none', fontWeight: 600, borderRadius: 8 }}>Play</a>
-                                </div>
-                            )}
+                                    {item.type === 'photo' && (
+                                        <div>
+                                            {item.caption && <p style={{ fontWeight: 600, marginBottom: 16 }}>{item.caption}</p>}
+                                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: 12 }}>
+                                                {item.images.map((img: string, i: number) => (
+                                                    <img key={i} src={img} alt={`img-${i}`} style={{ width: '100%', aspectRatio: '1', objectFit: 'cover', borderRadius: 12 }} />
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
 
-                            {block.type === 'photo' && (
-                                <div>
-                                    {block.caption && <p style={{ fontWeight: 600, marginBottom: 16 }}>{block.caption}</p>}
-                                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: 12 }}>
-                                        {block.images.map((img: string, i: number) => (
-                                            <img key={i} src={img} alt={`img-${i}`} style={{ width: '100%', aspectRatio: '1', objectFit: 'cover', borderRadius: 8 }} />
-                                        ))}
-                                    </div>
+                                    {item.type === 'product' && (
+                                        <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
+                                            {item.imageUrl && <img src={item.imageUrl} alt="Product" style={{ width: 80, height: 80, objectFit: 'cover', borderRadius: 8 }} />}
+                                            <div style={{ flex: 1, overflow: 'hidden' }}>
+                                                <div style={{ fontWeight: 700, fontSize: '1.1rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.name}</div>
+                                                <div style={{ fontWeight: 800, marginTop: 4 }}>{item.price}</div>
+                                            </div>
+                                            <a href={item.buyUrl} target="_blank" rel="noreferrer" style={{ padding: '8px 16px', background: theme.textColor, color: theme.bg, textDecoration: 'none', fontWeight: 600, borderRadius: 8, whiteSpace: 'nowrap' }}>Buy</a>
+                                        </div>
+                                    )}
                                 </div>
-                            )}
-
-                            {block.type === 'product' && (
-                                <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
-                                    {block.imageUrl && <img src={block.imageUrl} alt="Product" style={{ width: 80, height: 80, objectFit: 'cover', borderRadius: 8 }} />}
-                                    <div style={{ flex: 1 }}>
-                                        <div style={{ fontWeight: 700, fontSize: '1.1rem' }}>{block.name}</div>
-                                        <div style={{ fontWeight: 800, marginTop: 4 }}>{block.price}</div>
-                                    </div>
-                                    <a href={block.buyUrl} target="_blank" rel="noreferrer" style={{ padding: '8px 16px', background: theme.textColor, color: theme.bg, textDecoration: 'none', fontWeight: 600, borderRadius: 8 }}>Buy</a>
-                                </div>
-                            )}
-                        </div>
-                    ))}
+                            );
+                        }
+                    })}
                 </div>
 
             </div> {/* End scrollable content wrap */}
 
             {/* Bottom Watermark - Pushed to bottom by flex: 1 above */}
-            <div style={{ 
-                width: '100%',
-                padding: '40px 0 24px', 
-                fontSize: '0.85rem', 
-                color: profile.bgImage || (profile.bgColor && getContrastingColor(profile.bgColor).includes('255')) ? 'rgba(255,255,255,0.4)' : 'rgba(0,0,0,0.4)', 
-                textAlign: 'center', 
-                fontWeight: 600,
-                flexShrink: 0
-            }}>
-                <a href="/" style={{ color: 'inherit', textDecoration: 'none' }}>Powered by Linkzy</a>
-            </div>
+            {userPlan === 'free' && (
+                <div style={{ 
+                    width: '100%',
+                    padding: '40px 0 24px', 
+                    fontSize: '0.85rem', 
+                    color: profile.bgImage || (profile.bgColor && getContrastingColor(profile.bgColor).includes('255')) ? 'rgba(255,255,255,0.4)' : 'rgba(0,0,0,0.4)', 
+                    textAlign: 'center', 
+                    fontWeight: 600,
+                    flexShrink: 0
+                }}>
+                    <a href="/" style={{ color: 'inherit', textDecoration: 'none' }}>Powered by Linkzy</a>
+                </div>
+            )}
         </div>
     );
 }
