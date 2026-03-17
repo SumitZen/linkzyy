@@ -543,8 +543,8 @@ export default function Dashboard() {
                                         <div className="stat-card">
                                             <div className="stat-card__icon">👁</div>
                                             <div className="stat-card__label">Profile Views</div>
-                                            <div className="stat-card__value">—</div>
-                                            <div className="stat-card__sub">Tracking coming soon</div>
+                                            <div className="stat-card__value">{user?.views || 0}</div>
+                                            <div className="stat-card__sub">Lifetime visits</div>
                                         </div>
                                     </div>
                                     <div className="links-card">

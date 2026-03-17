@@ -36,6 +36,7 @@ export interface User {
     theme: string;
     textColor?: string;
     onboarded?: boolean;
+    views?: number;
 }
 
 // ── Context type ─────────────────────────────────────────────────────────────
@@ -82,6 +83,7 @@ function buildUserFromAppwrite(awUser: import('appwrite').Models.User<import('ap
         blocks: [],
         theme: 'editorial-light',
         onboarded: false,
+        views: 0,
         ...extra,
     };
 }
@@ -237,6 +239,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                             blocks: parseField(doc.blocks) as Block[],
                             textColor: textColorFromTheme || doc.textColor || '',
                             onboarded: !!doc.onboarded,
+                            views: Number(doc.views || 0),
                         };
                     } else {
                         // No document yet — fall back to localStorage

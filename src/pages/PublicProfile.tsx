@@ -47,7 +47,23 @@ export default function PublicProfile() {
                 if (res.documents.length === 0) {
                     setError('Profile not found.');
                 } else {
-                    setProfile(res.documents[0]);
+                    const doc = res.documents[0];
+                    setProfile(doc);
+
+                    // ─── Analytics: Increment View Count ───
+                    const isPreview = new URLSearchParams(window.location.search).get('preview') === 'true';
+                    if (!isPreview) {
+                        try {
+                            await databases.updateDocument(
+                                APPWRITE_CONFIG.databaseId,
+                                APPWRITE_CONFIG.profilesCollectionId,
+                                doc.$id,
+                                { views: (Number(doc.views) || 0) + 1 }
+                            );
+                        } catch (err) {
+                            console.error('Failed to increment views:', err);
+                        }
+                    }
                 }
             } catch (err: unknown) {
                 const error = err as Error;
