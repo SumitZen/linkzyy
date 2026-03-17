@@ -76,13 +76,50 @@ export default function PublicProfile() {
     }, [userId]);
 
     if (loading) {
-        return <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#111', color: '#fff' }}>Loading profile...</div>;
+        return (
+            <div style={{ 
+                minHeight: '100vh', 
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'center', 
+                background: '#0a0a0f',
+                color: '#fff',
+                fontFamily: 'var(--font-body)'
+            }}>
+                <div style={{ textAlign: 'center' }}>
+                    <div style={{ width: 40, height: 40, border: '3px solid rgba(255,255,255,0.1)', borderTopColor: '#fff', borderRadius: '50%', animation: 'spin 1s linear infinite', margin: '0 auto 16px' }} />
+                    <div style={{ fontSize: '0.9rem', opacity: 0.6, fontWeight: 500, letterSpacing: '0.05em' }}>LINKZY</div>
+                </div>
+                <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+            </div>
+        );
     }
+
     if (error || !profile) {
         return (
-            <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: '#111', color: '#fff', gap: 16 }}>
-                <h2>{error || 'Profile not found'}</h2>
-                <a href="/" style={{ color: '#7c3aed', textDecoration: 'none' }}>Create your own Linkzy</a>
+            <div style={{ 
+                minHeight: '100vh', 
+                display: 'flex', 
+                flexDirection: 'column', 
+                alignItems: 'center', 
+                justifyContent: 'center', 
+                background: '#0a0a0f', 
+                color: '#fff', 
+                gap: 24,
+                padding: 20,
+                textAlign: 'center'
+            }}>
+                <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '2rem' }}>{error || 'Profile not found'}</h2>
+                <p style={{ opacity: 0.6, maxWidth: 400 }}>The profile you're looking for doesn't exist or has been moved.</p>
+                <a href="/" style={{ 
+                    padding: '12px 24px', 
+                    background: '#fff', 
+                    color: '#000', 
+                    borderRadius: '12px', 
+                    fontWeight: 700, 
+                    textDecoration: 'none',
+                    fontSize: '0.9rem'
+                }}>Create your own Linkzy</a>
             </div>
         );
     }
@@ -277,18 +314,48 @@ export default function PublicProfile() {
 
             </div> {/* End scrollable content wrap */}
 
-            {/* Bottom Watermark - Pushed to bottom by flex: 1 above */}
+            {/* Premium Floating Watermark */}
             {userPlan === 'free' && (
                 <div style={{ 
-                    width: '100%',
-                    padding: '40px 0 24px', 
-                    fontSize: '0.85rem', 
-                    color: profile.bgImage || (profile.bgColor && getContrastingColor(profile.bgColor).includes('255')) ? 'rgba(255,255,255,0.4)' : 'rgba(0,0,0,0.4)', 
-                    textAlign: 'center', 
-                    fontWeight: 600,
-                    flexShrink: 0
+                    position: 'fixed',
+                    bottom: 24,
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    zIndex: 100,
+                    pointerEvents: 'none'
                 }}>
-                    <a href="/" style={{ color: 'inherit', textDecoration: 'none' }}>Powered by Linkzy</a>
+                    <a href="/" style={{ 
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 8,
+                        padding: '10px 18px',
+                        background: 'rgba(255, 255, 255, 0.1)',
+                        backdropFilter: 'blur(12px)',
+                        WebkitBackdropFilter: 'blur(12px)',
+                        border: '1px solid rgba(255, 255, 255, 0.15)',
+                        borderRadius: 999,
+                        color: profile.bgImage || (profile.bgColor && getContrastingColor(profile.bgColor).includes('255')) ? '#fff' : '#000',
+                        fontSize: '0.75rem',
+                        fontWeight: 700,
+                        textDecoration: 'none',
+                        letterSpacing: '0.05em',
+                        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.08)',
+                        pointerEvents: 'auto',
+                        transition: 'transform 0.2s ease'
+                    }}>
+                        <span style={{ 
+                            width: 18, 
+                            height: 18, 
+                            background: '#121826', 
+                            color: '#fff', 
+                            borderRadius: '50%', 
+                            display: 'flex', 
+                            alignItems: 'center', 
+                            justifyContent: 'center',
+                            fontSize: '0.6rem'
+                        }}>L</span>
+                        LINKZY
+                    </a>
                 </div>
             )}
         </div>

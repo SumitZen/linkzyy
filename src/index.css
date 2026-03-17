@@ -1,60 +1,60 @@
 :root {
-  /* Base backgrounds */
-  --bg-base:           #fdf8f2;
+  /* Base backgrounds — refined for a cleaner look */
+  --bg-base:           #fdfaf6;
   --bg-surface:        #ffffff;
-  --bg-surface-2:      #fef5ec;
-  --bg-surface-3:      #f8f0e8;
-  --bg-overlay:        rgba(253, 248, 242, 0.90);
+  --bg-surface-2:      #fcf5ee;
+  --bg-surface-3:      #f9f1e8;
+  --bg-overlay:        rgba(253, 250, 246, 0.94);
 
-  /* Midnight navy — primary actions */
-  --navy:              #1e2d4a;
-  --navy-mid:          #2d4270;
-  --navy-light:        #4a6fa5;
-  --navy-pale:         rgba(30, 45, 74, 0.08);
-  --navy-ghost:        rgba(30, 45, 74, 0.04);
+  /* Midnight navy — deeper and more sophisticated */
+  --navy:              #121826;
+  --navy-mid:          #1e293b;
+  --navy-light:        #334155;
+  --navy-pale:         rgba(18, 24, 38, 0.06);
+  --navy-ghost:        rgba(18, 24, 38, 0.03);
 
-  /* Dusty rose — highlights & accents */
-  --rose:              #b5637a;
-  --rose-mid:          #cc8899;
-  --rose-light:        #e8b4c0;
-  --rose-pale:         rgba(181, 99, 122, 0.10);
-  --rose-ghost:        rgba(181, 99, 122, 0.05);
+  /* Dusty rose — softer and more elegant */
+  --rose:              #a65c71;
+  --rose-mid:          #bc788b;
+  --rose-light:        #d49aa9;
+  --rose-pale:         rgba(166, 92, 113, 0.08);
+  --rose-ghost:        rgba(166, 92, 113, 0.04);
 
-  /* Champagne — decorative accents */
-  --champagne:         #c49a5a;
-  --champagne-light:   #e2c48a;
-  --champagne-pale:    rgba(196, 154, 90, 0.12);
+  /* Champagne — more refined gold tones */
+  --champagne:         #b88e4f;
+  --champagne-light:   #d4b483;
+  --champagne-pale:    rgba(184, 142, 79, 0.10);
 
-  /* Typography */
+  /* Typography — updated scales */
   --font-display:      'Playfair Display', Georgia, serif;
-  --font-body:         'Inter', -apple-system, sans-serif;
-  --text-primary:      #1a1a2e;
-  --text-secondary:    #4a4a6a;
-  --text-tertiary:     #8a8aaa;
+  --font-body:         'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --text-primary:      #0f172a;
+  --text-secondary:    #475569;
+  --text-tertiary:     #94a3b8;
   --text-inverse:      #ffffff;
 
-  /* Borders */
-  --border:            rgba(30, 45, 74, 0.10);
-  --border-strong:     rgba(30, 45, 74, 0.18);
-  --border-rose:       rgba(181, 99, 122, 0.20);
+  /* Borders — subtler */
+  --border:            rgba(15, 23, 42, 0.08);
+  --border-strong:     rgba(15, 23, 42, 0.15);
+  --border-rose:       rgba(166, 92, 113, 0.18);
 
-  /* Shadows — warm-tinted */
-  --shadow-xs:  0 1px 3px rgba(30, 45, 74, 0.07);
-  --shadow-sm:  0 2px 8px rgba(30, 45, 74, 0.08), 0 1px 3px rgba(30, 45, 74, 0.05);
-  --shadow-md:  0 4px 20px rgba(30, 45, 74, 0.10), 0 2px 6px rgba(30, 45, 74, 0.06);
-  --shadow-lg:  0 8px 40px rgba(30, 45, 74, 0.12), 0 3px 12px rgba(30, 45, 74, 0.07);
-  --shadow-rose: 0 4px 20px rgba(181, 99, 122, 0.18);
-  --shadow-navy: 0 4px 20px rgba(30, 45, 74, 0.22);
+  /* Shadows — layered and natural */
+  --shadow-xs:  0 1px 2px rgba(15, 23, 42, 0.05);
+  --shadow-sm:  0 4px 6px -1px rgba(15, 23, 42, 0.1), 0 2px 4px -2px rgba(15, 23, 42, 0.05);
+  --shadow-md:  0 12px 24px -6px rgba(15, 23, 42, 0.08), 0 4px 6px -2px rgba(15, 23, 42, 0.03);
+  --shadow-lg:  0 20px 40px -12px rgba(15, 23, 42, 0.12);
+  --shadow-rose: 0 8px 30px rgba(166, 92, 113, 0.2);
+  --shadow-navy: 0 10px 40px rgba(18, 24, 38, 0.25);
 
-  /* Radii */
-  --radius-sm:   8px;
-  --radius-md:   12px;
-  --radius-lg:   18px;
-  --radius-xl:   24px;
+  /* Radii — modern and consistent */
+  --radius-sm:   10px;
+  --radius-md:   14px;
+  --radius-lg:   20px;
+  --radius-xl:   32px;
   --radius-pill: 999px;
 
-  /* Transitions */
-  --transition: 0.18s ease;
+  /* Transitions — smoother curves */
+  --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 html, body {
@@ -62,9 +62,15 @@ html, body {
   color: var(--text-primary) !important;
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden !important;
   width: 100% !important;
   position: relative !important;
+}
+
+::selection {
+  background: var(--rose-pale);
+  color: var(--rose);
 }
 
 h1, h2, h3,
@@ -75,6 +81,7 @@ h1, h2, h3,
 .auth-card__heading {
   font-family: var(--font-display) !important;
   letter-spacing: -0.02em;
+  font-weight: 700;
 }
 
 *,
@@ -93,12 +100,13 @@ h1, h2, h3,
 }
 
 html {
-  scroll-behavior: auto;
+  scroll-behavior: smooth;
 }
 
 a {
   text-decoration: none;
   color: inherit;
+  transition: opacity var(--transition);
 }
 
 /* Hide scrollbars globally */
