@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import gsap from 'gsap';
+import { BrandIcon } from './BrandLogo';
 
 export default function BrutalistHero() {
     const heroRef = useRef<HTMLDivElement>(null);
@@ -37,7 +38,10 @@ export default function BrutalistHero() {
     return (
         <section className="hero-section" ref={heroRef}>
             <div className="hero-text-block" ref={textRef}>
-                <div className="hero-badge">✦ One link. All of you.</div>
+                <div className="hero-badge">
+                    <BrandIcon size={18} color="#b5637a" />
+                    One link. All of you.
+                </div>
                 <h1 className="hero-headline">
                     Your Identity, <br />
                     <span>Refined.</span>

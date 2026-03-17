@@ -2,6 +2,7 @@ import { useState } from 'react';
 import type { FormEvent } from 'react';
 import { Link, useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { BrandLogo } from '../components/BrandLogo';
 import './AuthPage.css';
 
 // Real Google "G" logo SVG
@@ -47,7 +48,6 @@ export default function LoginPage() {
         setError(''); setGoogleLoading(true);
         try {
             await loginWithGoogle();
-            // Google OAuth redirects — no navigate needed
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Google login failed.');
             setGoogleLoading(false);
@@ -57,13 +57,14 @@ export default function LoginPage() {
     return (
         <div className="auth-root">
             <div className="auth-card">
-                <Link to="/" className="auth-logo">Linkzy</Link>
+                <Link to="/" className="auth-logo" style={{ textDecoration: 'none' }}>
+                    <BrandLogo size={32} />
+                </Link>
                 <h1 className="auth-title">Welcome back</h1>
                 <p className="auth-sub">Log in to your Linkzy account</p>
 
                 {error && <div className="auth-error">{error}</div>}
 
-                {/* Google sign-in */}
                 <button className="auth-google-btn" onClick={handleGoogle} disabled={googleLoading}>
                     <GoogleLogo />
                     {googleLoading ? 'Redirecting…' : 'Continue with Google'}
@@ -93,7 +94,7 @@ export default function LoginPage() {
             </div>
 
             <div className="auth-brand-panel">
-                <div className="auth-brand-logo-text">Link<span>zy</span></div>
+                <BrandLogo size={48} textColor="#fff" iconColor="#fff" />
                 <p className="auth-brand-tagline">One link. Every platform. All of you.</p>
                 <div className="auth-avatars">
                     {[

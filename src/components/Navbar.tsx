@@ -3,6 +3,8 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import styles from './Navbar.module.css';
 
+import { BrandLogo } from './BrandLogo';
+
 export default function Navbar() {
     const [menuOpen, setMenuOpen] = useState(false);
     const { user, logout } = useAuth();
@@ -52,7 +54,13 @@ export default function Navbar() {
 
     return (
         <nav className={`${styles.navbar} ${scrolled ? styles['navbar--scrolled'] : ''}`}>
-            <Link to="/" className={styles.logo}>Linkzy</Link>
+            <Link to="/" className={styles.logo} style={{ textDecoration: 'none' }}>
+                <BrandLogo 
+                    size={scrolled ? 28 : 32} 
+                    textColor={scrolled ? '#1e2d4a' : '#fff'} 
+                    iconColor={scrolled ? '#b5637a' : '#fff'}
+                />
+            </Link>
 
             {/* Desktop links */}
             <div className={styles.navLinks}>
