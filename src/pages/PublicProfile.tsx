@@ -109,9 +109,10 @@ export default function PublicProfile() {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let blocks: any[] = forceParseJSON(profile?.blocks);
 
+    const isPreview = new URLSearchParams(window.location.search).get('preview') === 'true';
     const userPlan = profile.plan || 'free';
     const totalContent = [...links.map(l => ({ ...l, itemType: 'link' })), ...blocks.map(b => ({ ...b, itemType: 'block' }))];
-    const visibleContent = userPlan === 'free' ? totalContent.slice(0, 5) : totalContent;
+    const visibleContent = (userPlan === 'free' && !isPreview) ? totalContent.slice(0, 5) : totalContent;
 
     return (
         <div style={{
