@@ -930,7 +930,7 @@ export default function Dashboard() {
                                     </div>
                                     
                                     {/* Maintenance Card (Admin Only) */}
-                                    {user?.email === 'sumitsingh946765@gmail.com' && (
+                                    {user?.email === 'ss1816434@gmail.com' && (
                                         <div className="plan-access-card" style={{ marginTop: 20, borderColor: '#fee2e2' }}>
                                             <div className="promo-card__header">
                                                 <div>
