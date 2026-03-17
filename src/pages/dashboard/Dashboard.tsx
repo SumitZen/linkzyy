@@ -928,29 +928,31 @@ export default function Dashboard() {
                                         <button className="btn-save" onClick={() => { updateUser({ name: settingsName }); showToast('Settings saved', 'success'); }}>Save</button>
                                         <button className="btn-logout" onClick={() => { logout(); navigate('/'); }}>Log out</button>
                                     </div>
-
-                                {/* Maintenance Card */}
-                                <div className="plan-access-card" style={{ marginTop: 20, borderColor: '#fee2e2' }}>
-                                    <div className="promo-card__header">
-                                        <div>
-                                            <div className="promo-card__title" style={{ color: '#991b1b' }}>Maintenance</div>
-                                            <div className="promo-card__sub">System cleanup tools</div>
+                                    
+                                    {/* Maintenance Card (Admin Only) */}
+                                    {user?.email === 'sumitsingh946765@gmail.com' && (
+                                        <div className="plan-access-card" style={{ marginTop: 20, borderColor: '#fee2e2' }}>
+                                            <div className="promo-card__header">
+                                                <div>
+                                                    <div className="promo-card__title" style={{ color: '#991b1b' }}>Maintenance</div>
+                                                    <div className="promo-card__sub">System cleanup tools</div>
+                                                </div>
+                                            </div>
+                                            <div style={{ padding: '0 20px 20px' }}>
+                                                <p style={{ fontSize: '0.85rem', color: '#666', marginBottom: 16 }}>
+                                                    Found thousands of entries in your database? Run the purge tool to remove duplicates and keep only the latest version of each profile.
+                                                </p>
+                                                <button 
+                                                    className="btn-primary" 
+                                                    style={{ background: '#ef4444', border: 'none', width: '100%', opacity: isPurging ? 0.7 : 1 }}
+                                                    onClick={purgeDuplicates}
+                                                    disabled={isPurging}
+                                                >
+                                                    {isPurging ? 'Purging Documents...' : 'Purge All Duplicate Profiles'}
+                                                </button>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div style={{ padding: '0 20px 20px' }}>
-                                        <p style={{ fontSize: '0.85rem', color: '#666', marginBottom: 16 }}>
-                                            Found thousands of entries in your database? Run the purge tool to remove duplicates and keep only the latest version of each profile.
-                                        </p>
-                                        <button 
-                                            className="btn-primary" 
-                                            style={{ background: '#ef4444', border: 'none', width: '100%', opacity: isPurging ? 0.7 : 1 }}
-                                            onClick={purgeDuplicates}
-                                            disabled={isPurging}
-                                        >
-                                            {isPurging ? 'Purging Documents...' : 'Purge All Duplicate Profiles'}
-                                        </button>
-                                    </div>
-                                </div>
+                                    )}
 
                                     {/* Promo Code Card */}
                                     <div className="plan-access-card">
