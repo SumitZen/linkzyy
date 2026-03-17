@@ -29,8 +29,8 @@ const PLANS = [
     {
         id: 'pro',
         name: 'Pro',
-        monthlyPrice: 3,
-        annualPrice: 29,
+        monthlyPrice: 4,
+        annualPrice: 39,
         description: 'For creators who mean business.',
         cta: 'Start Pro free →',
         popular: true,
@@ -49,8 +49,8 @@ const PLANS = [
     {
         id: 'business',
         name: 'Business',
-        monthlyPrice: 9,
-        annualPrice: 69,
+        monthlyPrice: 6,
+        annualPrice: 59,
         description: 'For teams and power users.',
         cta: 'Contact sales',
         popular: false,

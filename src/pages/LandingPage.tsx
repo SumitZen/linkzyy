@@ -149,8 +149,8 @@ export default function LandingPage() {
                     }}>
                         {[
                             { name: 'Free', price: '$0', desc: 'The basics, forever.', btn: 'Get started' },
-                            { name: 'Pro', price: '$3', desc: 'Everything unlocked.', btn: 'Go Pro' },
-                            { name: 'Business', price: '$9', desc: 'For teams & scale.', btn: 'Contact' },
+                            { name: 'Pro', price: '$4', desc: 'Everything unlocked.', btn: 'Go Pro' },
+                            { name: 'Business', price: '$6', desc: 'For teams & scale.', btn: 'Contact' },
                         ].map(p => (
                             <div key={p.name} style={{
                                 background: '#fff',

@@ -17,7 +17,7 @@ const ONBOARDING_PLANS = [
     {
         id: 'pro',
         name: 'Pro',
-        price: '$3',
+        price: '$4',
         period: 'per month',
         desc: 'Built for professional creators.',
         features: ['Unlimited links', 'Premium themes', 'Advanced stats', 'No branding'],
@@ -28,7 +28,7 @@ const ONBOARDING_PLANS = [
     {
         id: 'business',
         name: 'Business',
-        price: '$9',
+        price: '$6',
         period: 'per month',
         desc: 'Advanced tools for teams.',
         features: ['Everything in Pro', '5 team profiles', 'Priority support'],
