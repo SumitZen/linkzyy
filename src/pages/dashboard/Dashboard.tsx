@@ -4,7 +4,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import Cropper from 'react-easy-crop';
 import type { Point, Area } from 'react-easy-crop';
 import { useAuth } from '../../context/AuthContext';
-import type { User, LinkItem, Block, MusicBlock, PhotoBlock, ProductBlock } from '../../context/AuthContext';
+import type { LinkItem, Block, MusicBlock, PhotoBlock, ProductBlock } from '../../context/AuthContext';
 import { PLATFORM_ICONS, PLATFORM_COLORS } from '../../lib/platformIcons';
 import { templatesList } from '../../lib/themes';
 import { storage, APPWRITE_READY, APPWRITE_CONFIG, databases } from '../../lib/appwrite';
@@ -231,16 +231,7 @@ export default function Dashboard() {
         }
     }, [user, navigate]);
 
-    // ─── Auto-Apply Plan from Pricing Page ───
-    useEffect(() => {
-        const selected = sessionStorage.getItem('selectedPlan');
-        if (selected && user && user.plan !== selected) {
-            updateUser({ plan: selected as User['plan'] });
-            sessionStorage.removeItem('selectedPlan');
-            showToast(`Welcome to ${selected.toUpperCase()}!`, 'success', '🎉');
-        }
-    }, [user, updateUser, showToast]);
-
+    // Plan-transition is now handled by the /checkout page explicitly.
     if (!user || (!user.onboarded && window.location.pathname.includes('/dashboard'))) return null;
 
     // CRUD helpers

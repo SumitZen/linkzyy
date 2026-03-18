@@ -89,13 +89,17 @@ export default function PricingPage() {
             return;
         }
 
-        // Apply session storage for plan selection persistence
-        sessionStorage.setItem('selectedPlan', planId);
-
-        if (user) {
-            navigate('/dashboard');
+        // If picking a paid plan, go to checkout. Otherwise, standard flow.
+        if (planId === 'pro' || planId === 'business') {
+            if (user) {
+                navigate(`/checkout?plan=${planId}`);
+            } else {
+                navigate(`/signup?plan=${planId}`);
+            }
         } else {
-            navigate(`/signup?plan=${planId}`);
+            // Free plan
+            if (user) navigate('/dashboard');
+            else navigate('/signup');
         }
     };
 

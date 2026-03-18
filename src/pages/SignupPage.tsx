@@ -50,7 +50,11 @@ export default function SignupPage() {
         setIsLoading(true);
         try {
             await signup(name, email, password, plan as any);
-            navigate('/onboarding', { replace: true });
+            if (plan !== 'free') {
+                navigate(`/checkout?plan=${plan}`, { replace: true });
+            } else {
+                navigate('/onboarding', { replace: true });
+            }
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Signup failed.');
         } finally {
