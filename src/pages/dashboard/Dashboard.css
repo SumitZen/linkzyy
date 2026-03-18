@@ -414,11 +414,12 @@
 }
 
 .stat-card__value { 
+  font-family: var(--font-display);
   font-size: 2.75rem; 
   font-weight: 800; 
   color: var(--navy); 
   line-height: 1; 
-  letter-spacing: -0.04em;
+  letter-spacing: -0.06em;
 }
 
 .stat-card__label { 
@@ -453,11 +454,11 @@
 
 .dashboard-section-card__title, .bento-card h3 {
   font-family: var(--font-display);
-  font-size: 1.5rem;
-  font-weight: 700;
+  font-size: 1.75rem;
+  font-weight: 800;
   color: var(--text-primary);
   margin-bottom: 28px;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.04em;
 }
 
 /* Links Tab */

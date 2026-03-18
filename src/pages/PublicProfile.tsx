@@ -176,7 +176,7 @@ export default function PublicProfile() {
             backgroundPosition: 'top center',
             backgroundSize: 'cover',
             backgroundAttachment: 'scroll',
-            fontFamily: 'Inter, sans-serif',
+            fontFamily: 'var(--font-body)',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
@@ -210,8 +210,10 @@ export default function PublicProfile() {
 
                 {/* Name & Bio */}
                 <h1 style={{ 
-                    fontSize: '1.5rem', 
-                    fontWeight: 700, 
+                    fontFamily: 'var(--font-display)',
+                    fontSize: '2rem', 
+                    fontWeight: 800, 
+                    letterSpacing: '-0.06em',
                     color: manualTextColor || (profile.bgImage ? '#fff' : (profile.bgColor ? getContrastingColor(profile.bgColor) : theme.textColor)), 
                     textShadow: profile.bgImage ? '0 2px 10px rgba(0,0,0,0.5)' : 'none',
                     textAlign: 'center', 
