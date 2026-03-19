@@ -6,7 +6,6 @@ import { templatesList } from '../lib/themes';
 import { PLATFORM_ICONS, PLATFORM_COLORS } from '../lib/platformIcons';
 import type { LinkItem } from '../context/AuthContext';
 import { getContrastingColor } from '../lib/utils';
-import { BrandLogo } from '../components/BrandLogo';
 
 function PlatformIcon({ id, size = 24, color }: { id: string; size?: number; color?: string }) {
     const found = PLATFORM_ICONS.find(p => p.id === id);
@@ -235,7 +234,7 @@ export default function PublicProfile() {
 
                 {/* Content (Links & Blocks combined for proper limit enforcement) */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 16, width: '100%' }}>
-                    {visibleContent.filter((item: any) => item.enabled !== false).map((item: any) => {
+                    {visibleContent.filter(item => item.enabled !== false).map((item: any) => {
                         if (item.itemType === 'link') {
                             return (
                                 <a key={item.id} href={item.url} target="_blank" rel="noopener noreferrer" className="bento-public-link" style={{
@@ -336,16 +335,26 @@ export default function PublicProfile() {
                         border: '1px solid rgba(255, 255, 255, 0.15)',
                         borderRadius: 999,
                         color: profile.bgImage || (profile.bgColor && getContrastingColor(profile.bgColor).includes('255')) ? '#fff' : '#000',
+                        fontSize: '0.75rem',
+                        fontWeight: 700,
                         textDecoration: 'none',
+                        letterSpacing: '0.05em',
                         boxShadow: '0 8px 32px rgba(0, 0, 0, 0.08)',
                         pointerEvents: 'auto',
                         transition: 'transform 0.2s ease'
                     }}>
-                        <BrandLogo 
-                            size={20} 
-                            textColor={profile.bgImage || (profile.bgColor && getContrastingColor(profile.bgColor).includes('255')) ? '#fff' : '#000'}
-                            iconColor={profile.bgImage || (profile.bgColor && getContrastingColor(profile.bgColor).includes('255')) ? '#fff' : '#b5637a'}
-                        />
+                        <span style={{ 
+                            width: 18, 
+                            height: 18, 
+                            background: '#121826', 
+                            color: '#fff', 
+                            borderRadius: '50%', 
+                            display: 'flex', 
+                            alignItems: 'center', 
+                            justifyContent: 'center',
+                            fontSize: '0.6rem'
+                        }}>L</span>
+                        LINKZY
                     </a>
                 </div>
             )}

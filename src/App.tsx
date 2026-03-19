@@ -13,7 +13,6 @@ import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 import AuthCallback from './pages/AuthCallback';
 import OnboardingPage from './pages/OnboardingPage';
-import CheckoutPage from './pages/CheckoutPage';
 import Dashboard from './pages/dashboard/Dashboard';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
@@ -38,7 +37,6 @@ export default function App() {
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/auth/callback" element={<AuthCallback />} />
           <Route path="/onboarding" element={<ProtectedRoute><OnboardingPage /></ProtectedRoute>} />
-          <Route path="/checkout" element={<ProtectedRoute><CheckoutPage /></ProtectedRoute>} />
 
           {/* Public routes with Navbar + Footer */}
           <Route element={<PublicLayout />}>

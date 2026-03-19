@@ -2,7 +2,6 @@ import { useState } from 'react';
 import type { FormEvent } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { BrandLogo } from '../components/BrandLogo';
 import './AuthPage.css';
 
 function GoogleLogo() {
@@ -50,11 +49,7 @@ export default function SignupPage() {
         setIsLoading(true);
         try {
             await signup(name, email, password, plan as any);
-            if (plan !== 'free') {
-                navigate(`/checkout?plan=${plan}`, { replace: true });
-            } else {
-                navigate('/onboarding', { replace: true });
-            }
+            navigate('/onboarding', { replace: true });
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Signup failed.');
         } finally {
@@ -65,9 +60,7 @@ export default function SignupPage() {
     return (
         <div className="auth-root">
             <div className="auth-card">
-                <Link to="/" className="auth-logo" style={{ textDecoration: 'none' }}>
-                    <BrandLogo size={32} />
-                </Link>
+                <Link to="/" className="auth-logo">Linkzy</Link>
                 <h1 className="auth-title">Create your account</h1>
                 <p className="auth-sub">
                     {plan !== 'free' ? `Starting with the ${plan.charAt(0).toUpperCase() + plan.slice(1)} plan` : 'Free forever — upgrade anytime'}
@@ -75,6 +68,7 @@ export default function SignupPage() {
 
                 {error && <div className="auth-error">{error}</div>}
 
+                {/* Google sign-up */}
                 <button className="auth-google-btn" onClick={handleGoogle} disabled={googleLoading}>
                     <GoogleLogo />
                     {googleLoading ? 'Redirecting…' : 'Continue with Google'}
@@ -148,7 +142,7 @@ export default function SignupPage() {
             </div>
 
             <div className="auth-brand-panel">
-                <BrandLogo size={48} textColor="#fff" iconColor="#fff" />
+                <div className="auth-brand-logo-text">Link<span>zy</span></div>
                 <p className="auth-brand-tagline">One link. Every platform. All of you.</p>
                 <div className="auth-feature-list">
                     {['Unlimited links', 'Custom themes', 'Real-time analytics', 'No-code setup'].map(f => (
