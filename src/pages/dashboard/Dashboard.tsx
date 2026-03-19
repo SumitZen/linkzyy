@@ -752,183 +752,144 @@ export default function Dashboard() {
 
                             {/* ── APPEARANCE ── */}
                             {activeTab === 'appearance' && (
-                                <div className="bento-fade-in dashboard-appearance">
+                                <div className="bento-fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
                                     <header className="bento-page-header">
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                            <h1>Appearance</h1>
-                                            <div className="bento-badge bento-badge--rose">Design</div>
-                                        </div>
-                                        <p>Style your public profile to match your brand's aesthetic.</p>
+                                        <h1>Appearance</h1>
+                                        <p>Customise how your public profile looks.</p>
                                     </header>
 
-                                    <div className="bento-grid-appearance">
-                                        {/* ── CARD 1: PROFILE ── */}
-                                        <div className="bento-card appearance-card--profile">
-                                            <div className="bento-card__title">
-                                                <span className="bento-card__icon">👤</span>
-                                                <h3>Profile</h3>
-                                            </div>
-                                            
-                                            <div className="appearance-profile-group">
-                                                <div className="field-group avatar-upload-field">
-                                                    <div className="avatar-preview-container">
-                                                        <div className="bento-field-avatar-sq">
-                                                            {avatarUrl
-                                                                ? <img src={avatarUrl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                                                                : <span style={{ fontSize: '1.5rem', fontWeight: 800 }}>{user?.name?.charAt(0)}</span>
-                                                            }
-                                                        </div>
-                                                        <div className="avatar-actions">
-                                                            <label className="btn-upload btn-upload--small">
-                                                                Change Photo
-                                                                <input type="file" accept="image/*" style={{ display: 'none' }} onChange={e => onFileChange(e, 'avatar')} />
-                                                            </label>
-                                                            {avatarUrl && <button className="btn-ghost--danger btn-ghost--small" onClick={() => setAvatarUrl('')}>Remove</button>}
-                                                        </div>
-                                                    </div>
+                                    <div className="appearance-form">
+                                        {/* Avatar */}
+                                        <div className="field-group">
+                                            <label className="field-label">Profile Photo</label>
+                                            <div className="profile-photo-row">
+                                                <div className="bento-field-avatar-sq">
+                                                    {avatarUrl
+                                                        ? <img src={avatarUrl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
+                                                        : <span style={{ fontSize: '1.1rem' }}>{user?.name?.charAt(0)}</span>
+                                                    }
                                                 </div>
-
-                                                <div className="field-group">
-                                                    <label className="field-label">Display Name</label>
-                                                    <input
-                                                        className="bento-input"
-                                                        type="text"
-                                                        placeholder="Your Name"
-                                                        value={name}
-                                                        onChange={e => setName(e.target.value)}
-                                                        onBlur={() => { if (name !== user?.name) { updateUser({ name }); showToast('Name updated', 'info', '👤'); } }}
-                                                    />
-                                                </div>
-
-                                                <div className="field-group">
-                                                    <label className="field-label">Bio (Short Description)</label>
-                                                    <textarea 
-                                                        className="bento-input"
-                                                        rows={3} 
-                                                        placeholder="Write a short bio about yourself..."
-                                                        value={bio} 
-                                                        onChange={e => setBio(e.target.value)} 
-                                                        onBlur={() => { if (bio !== user?.bio) { updateUser({ bio }); showToast('Bio updated', 'info', '📝'); } }} 
-                                                    />
-                                                </div>
+                                                <label className="bento-btn" style={{ cursor: 'pointer' }}>
+                                                    Upload Photo
+                                                    <input type="file" accept="image/*" style={{ display: 'none' }} onChange={e => onFileChange(e, 'avatar')} />
+                                                </label>
+                                                {avatarUrl && <button className="bento-ghost" onClick={() => setAvatarUrl('')}>Clear</button>}
                                             </div>
                                         </div>
 
-                                        {/* ── CARD 2: BACKGROUND ── */}
-                                        <div className="bento-card appearance-card--background">
-                                            <div className="bento-card__title">
-                                                <span className="bento-card__icon">🎨</span>
-                                                <h3>Custom Background</h3>
-                                            </div>
+                                        {/* Display name */}
+                                        <div className="field-group">
+                                            <label className="field-label">Display Name</label>
+                                            <input
+                                                type="text"
+                                                value={name}
+                                                onChange={e => setName(e.target.value)}
+                                                onBlur={() => { if (name !== user?.name) { updateUser({ name }); showToast('Name saved', 'info', '👤'); } }}
+                                            />
+                                        </div>
 
-                                            <div className="appearance-bg-group">
-                                                <div className="field-group">
-                                                    <label className="field-label">Background Image</label>
-                                                    <div className="bg-image-uploader">
-                                                        {bgImage ? (
-                                                            <div className="bg-image-preview">
-                                                                <img src={bgImage} alt="Background" />
-                                                                <button className="bg-image-clear" onClick={() => setBgImage('')}>✕</button>
+                                        {/* Bio */}
+                                        <div className="field-group">
+                                            <label className="field-label">Bio</label>
+                                            <textarea rows={3} value={bio} onChange={e => setBio(e.target.value)} onBlur={() => { if (bio !== user?.bio) { updateUser({ bio }); showToast('Bio saved', 'info', '📝'); } }} />
+                                        </div>
+
+                                        <div className="appearance-section-divider"></div>
+
+                                        {/* Background image */}
+                                        <div className="field-group">
+                                            <label className="field-label">Background Photo <span className="bento-hint">(fills entire profile background)</span></label>
+                                            {bgImage && <div style={{ width: '100%', height: 160, borderRadius: 12, backgroundImage: `url(${bgImage})`, backgroundSize: 'cover', backgroundPosition: 'center', marginBottom: 12, border: '1px solid rgba(30,45,74,0.1)' }} />}
+                                            <div style={{ display: 'flex', gap: 8 }}>
+                                                <label className="btn-upload">
+                                                    Upload Background
+                                                    <input type="file" accept="image/*" style={{ display: 'none' }} onChange={e => onFileChange(e, 'background')} />
+                                                </label>
+                                                {bgImage && <button className="bento-ghost" onClick={() => setBgImage('')}>Clear</button>}
+                                            </div>
+                                        </div>
+
+                                        {/* Solid color override */}
+                                        <div className="field-group">
+                                            <label className="field-label">Background Colour <span className="bento-hint">(used if no photo)</span></label>
+                                            <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                                                <input type="color" value={bgColor || '#7c3aed'} onChange={e => setBgColor(e.target.value)} style={{ width: 40, height: 36, border: '1.5px solid #e5e7eb', borderRadius: 8, padding: 2, cursor: 'pointer', flexShrink: 0 }} />
+                                                <input className="bento-input" style={{ flex: 1 }} placeholder="#hex or rgba()" value={bgColor} onChange={e => setBgColor(e.target.value)} />
+                                                {bgColor && <button className="bento-ghost" onClick={() => setBgColor('')}>Clear</button>}
+                                            </div>
+                                        </div>
+
+                                        {/* Manual Text color override */}
+                                        <div className="field-group">
+                                            <label className="field-label">Font Colour</label>
+                                            <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                                                <input type="color" value={manualTextColor || '#ffffff'} onChange={e => setManualTextColor(e.target.value)} style={{ width: 40, height: 36, border: '1.5px solid #e5e7eb', borderRadius: 8, padding: 2, cursor: 'pointer', flexShrink: 0 }} />
+                                                <input className="bento-input" style={{ flex: 1 }} placeholder="#hex or rgba()" value={manualTextColor} onChange={e => setManualTextColor(e.target.value)} />
+                                                {manualTextColor && <button className="bento-ghost" onClick={() => setManualTextColor('')}>Reset</button>}
+                                            </div>
+                                        </div>
+
+                                        {/* Theme grid */}
+                                        <div className="field-group">
+                                            <label className="field-label">Theme Preset</label>
+                                            {(() => {
+                                                const swatchGradients: Record<string, string> = {
+                                                    '1-vision': 'linear-gradient(135deg, #0a1628, #1e3a5f)',
+                                                    '2-midnight': 'linear-gradient(135deg, #0d1117, #1a2744)',
+                                                    '3-ocean': 'linear-gradient(135deg, #0c1f3f, #0a3d62)',
+                                                    '4-blush': 'linear-gradient(135deg, #2d1b1b, #7c2d2d)',
+                                                    '5-prism': 'linear-gradient(135deg, #e8e0f0, #c8b8e0)',
+                                                    '6-onyx': 'linear-gradient(135deg, #0a0a0a, #1c1c1c)',
+                                                    '7-stripe': 'linear-gradient(135deg, #0a0f2e, #1a2060)',
+                                                    '8-nordic': 'linear-gradient(135deg, #1a2030, #2a3545)',
+                                                    '9-sand': 'linear-gradient(135deg, #2a1f0f, #4a3520)',
+                                                    '10-brutal': 'linear-gradient(135deg, #1a1a1a, #333333)',
+                                                };
+
+                                                return (
+                                                    <div className="bento-theme-grid">
+                                                        {(bgImage || bgColor) && (
+                                                            <div className="bento-theme-btn sel" style={{ background: bgImage ? `url(${bgImage}) center/cover` : (bgColor ? bgColor : 'linear-gradient(135deg, rgba(124,58,237,0.5), #07070f)') }}>
+                                                                <div className="bento-theme-name">Custom</div>
                                                             </div>
-                                                        ) : (
-                                                            <label className="bg-upload-dropzone">
-                                                                <span className="bg-upload-icon">🖼️</span>
-                                                                <span className="bg-upload-text">Upload Custom BG</span>
-                                                                <input type="file" accept="image/*" style={{ display: 'none' }} onChange={e => onFileChange(e, 'background')} />
-                                                            </label>
                                                         )}
+
+                                                        {templatesList.map(t => {
+                                                            const isLocked = user?.plan === 'free' && t.isPremium;
+                                                            return (
+                                                                <button 
+                                                                    key={t.id} 
+                                                                    className={[
+                                                                        'bento-theme-btn', 
+                                                                        (selTheme === t.id && !bgImage && !bgColor) ? 'sel' : '',
+                                                                        isLocked ? 'locked' : ''
+                                                                    ].filter(Boolean).join(' ')} 
+                                                                    style={{ background: swatchGradients[t.id] || t.bg }}
+                                                                    onClick={() => {
+                                                                        if (isLocked) {
+                                                                            handleThemeSelect(t.id); // Triggers toast & redirect
+                                                                            return;
+                                                                        }
+                                                                        setBgImage('');
+                                                                        setBgColor('');
+                                                                        setManualTextColor('');
+                                                                        handleThemeSelect(t.id);
+                                                                    }}
+                                                                >
+                                                                    <div className="bento-theme-name">
+                                                                        {t.name}
+                                                                        {isLocked && <span className="bento-theme-lock">💎</span>}
+                                                                    </div>
+                                                                </button>
+                                                            );
+                                                        })}
                                                     </div>
-                                                </div>
-
-                                                <div className="color-picker-grid">
-                                                    <div className="field-group">
-                                                        <label className="field-label">BG Color</label>
-                                                        <div className="bento-color-picker">
-                                                            <input type="color" value={bgColor || '#7c3aed'} onChange={e => setBgColor(e.target.value)} />
-                                                            <input type="text" placeholder="#hex" value={bgColor} onChange={e => setBgColor(e.target.value)} />
-                                                        </div>
-                                                    </div>
-
-                                                    <div className="field-group">
-                                                        <label className="field-label">Text Color</label>
-                                                        <div className="bento-color-picker">
-                                                            <input type="color" value={manualTextColor || '#ffffff'} onChange={e => setManualTextColor(e.target.value)} />
-                                                            <input type="text" placeholder="#hex" value={manualTextColor} onChange={e => setManualTextColor(e.target.value)} />
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        {/* ── CARD 3: THEME PRESETS ── */}
-                                        <div className="bento-card appearance-card--themes">
-                                            <div className="bento-card__title">
-                                                <span className="bento-card__icon">🎭</span>
-                                                <h3>Theme Presets</h3>
-                                            </div>
-
-                                            <div className="bento-theme-grid">
-                                                {(bgImage || bgColor) && (
-                                                    <div className="bento-theme-btn sel custom-theme-swatch" onClick={() => { setBgImage(''); setBgColor(''); setManualTextColor(''); }}>
-                                                        <div className="bento-theme-preview" style={{ background: bgImage ? `url(${bgImage}) center/cover` : (bgColor ? bgColor : '#7c3aed') }}></div>
-                                                        <div className="bento-theme-name">Custom (Reset)</div>
-                                                    </div>
-                                                )}
-
-                                                {templatesList.map(t => {
-                                                    const isLocked = user?.plan === 'free' && t.isPremium;
-                                                    const swatchGradients: Record<string, string> = {
-                                                        '1-vision': 'linear-gradient(135deg, #7c3aed, #ec4899)',
-                                                        '2-midnight': 'linear-gradient(135deg, #4338ca, #020617)',
-                                                        '3-ocean': 'linear-gradient(135deg, #0ea5e9, #0c4a6e)',
-                                                        '4-blush': 'linear-gradient(135deg, #fecdd3, #fff1f2)',
-                                                        '5-prism': 'linear-gradient(135deg, #e0c3fc, #8ec5fc)',
-                                                        '6-onyx': 'linear-gradient(135deg, #0a0a0a, #334155)',
-                                                        '7-stripe': 'linear-gradient(135deg, #111827, #f9fafb)',
-                                                        '8-nordic': 'linear-gradient(135deg, #cbd5e1, #f1f5f9)',
-                                                        '9-sand': 'linear-gradient(135deg, #f5f5f4, #fafaf9)',
-                                                        '10-brutal': 'linear-gradient(135deg, #000000, #ffffff)',
-                                                    };
-
-                                                    return (
-                                                        <button 
-                                                            key={t.id} 
-                                                            className={[
-                                                                'bento-theme-btn', 
-                                                                (selTheme === t.id && !bgImage && !bgColor) ? 'sel' : '',
-                                                                isLocked ? 'locked' : ''
-                                                            ].filter(Boolean).join(' ')} 
-                                                            onClick={() => {
-                                                                if (isLocked) {
-                                                                    handleThemeSelect(t.id);
-                                                                    return;
-                                                                }
-                                                                setBgImage('');
-                                                                setBgColor('');
-                                                                setManualTextColor('');
-                                                                handleThemeSelect(t.id);
-                                                            }}
-                                                        >
-                                                            <div className="bento-theme-preview" style={{ background: swatchGradients[t.id] || t.bg }}></div>
-                                                            <div className="bento-theme-name">
-                                                                {t.name}
-                                                                {isLocked && <span className="bento-theme-lock">💎</span>}
-                                                            </div>
-                                                        </button>
-                                                    );
-                                                })}
-                                            </div>
+                                                );
+                                            })()}
                                         </div>
                                     </div>
 
-                                    <div className="appearance-footer-actions">
-                                        <button className="btn-primary btn-save-appearance" onClick={saveAppearance}>
-                                            <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                                                <path d="M5 13l4 4L19 7" />
-                                            </svg>
-                                            Save Appearance
-                                        </button>
-                                    </div>
+                                    <button className="btn-primary" onClick={saveAppearance} style={{ alignSelf: 'flex-start' }}>Save Changes</button>
                                 </div>
                             )} {/* End Appearance Tab */}
 

@@ -51,13 +51,12 @@
 
 /* ── Heading ── */
 .auth-title {
-  font-family: var(--font-display);
-  font-size: 2.25rem;
-  font-weight: 800;
-  color: #1a1a2e;
-  letter-spacing: -0.05em;
-  line-height: 1.1;
-  margin: 0 0 12px;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1e2d4a;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  margin: 0 0 8px;
 }
 
 /* ── Subtitle ── */
@@ -245,11 +244,10 @@
 
 /* ── Right panel: brand content ── */
 .auth-brand-logo-text {
-  font-family: var(--font-display);
-  font-size: 3rem;
+  font-size: 2.6rem;
   font-weight: 800;
-  color: #1a1a2e;
-  letter-spacing: -0.06em;
+  color: #1e2d4a;
+  letter-spacing: -0.04em;
   margin-bottom: 14px;
   line-height: 1;
 }

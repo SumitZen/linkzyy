@@ -1,7 +1,7 @@
 /* ═══ STEP 7: TEMPLATES PAGE ═══ */
 
 .templates-page, .container {
-  padding: 140px 40px 120px;
+  padding: 80px 40px 120px;
   max-width: 1200px;
   margin: 0 auto;
 }
@@ -153,4 +153,4 @@
 @media (max-width: 1100px) { .templates-grid, .grid { grid-template-columns: repeat(3, 1fr); } }
 @media (max-width: 768px)  { .templates-grid, .grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 480px)  { .templates-grid, .grid { grid-template-columns: 1fr; } }
-@media (max-width: 600px)  { .templates-page, .container { padding: 120px 20px 100px; } }
+@media (max-width: 600px)  { .templates-page, .container { padding: 60px 20px 100px; } }
