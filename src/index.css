@@ -109,39 +109,44 @@ a {
   transition: opacity var(--transition);
 }
 
-/* Hide scrollbars globally */
-::-webkit-scrollbar,
-*::-webkit-scrollbar,
-html::-webkit-scrollbar,
-body::-webkit-scrollbar {
-  display: none !important;
-  width: 0 !important;
-  height: 0 !important;
-  background: transparent !important;
+/* Custom clean scrollbar instead of completely hiding it, to ensure scrolling remains functional and visible */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
 }
-
-*,
-html,
-body {
-  -ms-overflow-style: none !important;
-  scrollbar-width: none !important;
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(30, 45, 74, 0.15);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(30, 45, 74, 0.25);
 }
 
 /* ═══ STEP 2: GLOBAL PAGE BACKGROUND ═══ */
 .page-bg,
-body,
-main,
-#__next,
-#root {
+body {
   background-color: var(--bg-base) !important;
   background-image:
     radial-gradient(ellipse 80% 50% at 10% 0%,
       rgba(196, 154, 90, 0.10) 0%, transparent 55%),
     radial-gradient(ellipse 60% 60% at 90% 100%,
       rgba(181, 99, 122, 0.09) 0%, transparent 55%) !important;
+  background-attachment: fixed !important;
   min-height: 100vh;
-  width: 100% !important;
-  overflow-x: hidden !important;
+  width: 100%;
+  /* Only hide horizontal overflow on body, not root/main */
+  overflow-x: hidden;
+}
+
+main,
+#__next,
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 /* ═══ STEP 4: GLOBAL BUTTONS & FORMS ═══ */

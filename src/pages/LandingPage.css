@@ -14,10 +14,10 @@ header.site-header {
   height: 60px !important;
   box-sizing: border-box !important;
 
-  /* Richer background — warm white with stronger blur */
+  /* Richer background — warm white with optimized blur */
   background: rgba(253, 248, 242, 0.92) !important;
-  backdrop-filter: blur(40px) saturate(180%) !important;
-  -webkit-backdrop-filter: blur(40px) saturate(180%) !important;
+  backdrop-filter: blur(12px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(12px) saturate(180%) !important;
 
   /* More visible border + warm shadow */
   border: 1px solid rgba(30, 45, 74, 0.12) !important;
