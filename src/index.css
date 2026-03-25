@@ -98,9 +98,7 @@ h1, h2, h3,
   }
 }
 
-html {
-  scroll-behavior: smooth;
-}
+
 
 a {
   text-decoration: none;
@@ -135,6 +133,9 @@ body::before {
     radial-gradient(ellipse 80% 50% at 10% 0%, rgba(196, 154, 90, 0.10) 0%, transparent 55%),
     radial-gradient(ellipse 60% 60% at 90% 100%, rgba(181, 99, 122, 0.09) 0%, transparent 55%);
   pointer-events: none;
+  /* Force hardware acceleration to prevent repaint lag on scroll */
+  transform: translateZ(0);
+  will-change: transform;
 }
 
 .page-bg,
